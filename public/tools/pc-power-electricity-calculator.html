@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。">
+  <meta name="keywords" content="ゲーミングPC 電気代 計算, 自作PC 電源容量 シミュレーター, グラボ 電気代 月額 比較">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">ガジェット・PC</span>
+      <h1>ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター</h1>
+      <p class="summary">CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。</p>
+      
+      <div class="calc-grid"><div class="form-group"><label>GPU（グラフィックボード）クラス</label><select id="gpuPower" onchange="calcPc()"><option value="115">エントリー（RTX 4060 / RX 7600 クラス：約115〜160W）</option><option value="200" selected>ミドル（RTX 4070 Super クラス：約200〜220W）</option><option value="285">ハイエンド（RTX 4070 Ti Super / 4080 クラス：約285〜320W）</option><option value="450">フラッグシップ（RTX 4090 クラス：約450W）</option></select></div><div class="form-group"><label>CPU＋周辺パーツ合計消費電力（ゲーム負荷時）［W］</label><input type="number" id="cpuOtherPower" value="130" min="40" max="400" step="10" oninput="calcPc()"></div><div class="form-group"><label>1日あたりのゲーム・高負荷作業時間［時間/日］</label><input type="number" id="gameHours" value="3" min="0" max="24" step="0.5" oninput="calcPc()"></div><div class="form-group"><label>1日あたりのアイドル・ブラウジング時間［時間/日］（約75Wで計算）</label><input type="number" id="idleHours" value="4" min="0" max="24" step="0.5" oninput="calcPc()"></div></div><div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">変換ロスを減らして電気代を節約！80PLUS GOLD / ATX3.0対応電源ユニット</div>
+        <p class="aff-item-desc">電源効率（80PLUS認証グレード）を上げるだけで、高負荷時の発熱と無駄な消費電力を大幅にカットできます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E9%9B%BB%E6%BA%90%E3%83%A6%E3%83%8B%E3%83%83%E3%83%88%20750W%20850W%2080PLUS%20GOLD%20ATX3.0&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">スマホでPCの消費電力確認＆遠隔ON/OFFができるスマートプラグ</div>
+        <p class="aff-item-desc">ゲーム中とアイドル時のリアルタイム消費電力（W）をスマホアプリでグラフ管理できます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=SwitchBot%20%E3%82%B9%E3%83%9E%E3%83%BC%E3%83%88%E3%83%97%E3%83%A9%E3%82%B0%20%E9%9B%BB%E5%8A%9B%E3%83%A2%E3%83%8B%E3%82%BF%E3%83%AA%E3%83%B3%E3%82%B0&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>ゲーミングPCの電源容量で「ピーク消費電力の約1.6〜2倍」が推奨される理由</h2><p>PC用の電源ユニット（PSU）は、<strong>最大定格出力の50%〜60%前後の負荷で稼働しているときが最も電力変換効率が高く、静音性と寿命も最大化される</strong>という特性があります。さらに近年のグラフィックボードは瞬間的なスパイク電力（瞬間最大消費電力）が発生するため、余裕を持った容量選びが不可欠です。</p><h3>80PLUS認証グレードで毎月の電気代も変わる</h3><p>PCパーツが300Wを消費していても、コンセントから実際に引き込まれる電力は「300W ÷ 電源の変換効率」となります。古いSTANDARD電源（効率80%）から最新のGOLD/PLATINUM電源（効率90%前後）に変えるだけで、余分な排熱が減り、夏場のエアコン負荷も含めて電気代をスマートに抑えられます。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/mobile-plan-breakeven-calculator.html">
+        <span class="category-badge">暮らし・通信費節約</span>
+        <h3>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター</h3>
+        <p>現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calcPc(){const gpu=parseFloat(document.getElementById('gpuPower').value)||200;const cpuOther=parseFloat(document.getElementById('cpuOtherPower').value)||130;const gHours=parseFloat(document.getElementById('gameHours').value)||0;const iHours=parseFloat(document.getElementById('idleHours').value)||0;const peakLoad=gpu+cpuOther;const recPsuRaw=Math.ceil((peakLoad*1.65)/50)*50;const recPsu=Math.max(550,recPsuRaw);const psuEfficiency=0.88;const wallGameW=peakLoad/psuEfficiency;const wallIdleW=75/psuEfficiency;const dailyKwh=((wallGameW*gHours)+(wallIdleW*iHours))/1000;const monthlyCost=Math.round(dailyKwh*30*31);const yearlyCost=monthlyCost*12;document.getElementById('calcResult').innerHTML=`<div class="result-headline">推奨電源ユニット容量：<strong>${recPsu} W 以上</strong>（80PLUS GOLD推奨）</div><div class="metrics-row"><div class="metric-card"><span>月々のPC電気代目安</span><strong>約 ¥${monthlyCost.toLocaleString()} / 月</strong><small>（ゲーム時実質 ${Math.round(wallGameW)}W / 1日 ${dailyKwh.toFixed(2)}kWh）</small></div><div class="metric-card"><span>年間のPC電気代目安</span><strong>約 ¥${yearlyCost.toLocaleString()} / 年</strong><small>（電気料金単価 31円/kWh・変換効率88%で算出）</small></div></div>`;}document.addEventListener('DOMContentLoaded',calcPc);
+  </script>
+</body>
+</html>

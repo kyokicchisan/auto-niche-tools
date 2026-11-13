@@ -1,0 +1,24 @@
+{
+  "slug": "appliance-payback-calculator",
+  "title": "省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター",
+  "category": "家電・エネルギー",
+  "summary": "エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。",
+  "targetKeywords": ["家電 買い替え 元が取れる 計算", "エアコン 電気代 比較 シミュレーター", "冷蔵庫 省エネ 損益分岐点"],
+  "affiliateSearchQuery": "省エネ エアコン 冷蔵庫 節電 ワットモニター",
+  "affiliateRecommendations": [
+    {
+      "name": "コンセントに挿すだけ！家電の実測電気代がわかる「ワットモニター」",
+      "description": "今の家電が実際に毎月いくら電気代を食っているか1円単位で計測できる人気チェッカーです。",
+      "searchQuery": "サンワサプライ ワットモニター 電気代計測器"
+    },
+    {
+      "name": "Amazon 省エネ家電・季節空調売れ筋ランキング",
+      "description": "最新の省エネ基準達成モデルや、工事費込みのベストセラー価格を比較できます。",
+      "searchQuery": "省エネ エアコン 冷蔵庫 売れ筋"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\"><div class=\"form-group\"><label>対象家電プリセット（選択で目安を自動入力）</label><select id=\"preset\" onchange=\"applyPreset()\"><option value=\"custom\">自分で数値を入力する</option><option value=\"aircon\" selected>エアコン（10年前の機種 → 最新省エネ機種）</option><option value=\"fridge\">大型冷蔵庫（10年前の機種 → 最新省エネ機種）</option><option value=\"led\">部屋照明（蛍光灯シーリング → LED照明）</option></select></div><div class=\"form-group\"><label>買い替え費用（本体価格＋工事費 − 下取り・補助金）［円］</label><input type=\"number\" id=\"purchaseCost\" value=\"110000\" min=\"1000\" step=\"1000\" oninput=\"calculatePayback()\"></div><div class=\"form-group\"><label>現在の家電の年間消費電力量［kWh/年］（または月額電気代換算）</label><input type=\"number\" id=\"oldKwh\" value=\"980\" min=\"10\" step=\"10\" oninput=\"calculatePayback()\"></div><div class=\"form-group\"><label>新しい家電の年間消費電力量［kWh/年］</label><input type=\"number\" id=\"newKwh\" value=\"660\" min=\"10\" step=\"10\" oninput=\"calculatePayback()\"></div><div class=\"form-group\"><label>電気料金単価［円/kWh］（全国目安：31円）</label><input type=\"number\" id=\"unitPrice\" value=\"31\" min=\"10\" max=\"60\" step=\"0.5\" oninput=\"calculatePayback()\"></div></div><div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function applyPreset(){const p=document.getElementById('preset').value;if(p==='aircon'){document.getElementById('purchaseCost').value=110000;document.getElementById('oldKwh').value=980;document.getElementById('newKwh').value=660;}else if(p==='fridge'){document.getElementById('purchaseCost').value=145000;document.getElementById('oldKwh').value=540;document.getElementById('newKwh').value=260;}else if(p==='led'){document.getElementById('purchaseCost').value=8500;document.getElementById('oldKwh').value=280;document.getElementById('newKwh').value=110;}calculatePayback();}function calculatePayback(){const cost=parseFloat(document.getElementById('purchaseCost').value)||0;const oldK=parseFloat(document.getElementById('oldKwh').value)||0;const newK=parseFloat(document.getElementById('newKwh').value)||0;const price=parseFloat(document.getElementById('unitPrice').value)||31;const diffKwh=Math.max(0,oldK-newK);const annualSave=Math.round(diffKwh*price);const monthlySave=Math.round(annualSave/12);const box=document.getElementById('calcResult');if(annualSave<=0){box.innerHTML='<p class=\"warn\">新しい家電の消費電力が現在より低くなるように入力してください。</p>';return;}const years=cost/annualSave;const fullYears=Math.floor(years);const months=Math.round((years-fullYears)*12);const tenYearNet=annualSave*10-cost;const verdict=years<=7?'<span class=\"badge-good\">◎ 買い替えメリット大（寿命前に回収可能）</span>':years<=10?'<span class=\"badge-mid\">◯ 標準的（10年使用で元が取れる水準）</span>':'<span class=\"badge-low\">△ 電気代差額だけでは回収に10年以上かかります</span>';box.innerHTML=`<div class=\"result-headline\">元が取れるまでの期間：<strong>約 ${fullYears}年 ${months}ヶ月</strong></div><div class=\"verdict-line\">判定：${verdict}</div><div class=\"metrics-row\"><div class=\"metric-card\"><span>年間の電気代節約額</span><strong>¥${annualSave.toLocaleString()} / 年</strong><small>（月あたり約 ¥${monthlySave.toLocaleString()} お得）</small></div><div class=\"metric-card\"><span>10年間使った場合のトータル損得</span><strong class=\"${tenYearNet>=0?'pos':'neg'}\">${tenYearNet>=0?'+':''}¥${tenYearNet.toLocaleString()}</strong><small>（10年分の節約額 − 購入費用）</small></div></div>`;}document.addEventListener('DOMContentLoaded',calculatePayback);",
+  "articleHtml": "<h2>家電の買い替えで「元が取れるか」を判断する3つの基準</h2><p>家電の一般的な寿命（設計上の標準使用期間）は<strong>エアコン・冷蔵庫ともに約10年</strong>です。そのため、電気代の差額だけで判断する場合は「10年以内に損益分岐点を超えるかどうか」がひとつの目安になります。</p><h3>1. 最も元が取りやすいのは「照明（LED化）」と「10年以上前の大型冷蔵庫」</h3><p>24時間365日稼働し続ける冷蔵庫は、10年前のモデルと最新モデルで年間消費電力量が半分近く（年間約8,000円〜1万円以上の差）になるケースが珍しくありません。さらに自治体の「省エネ家電買い替え補助金」や「東京ゼロエミポイント」などを併用すると、回収期間を一気に2〜3年短縮できます。</p><h3>2. 実測値を測るとさらに正確に比較できる</h3><p>カタログ記載の「期間消費電力量」はJIS規格に基づいた平均値です。自宅の設置環境や使用時間によって実際の消費電力は大きく変わるため、買い替え前に1,500円前後の「ワットモニター」で現在の家電の電気代を測ってみると、驚くほど正確な回収シミュレーションが可能です。</p>",
+  "createdAt": "2026-11-13"
+}

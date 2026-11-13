@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。">
+  <meta name="keywords" content="家電 買い替え 元が取れる 計算, エアコン 電気代 比較 シミュレーター, 冷蔵庫 省エネ 損益分岐点">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">家電・エネルギー</span>
+      <h1>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h1>
+      <p class="summary">エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      
+      <div class="calc-grid"><div class="form-group"><label>対象家電プリセット（選択で目安を自動入力）</label><select id="preset" onchange="applyPreset()"><option value="custom">自分で数値を入力する</option><option value="aircon" selected>エアコン（10年前の機種 → 最新省エネ機種）</option><option value="fridge">大型冷蔵庫（10年前の機種 → 最新省エネ機種）</option><option value="led">部屋照明（蛍光灯シーリング → LED照明）</option></select></div><div class="form-group"><label>買い替え費用（本体価格＋工事費 − 下取り・補助金）［円］</label><input type="number" id="purchaseCost" value="110000" min="1000" step="1000" oninput="calculatePayback()"></div><div class="form-group"><label>現在の家電の年間消費電力量［kWh/年］（または月額電気代換算）</label><input type="number" id="oldKwh" value="980" min="10" step="10" oninput="calculatePayback()"></div><div class="form-group"><label>新しい家電の年間消費電力量［kWh/年］</label><input type="number" id="newKwh" value="660" min="10" step="10" oninput="calculatePayback()"></div><div class="form-group"><label>電気料金単価［円/kWh］（全国目安：31円）</label><input type="number" id="unitPrice" value="31" min="10" max="60" step="0.5" oninput="calculatePayback()"></div></div><div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">コンセントに挿すだけ！家電の実測電気代がわかる「ワットモニター」</div>
+        <p class="aff-item-desc">今の家電が実際に毎月いくら電気代を食っているか1円単位で計測できる人気チェッカーです。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%B5%E3%83%B3%E3%83%AF%E3%82%B5%E3%83%97%E3%83%A9%E3%82%A4%20%E3%83%AF%E3%83%83%E3%83%88%E3%83%A2%E3%83%8B%E3%82%BF%E3%83%BC%20%E9%9B%BB%E6%B0%97%E4%BB%A3%E8%A8%88%E6%B8%AC%E5%99%A8&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">Amazon 省エネ家電・季節空調売れ筋ランキング</div>
+        <p class="aff-item-desc">最新の省エネ基準達成モデルや、工事費込みのベストセラー価格を比較できます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E7%9C%81%E3%82%A8%E3%83%8D%20%E3%82%A8%E3%82%A2%E3%82%B3%E3%83%B3%20%E5%86%B7%E8%94%B5%E5%BA%AB%20%E5%A3%B2%E3%82%8C%E7%AD%8B&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>家電の買い替えで「元が取れるか」を判断する3つの基準</h2><p>家電の一般的な寿命（設計上の標準使用期間）は<strong>エアコン・冷蔵庫ともに約10年</strong>です。そのため、電気代の差額だけで判断する場合は「10年以内に損益分岐点を超えるかどうか」がひとつの目安になります。</p><h3>1. 最も元が取りやすいのは「照明（LED化）」と「10年以上前の大型冷蔵庫」</h3><p>24時間365日稼働し続ける冷蔵庫は、10年前のモデルと最新モデルで年間消費電力量が半分近く（年間約8,000円〜1万円以上の差）になるケースが珍しくありません。さらに自治体の「省エネ家電買い替え補助金」や「東京ゼロエミポイント」などを併用すると、回収期間を一気に2〜3年短縮できます。</p><h3>2. 実測値を測るとさらに正確に比較できる</h3><p>カタログ記載の「期間消費電力量」はJIS規格に基づいた平均値です。自宅の設置環境や使用時間によって実際の消費電力は大きく変わるため、買い替え前に1,500円前後の「ワットモニター」で現在の家電の電気代を測ってみると、驚くほど正確な回収シミュレーションが可能です。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/mobile-plan-breakeven-calculator.html">
+        <span class="category-badge">暮らし・通信費節約</span>
+        <h3>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター</h3>
+        <p>現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/pc-power-electricity-calculator.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター</h3>
+        <p>CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function applyPreset(){const p=document.getElementById('preset').value;if(p==='aircon'){document.getElementById('purchaseCost').value=110000;document.getElementById('oldKwh').value=980;document.getElementById('newKwh').value=660;}else if(p==='fridge'){document.getElementById('purchaseCost').value=145000;document.getElementById('oldKwh').value=540;document.getElementById('newKwh').value=260;}else if(p==='led'){document.getElementById('purchaseCost').value=8500;document.getElementById('oldKwh').value=280;document.getElementById('newKwh').value=110;}calculatePayback();}function calculatePayback(){const cost=parseFloat(document.getElementById('purchaseCost').value)||0;const oldK=parseFloat(document.getElementById('oldKwh').value)||0;const newK=parseFloat(document.getElementById('newKwh').value)||0;const price=parseFloat(document.getElementById('unitPrice').value)||31;const diffKwh=Math.max(0,oldK-newK);const annualSave=Math.round(diffKwh*price);const monthlySave=Math.round(annualSave/12);const box=document.getElementById('calcResult');if(annualSave<=0){box.innerHTML='<p class="warn">新しい家電の消費電力が現在より低くなるように入力してください。</p>';return;}const years=cost/annualSave;const fullYears=Math.floor(years);const months=Math.round((years-fullYears)*12);const tenYearNet=annualSave*10-cost;const verdict=years<=7?'<span class="badge-good">◎ 買い替えメリット大（寿命前に回収可能）</span>':years<=10?'<span class="badge-mid">◯ 標準的（10年使用で元が取れる水準）</span>':'<span class="badge-low">△ 電気代差額だけでは回収に10年以上かかります</span>';box.innerHTML=`<div class="result-headline">元が取れるまでの期間：<strong>約 ${fullYears}年 ${months}ヶ月</strong></div><div class="verdict-line">判定：${verdict}</div><div class="metrics-row"><div class="metric-card"><span>年間の電気代節約額</span><strong>¥${annualSave.toLocaleString()} / 年</strong><small>（月あたり約 ¥${monthlySave.toLocaleString()} お得）</small></div><div class="metric-card"><span>10年間使った場合のトータル損得</span><strong class="${tenYearNet>=0?'pos':'neg'}">${tenYearNet>=0?'+':''}¥${tenYearNet.toLocaleString()}</strong><small>（10年分の節約額 − 購入費用）</small></div></div>`;}document.addEventListener('DOMContentLoaded',calculatePayback);
+  </script>
+</body>
+</html>

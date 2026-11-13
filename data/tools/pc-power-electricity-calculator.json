@@ -1,0 +1,24 @@
+{
+  "slug": "pc-power-electricity-calculator",
+  "title": "ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター",
+  "category": "ガジェット・PC",
+  "summary": "CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。",
+  "targetKeywords": ["ゲーミングPC 電気代 計算", "自作PC 電源容量 シミュレーター", "グラボ 電気代 月額 比較"],
+  "affiliateSearchQuery": "PC電源ユニット 80PLUS GOLD ATX3.0 ワットチェッカー",
+  "affiliateRecommendations": [
+    {
+      "name": "変換ロスを減らして電気代を節約！80PLUS GOLD / ATX3.0対応電源ユニット",
+      "description": "電源効率（80PLUS認証グレード）を上げるだけで、高負荷時の発熱と無駄な消費電力を大幅にカットできます。",
+      "searchQuery": "電源ユニット 750W 850W 80PLUS GOLD ATX3.0"
+    },
+    {
+      "name": "スマホでPCの消費電力確認＆遠隔ON/OFFができるスマートプラグ",
+      "description": "ゲーム中とアイドル時のリアルタイム消費電力（W）をスマホアプリでグラフ管理できます。",
+      "searchQuery": "SwitchBot スマートプラグ 電力モニタリング"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\"><div class=\"form-group\"><label>GPU（グラフィックボード）クラス</label><select id=\"gpuPower\" onchange=\"calcPc()\"><option value=\"115\">エントリー（RTX 4060 / RX 7600 クラス：約115〜160W）</option><option value=\"200\" selected>ミドル（RTX 4070 Super クラス：約200〜220W）</option><option value=\"285\">ハイエンド（RTX 4070 Ti Super / 4080 クラス：約285〜320W）</option><option value=\"450\">フラッグシップ（RTX 4090 クラス：約450W）</option></select></div><div class=\"form-group\"><label>CPU＋周辺パーツ合計消費電力（ゲーム負荷時）［W］</label><input type=\"number\" id=\"cpuOtherPower\" value=\"130\" min=\"40\" max=\"400\" step=\"10\" oninput=\"calcPc()\"></div><div class=\"form-group\"><label>1日あたりのゲーム・高負荷作業時間［時間/日］</label><input type=\"number\" id=\"gameHours\" value=\"3\" min=\"0\" max=\"24\" step=\"0.5\" oninput=\"calcPc()\"></div><div class=\"form-group\"><label>1日あたりのアイドル・ブラウジング時間［時間/日］（約75Wで計算）</label><input type=\"number\" id=\"idleHours\" value=\"4\" min=\"0\" max=\"24\" step=\"0.5\" oninput=\"calcPc()\"></div></div><div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function calcPc(){const gpu=parseFloat(document.getElementById('gpuPower').value)||200;const cpuOther=parseFloat(document.getElementById('cpuOtherPower').value)||130;const gHours=parseFloat(document.getElementById('gameHours').value)||0;const iHours=parseFloat(document.getElementById('idleHours').value)||0;const peakLoad=gpu+cpuOther;const recPsuRaw=Math.ceil((peakLoad*1.65)/50)*50;const recPsu=Math.max(550,recPsuRaw);const psuEfficiency=0.88;const wallGameW=peakLoad/psuEfficiency;const wallIdleW=75/psuEfficiency;const dailyKwh=((wallGameW*gHours)+(wallIdleW*iHours))/1000;const monthlyCost=Math.round(dailyKwh*30*31);const yearlyCost=monthlyCost*12;document.getElementById('calcResult').innerHTML=`<div class=\"result-headline\">推奨電源ユニット容量：<strong>${recPsu} W 以上</strong>（80PLUS GOLD推奨）</div><div class=\"metrics-row\"><div class=\"metric-card\"><span>月々のPC電気代目安</span><strong>約 ¥${monthlyCost.toLocaleString()} / 月</strong><small>（ゲーム時実質 ${Math.round(wallGameW)}W / 1日 ${dailyKwh.toFixed(2)}kWh）</small></div><div class=\"metric-card\"><span>年間のPC電気代目安</span><strong>約 ¥${yearlyCost.toLocaleString()} / 年</strong><small>（電気料金単価 31円/kWh・変換効率88%で算出）</small></div></div>`;}document.addEventListener('DOMContentLoaded',calcPc);",
+  "articleHtml": "<h2>ゲーミングPCの電源容量で「ピーク消費電力の約1.6〜2倍」が推奨される理由</h2><p>PC用の電源ユニット（PSU）は、<strong>最大定格出力の50%〜60%前後の負荷で稼働しているときが最も電力変換効率が高く、静音性と寿命も最大化される</strong>という特性があります。さらに近年のグラフィックボードは瞬間的なスパイク電力（瞬間最大消費電力）が発生するため、余裕を持った容量選びが不可欠です。</p><h3>80PLUS認証グレードで毎月の電気代も変わる</h3><p>PCパーツが300Wを消費していても、コンセントから実際に引き込まれる電力は「300W ÷ 電源の変換効率」となります。古いSTANDARD電源（効率80%）から最新のGOLD/PLATINUM電源（効率90%前後）に変えるだけで、余分な排熱が減り、夏場のエアコン負荷も含めて電気代をスマートに抑えられます。</p>",
+  "createdAt": "2026-11-13"
+}

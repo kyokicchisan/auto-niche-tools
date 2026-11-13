@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。">
+  <meta name="keywords" content="スマホ 乗り換え 元が取れる 計算, 格安SIM 節約 シミュレーター, 通信費 2年間 差額 計算機">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">暮らし・通信費節約</span>
+      <h1>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター</h1>
+      <p class="summary">現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。</p>
+      
+      <div class="calc-grid"><div class="form-group"><label>現在のスマホ月額料金（1人あたり）［円/月］</label><input type="number" id="curFee" value="7480" min="500" step="100" oninput="calcSim()"></div><div class="form-group"><label>乗り換え後の月額料金［円/月］（格安SIM・オンラインプラン目安：1,980〜2,970円）</label><input type="number" id="newFee" value="2178" min="300" step="100" oninput="calcSim()"></div><div class="form-group"><label>乗り換え人数（家族同時に見直す場合）［人］</label><input type="number" id="members" value="1" min="1" max="10" step="1" oninput="calcSim()"></div><div class="form-group"><label>初期費用・事務手数料など（1人あたり）［円］</label><input type="number" id="initFee" value="3300" min="0" step="500" oninput="calcSim()"></div></div><div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">契約事務手数料（3,300円〜）が無料・割引になる「エントリーパッケージ」</div>
+        <p class="aff-item-desc">乗り換え前にAmazonで数百円のエントリーコードを購入しておくと、初期事務手数料を大幅に節約できます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E6%A0%BC%E5%AE%89SIM%20%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AA%E3%83%BC%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%20%E4%BA%8B%E5%8B%99%E6%89%8B%E6%95%B0%E6%96%99%E7%84%A1%E6%96%99&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">キャリア縛りなし！コスパ最強のSIMフリースマートフォン売れ筋</div>
+        <p class="aff-item-desc">キャリアショップの割高な分割価格ではなく、SIMフリー版を一括購入することでトータル維持費を最小化できます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=SIM%E3%83%95%E3%83%AA%E3%83%BC%20%E3%82%B9%E3%83%9E%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%B3%20%E6%9C%AC%E4%BD%93%20%E5%A3%B2%E3%82%8C%E7%AD%8B&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>スマホ料金の見直しは「最も確実で即効性が高い」固定費削減</h2><p>大手キャリアの無制限プラン（月7,000円〜8,000円台）を契約していても、実際の月間データ使用量を調べてみると<strong>ユーザーの約8割が月20GB未満</strong>に収まっていると言われています。これを月20GB〜30GBのオンライン専用プランや格安SIM（月額2,000円〜2,970円前後）に切り替えるだけで、使い勝手は一切変わらないまま年間6万円以上の現金が手元に残ります。</p><h3>エントリーパッケージを使えば「初月から黒字」も可能</h3><p>乗り換え時に唯一のハードルになるのが3,300円〜3,850円の契約事務手数料ですが、Amazonなどで販売されている数百円の「エントリーパッケージ（エントリーコード）」を事前に購入して申し込むことで、事務手数料を0円にできる通信会社が多くあります。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/pc-power-electricity-calculator.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター</h3>
+        <p>CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calcSim(){const cur=parseFloat(document.getElementById('curFee').value)||0;const next=parseFloat(document.getElementById('newFee').value)||0;const mem=parseInt(document.getElementById('members').value)||1;const init=parseFloat(document.getElementById('initFee').value)||0;const monthlyDiff=(cur-next)*mem;const totalInit=init*mem;const box=document.getElementById('calcResult');if(monthlyDiff<=0){box.innerHTML='<p class="warn">乗り換え後の月額料金が現在より安くなるように入力してください。</p>';return;}const monthsToPayback=Math.ceil(totalInit/monthlyDiff);const save2Years=(monthlyDiff*24)-totalInit;box.innerHTML=`<div class="result-headline">初期費用の回収期間：<strong>${monthsToPayback<=1?'初月（1ヶ月目）':monthsToPayback+'ヶ月目'} から黒字化！</strong></div><div class="metrics-row"><div class="metric-card"><span>毎月の固定費削減額（${mem}人合計）</span><strong>¥${monthlyDiff.toLocaleString()} / 月</strong><small>（年間 ¥${(monthlyDiff*12).toLocaleString()} の節約）</small></div><div class="metric-card"><span>2年間（24ヶ月）で浮くお金</span><strong class="pos">+¥${save2Years.toLocaleString()}</strong><small>（初期費用 ¥${totalInit.toLocaleString()} を差し引き後の純利益）</small></div></div>`;}document.addEventListener('DOMContentLoaded',calcSim);
+  </script>
+</body>
+</html>

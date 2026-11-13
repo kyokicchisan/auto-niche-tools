@@ -1,0 +1,24 @@
+{
+  "slug": "mobile-plan-breakeven-calculator",
+  "title": "スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター",
+  "category": "暮らし・通信費節約",
+  "summary": "現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。",
+  "targetKeywords": ["スマホ 乗り換え 元が取れる 計算", "格安SIM 節約 シミュレーター", "通信費 2年間 差額 計算機"],
+  "affiliateSearchQuery": "SIMフリー スマートフォン モバイルルーター エントリーパッケージ",
+  "affiliateRecommendations": [
+    {
+      "name": "契約事務手数料（3,300円〜）が無料・割引になる「エントリーパッケージ」",
+      "description": "乗り換え前にAmazonで数百円のエントリーコードを購入しておくと、初期事務手数料を大幅に節約できます。",
+      "searchQuery": "格安SIM エントリーパッケージ 事務手数料無料"
+    },
+    {
+      "name": "キャリア縛りなし！コスパ最強のSIMフリースマートフォン売れ筋",
+      "description": "キャリアショップの割高な分割価格ではなく、SIMフリー版を一括購入することでトータル維持費を最小化できます。",
+      "searchQuery": "SIMフリー スマートフォン 本体 売れ筋"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\"><div class=\"form-group\"><label>現在のスマホ月額料金（1人あたり）［円/月］</label><input type=\"number\" id=\"curFee\" value=\"7480\" min=\"500\" step=\"100\" oninput=\"calcSim()\"></div><div class=\"form-group\"><label>乗り換え後の月額料金［円/月］（格安SIM・オンラインプラン目安：1,980〜2,970円）</label><input type=\"number\" id=\"newFee\" value=\"2178\" min=\"300\" step=\"100\" oninput=\"calcSim()\"></div><div class=\"form-group\"><label>乗り換え人数（家族同時に見直す場合）［人］</label><input type=\"number\" id=\"members\" value=\"1\" min=\"1\" max=\"10\" step=\"1\" oninput=\"calcSim()\"></div><div class=\"form-group\"><label>初期費用・事務手数料など（1人あたり）［円］</label><input type=\"number\" id=\"initFee\" value=\"3300\" min=\"0\" step=\"500\" oninput=\"calcSim()\"></div></div><div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function calcSim(){const cur=parseFloat(document.getElementById('curFee').value)||0;const next=parseFloat(document.getElementById('newFee').value)||0;const mem=parseInt(document.getElementById('members').value)||1;const init=parseFloat(document.getElementById('initFee').value)||0;const monthlyDiff=(cur-next)*mem;const totalInit=init*mem;const box=document.getElementById('calcResult');if(monthlyDiff<=0){box.innerHTML='<p class=\"warn\">乗り換え後の月額料金が現在より安くなるように入力してください。</p>';return;}const monthsToPayback=Math.ceil(totalInit/monthlyDiff);const save2Years=(monthlyDiff*24)-totalInit;box.innerHTML=`<div class=\"result-headline\">初期費用の回収期間：<strong>${monthsToPayback<=1?'初月（1ヶ月目）':monthsToPayback+'ヶ月目'} から黒字化！</strong></div><div class=\"metrics-row\"><div class=\"metric-card\"><span>毎月の固定費削減額（${mem}人合計）</span><strong>¥${monthlyDiff.toLocaleString()} / 月</strong><small>（年間 ¥${(monthlyDiff*12).toLocaleString()} の節約）</small></div><div class=\"metric-card\"><span>2年間（24ヶ月）で浮くお金</span><strong class=\"pos\">+¥${save2Years.toLocaleString()}</strong><small>（初期費用 ¥${totalInit.toLocaleString()} を差し引き後の純利益）</small></div></div>`;}document.addEventListener('DOMContentLoaded',calcSim);",
+  "articleHtml": "<h2>スマホ料金の見直しは「最も確実で即効性が高い」固定費削減</h2><p>大手キャリアの無制限プラン（月7,000円〜8,000円台）を契約していても、実際の月間データ使用量を調べてみると<strong>ユーザーの約8割が月20GB未満</strong>に収まっていると言われています。これを月20GB〜30GBのオンライン専用プランや格安SIM（月額2,000円〜2,970円前後）に切り替えるだけで、使い勝手は一切変わらないまま年間6万円以上の現金が手元に残ります。</p><h3>エントリーパッケージを使えば「初月から黒字」も可能</h3><p>乗り換え時に唯一のハードルになるのが3,300円〜3,850円の契約事務手数料ですが、Amazonなどで販売されている数百円の「エントリーパッケージ（エントリーコード）」を事前に購入して申し込むことで、事務手数料を0円にできる通信会社が多くあります。</p>",
+  "createdAt": "2026-11-13"
+}

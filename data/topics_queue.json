@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "ev-hybrid-gas-breakeven",
+    "title": "ハイブリッド車・EV vs ガソリン車「走行距離何kmで元が取れる？」損益分岐シミュレーター",
+    "category": "暮らし・乗り物コスト",
+    "targetKeywords": ["ハイブリッド 元が取れる 計算", "ガソリン代 比較 シミュレーター", "車 買い替え 損益分岐点"],
+    "affiliateSearchQuery": "カー用品 燃費向上 グッズ EV充電ケーブル",
+    "status": "pending"
+  },
+  {
+    "slug": "solar-battery-payback",
+    "title": "ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機",
+    "category": "家電・エネルギー",
+    "targetKeywords": ["ポータブル電源 元が取れる", "ソーラーパネル 電気代 計算", "ベランダ発電 採算 シミュレーター"],
+    "affiliateSearchQuery": "ポータブル電源 ソーラーパネル セット リン酸鉄",
+    "status": "pending"
+  },
+  {
+    "slug": "dehumidifier-dryer-cost",
+    "title": "浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機",
+    "category": "家電・エネルギー",
+    "targetKeywords": ["浴室乾燥機 電気代 計算", "除湿機 部屋干し 電気代 比較", "ドラム式洗濯機 元が取れる"],
+    "affiliateSearchQuery": "衣類乾燥除湿機 ハイブリッド 省エネ",
+    "status": "pending"
+  },
+  {
+    "slug": "storage-raid-capacity-calc",
+    "title": "動画撮影・防犯カメラ・NAS用「必要ストレージ容量（TB）＆録画可能日数」逆算ツール",
+    "category": "ガジェット・PC",
+    "targetKeywords": ["防犯カメラ HDD 容量 計算", "動画 撮影 容量 計算機", "NAS 容量 シミュレーター"],
+    "affiliateSearchQuery": "内蔵HDD NAS用 大容量 外付けSSD",
+    "status": "pending"
+  },
+  {
+    "slug": "coffee-maker-cafe-breakeven",
+    "title": "全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機",
+    "category": "暮らし・食費節約",
+    "targetKeywords": ["コーヒーメーカー 元が取れる 計算", "全自動コーヒーメーカー 1杯あたり コスト", "カフェ代 節約 シミュレーター"],
+    "affiliateSearchQuery": "全自動コーヒーメーカー デロンギ コーヒー豆",
+    "status": "pending"
+  },
+  {
+    "slug": "water-server-petbottle-cost",
+    "title": "ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機",
+    "category": "暮らし・食費節約",
+    "targetKeywords": ["ウォーターサーバー ペットボトル どっちが安い 計算", "浄水器 コスト 比較 シミュレーター"],
+    "affiliateSearchQuery": "浄水器 カートリッジ ラベルレス 水 2L 箱買い",
+    "status": "pending"
+  },
+  {
+    "slug": "ergonomic-chair-cost-per-day",
+    "title": "高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター",
+    "category": "仕事・デスク環境",
+    "targetKeywords": ["オフィスチェア 高い 元が取れる", "マットレス 寿命 日割り計算", "テレワーク 椅子 投資対効果"],
+    "affiliateSearchQuery": "オフィスチェア メッシュ 人間工学 高反発マットレス",
+    "status": "pending"
+  }
+]

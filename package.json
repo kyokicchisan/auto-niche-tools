@@ -1,0 +1,11 @@
+{
+  "name": "auto-niche-tools",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AIによる損得・コスト逆算シミュレーター自動量産＆収益化システム",
+  "scripts": {
+    "build": "node scripts/build_site.mjs",
+    "generate": "node scripts/generate_tool.mjs"
+  }
+}

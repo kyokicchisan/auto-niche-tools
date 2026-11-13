@@ -1,0 +1,20 @@
+{
+  "siteName": "損得・コスト逆算シミュレーター Lab",
+  "siteDescription": "「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集",
+  "baseUrl": "https://kyokicchisan.github.io/auto-niche-tools",
+  "adsense": {
+    "enabled": false,
+    "clientId": "ca-pub-XXXXXXXXXXXXXXXX",
+    "slotIdTop": "1111111111",
+    "slotIdBottom": "2222222222"
+  },
+  "affiliate": {
+    "amazonAssociateTag": "your-tag-22",
+    "rakutenAffiliateId": "",
+    "customCtaBanner": {
+      "enabled": true,
+      "badgeText": "💡 計算結果とあわせてチェック",
+      "defaultButtonText": "Amazonで人気の対象アイテム・価格を見る"
+    }
+  }
+}
