@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ハイブリッド車・EV vs ガソリン車「走行距離何kmで元が取れる？」損益分岐シミュレーター | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="ハイブリッド車（HV）や電気自動車（EV）はガソリン車より車両価格が高めですが、何km走れば車両価格の差額を燃料費で回収できるのか？走行距離や実燃費、電気代から元が取れる損益分岐点を一瞬で算出します。">
+  <meta name="keywords" content="ハイブリッド 元が取れる 計算, ガソリン代 比較 シミュレーター, 車 買い替え 損益分岐点">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">暮らし・乗り物コスト</span>
+      <h1>ハイブリッド車・EV vs ガソリン車「走行距離何kmで元が取れる？」損益分岐シミュレーター</h1>
+      <p class="summary">ハイブリッド車（HV）や電気自動車（EV）はガソリン車より車両価格が高めですが、何km走れば車両価格の差額を燃料費で回収できるのか？走行距離や実燃費、電気代から元が取れる損益分岐点を一瞬で算出します。</p>
+      
+      <div class="calc-grid"><div class="form-group"><label for="comparisonType">比較対象</label><select id="comparisonType" onchange="calculateBreakeven()"><option value="HV" selected>ハイブリッド車 (HV)</option><option value="EV">電気自動車 (EV)</option></select></div><div class="form-group"><label for="annualDistance">年間走行距離 (km)</label><input type="number" id="annualDistance" value="10000" step="500" oninput="calculateBreakeven()"></div><div class="form-group"><label for="gasPrice">ガソリン価格 (円/L)</label><input type="number" id="gasPrice" value="175" step="1" oninput="calculateBreakeven()"></div><div class="form-group"><label for="baseCarPrice">ガソリン車 車両価格 (万円)</label><input type="number" id="baseCarPrice" value="250" step="10" oninput="calculateBreakeven()"></div><div class="form-group"><label for="baseCarEconomy">ガソリン車 実燃費 (km/L)</label><input type="number" id="baseCarEconomy" value="13" step="0.5" oninput="calculateBreakeven()"></div><div class="form-group"><label for="targetCarPrice">HV/EV 車両価格 (万円)</label><input type="number" id="targetCarPrice" value="310" step="10" oninput="calculateBreakeven()"></div><div class="form-group"><label for="targetCarEconomy" id="targetEconomyLabel">HV 実燃費 (km/L)</label><input type="number" id="targetCarEconomy" value="23" step="0.5" oninput="calculateBreakeven()"></div><div class="form-group" id="electricityCostGroup" style="display:none;"><label for="electricityRate">電気代単価 (円/kWh)</label><input type="number" id="electricityRate" value="31" step="1" oninput="calculateBreakeven()"></div></div><div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">車載用高効率充電器・コンセントタップ</div>
+        <p class="aff-item-desc">EV・PHEVやHV車内での電源活用を効率化し、ドライブ中の利便性と節電を両立させる必須アイテム。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E8%BB%8A%E8%BC%89%E3%82%B3%E3%83%B3%E3%82%BB%E3%83%B3%E3%83%88%20%E3%82%A4%E3%83%B3%E3%83%90%E3%83%BC%E3%82%BF%E3%83%BC%20%E7%AF%80%E9%9B%BB&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">低燃費タイヤ（エコタイヤ）</div>
+        <p class="aff-item-desc">転がり抵抗を減らすことで実燃費・電費を大幅に向上させ、損益分岐点への到達を速めます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E4%BD%8E%E7%87%83%E8%B2%BB%E3%82%BF%E3%82%A4%E3%83%A4%20%E3%82%A8%E3%82%B3%E3%82%BF%E3%82%A4%E3%83%A4&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>ハイブリッド車やEVは本当に「元が取れる」のか？</h2><p>車の買い替え時、多くの人が悩むのが「ガソリン車にするか、それともハイブリッド車（HV）や電気自動車（EV）にするか」という選択です。HVやEVは燃費・電費に優れ毎月の燃料費を大幅に抑えられますが、車両本体価格がガソリン車よりも数十万〜数百万円高く設定されています。</p><p>結論から言うと、<strong>「年間走行距離が多い人ほど速く元が取れ、逆に走行距離が少ない人はガソリン車の方が生涯コストが安い」</strong>ケースが多々あります。</p><h3>損益分岐点を決める3つの重要要素</h3><p>元が取れるまでの距離（損益分岐点）を左右するのは、主に以下の3点です。</p><ul><li><strong>車両価格の差額：</strong>ガソリン車との価格差が小さいほど元が取りやすくなります。国の補助金（CEV補助金など）や自治体の補助金を活用できる場合、実質価格差は縮まります。</li><li><strong>実燃費・電費の差：</strong>カタログ値（WLTCモード）ではなく、日常走行での「実燃費」で計算することが重要です。一般的にチョイ乗りが多いと燃費は悪化します。</li><li><strong>ガソリン価格と電気代：</strong>ガソリン高騰期にはHVやEVの優位性が高まります。EVの場合は深夜電力プランの活用や太陽光発電の連携で充電コストをさらに下げられます。</li></ul><h3>損益分岐点を早めるためのコツ</h3><p>HVやEVを選んで確実に得をするためには、以下のポイントを意識してみましょう。</p><p>1. <strong>補助金や税制優遇（エコカー減税）をフル活用する：</strong>購入時の優遇措置をしっかり計算に入れることで、初期投資の差額を抑えられます。<br>2. <strong>低燃費タイヤの導入：</strong>タイヤ交換時に転がり抵抗の少ないエコタイヤを選ぶことで、実燃費・電費を向上させます。<br>3. <strong>リセールバリューを考慮する：</strong>数年後に売却する場合、HVや特定人気のEVは買取価格が高値で安定する傾向があります。車両価格差の全てを燃料代だけで回収する必要はありません。</p><p>まずはシミュレーターにお手元の条件を入力し、ご自身のライフスタイルで「何年・何万kmで元が取れるか」を確認してみましょう！</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/mobile-plan-breakeven-calculator.html">
+        <span class="category-badge">暮らし・通信費節約</span>
+        <h3>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター</h3>
+        <p>現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/pc-power-electricity-calculator.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター</h3>
+        <p>CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateBreakeven() { const type = document.getElementById('comparisonType').value; const annualDist = parseFloat(document.getElementById('annualDistance').value) || 0; const gasPrice = parseFloat(document.getElementById('gasPrice').value) || 0; const basePrice = (parseFloat(document.getElementById('baseCarPrice').value) || 0) * 10000; const baseEconomy = parseFloat(document.getElementById('baseCarEconomy').value) || 1; const targetPrice = (parseFloat(document.getElementById('targetCarPrice').value) || 0) * 10000; const targetEconomy = parseFloat(document.getElementById('targetCarEconomy').value) || 1; const electricityRate = parseFloat(document.getElementById('electricityRate').value) || 31; const targetEconomyLabel = document.getElementById('targetEconomyLabel'); const electricityCostGroup = document.getElementById('electricityCostGroup'); if (type === 'EV') { targetEconomyLabel.innerText = 'EV 電費 (km/kWh)'; electricityCostGroup.style.display = 'block'; } else { targetEconomyLabel.innerText = 'HV 実燃費 (km/L)'; electricityCostGroup.style.display = 'none'; } const baseCostPerKm = gasPrice / baseEconomy; let targetCostPerKm = 0; if (type === 'EV') { targetCostPerKm = electricityRate / targetEconomy; } else { targetCostPerKm = gasPrice / targetEconomy; } const diffPrice = targetPrice - basePrice; const savingsPerKm = baseCostPerKm - targetCostPerKm; const resultDiv = document.getElementById('calcResult'); if (diffPrice <= 0) { resultDiv.innerHTML = '<div class="result-headline">結論：<strong>初期費用が同額以下のため、即座にお得です！</strong></div><div class="metrics-row"><div class="metric-card"><span>1kmあたりの節約額</span><strong>' + Math.max(0, savingsPerKm).toFixed(1) + ' 円</strong><small>ガソリン車との比較</small></div><div class="metric-card"><span>年間燃料代節約</span><strong>' + Math.round(Math.max(0, savingsPerKm) * annualDist).toLocaleString() + ' 円</strong><small>年間' + annualDist.toLocaleString() + 'km走行時</small></div></div>'; return; } if (savingsPerKm <= 0) { resultDiv.innerHTML = '<div class="result-headline">結論：<strong>現在の条件では燃料代の元が取れません</strong></div><div class="metrics-row"><div class="metric-card"><span>1kmあたりのコスト差</span><strong>+' + Math.abs(savingsPerKm).toFixed(1) + ' 円</strong><small>HV/EVの方が割高です</small></div></div>'; return; } const breakevenKm = Math.round(diffPrice / savingsPerKm); const breakevenYears = (breakevenKm / annualDist).toFixed(1); const annualSavings = Math.round(savingsPerKm * annualDist); resultDiv.innerHTML = '<div class="result-headline">結論：約 <strong>' + breakevenKm.toLocaleString() + ' km</strong>（約 <strong>' + breakevenYears + ' 年</strong>）で元が取れます！</div><div class="metrics-row"><div class="metric-card"><span>車両価格差</span><strong>' + (diffPrice / 10000).toLocaleString() + ' 万円</strong><small>回収に必要な差額</small></div><div class="metric-card"><span>1kmあたりの節約</span><strong>' + savingsPerKm.toFixed(1) + ' 円</strong><small>燃料費の差額</small></div><div class="metric-card"><span>年間燃料代節約</span><strong>' + annualSavings.toLocaleString() + ' 円</strong><small>年間' + annualDist.toLocaleString() + 'km換算</small></div></div>'; } document.addEventListener('DOMContentLoaded', calculateBreakeven);
+  </script>
+</body>
+</html>
