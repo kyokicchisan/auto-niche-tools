@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>動画撮影・防犯カメラ・NAS用「必要ストレージ容量（TB）＆録画可能日数」逆算ツール | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="防犯カメラの常時録画や4K動画撮影、NAS導入で何TBのHDD/SSDが必要かを即座に逆算シミュレーション。ビットレートやカメラ台数、RAID構成から最適なストレージ容量と録画可能日数を自動算出します。">
+  <meta name="keywords" content="防犯カメラ HDD 容量 計算, 動画 撮影 容量 計算機, NAS 容量 シミュレーター">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">ガジェット・PC</span>
+      <h1>動画撮影・防犯カメラ・NAS用「必要ストレージ容量（TB）＆録画可能日数」逆算ツール</h1>
+      <p class="summary">防犯カメラの常時録画や4K動画撮影、NAS導入で何TBのHDD/SSDが必要かを即座に逆算シミュレーション。ビットレートやカメラ台数、RAID構成から最適なストレージ容量と録画可能日数を自動算出します。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="presetSelect">撮影・録画プリセット</label>
+    <select id="presetSelect" onchange="applyPreset(); calculateStorage();">
+      <option value="2">防犯カメラ: フルHD (H.265 / 2Mbps)</option>
+      <option value="4">防犯カメラ: フルHD (H.264 / 4Mbps)</option>
+      <option value="8" selected>防犯カメラ: 4K (H.265 / 8Mbps)</option>
+      <option value="16">防犯カメラ: 4K (H.264 / 16Mbps)</option>
+      <option value="50">YouTube/動画撮影: 4K 30p 高画質 (50Mbps)</option>
+      <option value="100">ミラーレス一眼: 4K 60p 高ビットレート (100Mbps)</option>
+      <option value="500">シネマ撮影: 4K ProRes 422 HQ (約500Mbps)</option>
+      <option value="custom">カスタム指定 (手動入力)</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="bitrate">ビットレート (Mbps)</label>
+    <input type="number" id="bitrate" value="8" min="0.5" step="0.5" oninput="calculateStorage();">
+  </div>
+
+  <div class="form-group">
+    <label for="streamCount">カメラ台数 / 同時録画ストリーム数</label>
+    <input type="number" id="streamCount" value="4" min="1" max="64" step="1" oninput="calculateStorage();">
+  </div>
+
+  <div class="form-group">
+    <label for="hoursPerDay">1日あたりの録画時間 (時間)</label>
+    <input type="number" id="hoursPerDay" value="24" min="0.5" max="24" step="0.5" oninput="calculateStorage();">
+  </div>
+
+  <div class="form-group">
+    <label for="targetDays">目標保存日数 (日)</label>
+    <input type="number" id="targetDays" value="30" min="1" max="3650" step="1" oninput="calculateStorage();">
+  </div>
+
+  <div class="form-group">
+    <label for="raidMode">RAID構成 / 冗長性</label>
+    <select id="raidMode" onchange="calculateStorage();">
+      <option value="single">RAIDなし (単体ドライブ / 効率100%)</option>
+      <option value="raid1">RAID 1 (ミラーリング / 実効50%)</option>
+      <option value="raid5" selected>RAID 5 (1台パリティ / 4台構成例: 75%)</option>
+      <option value="raid6">RAID 6 (2台パリティ / 4台構成例: 50%)</option>
+    </select>
+  </div>
+
+  <div class="form-group" id="driveCountGroup">
+    <label for="driveCount">NAS搭載ドライブ本数</label>
+    <input type="number" id="driveCount" value="4" min="2" max="16" step="1" oninput="calculateStorage();">
+  </div>
+
+  <div id="calcResult" class="result-box"></div>
+</div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">NAS専用 高耐久内蔵HDD（WD Red Plus / Seagate IronWolf）</div>
+        <p class="aff-item-desc">24時間365日の連続稼働を想定した高信頼性ドライブ。RAID環境での振動対策やエラー回復制御を備え、防犯カメラ録画や家庭内NASに最適です。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=NAS%20%E5%86%85%E8%94%B5HDD%208TB%20WD%20Red%20Seagate%20IronWolf&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">高速・耐衝撃 外付けポータブルSSD（1TB〜4TB）</div>
+        <p class="aff-item-desc">4K/60fpsやProResなど高ビットレート動画の現場バックアップに必須。転送待ち時間を大幅に削減し、編集ワークフローを高速化します。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E5%A4%96%E4%BB%98%E3%81%91SSD%202TB%204TB%20%E9%AB%98%E9%80%9F%20%E3%83%9D%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>防犯カメラや動画保存でストレージ容量が足りなくなる原因</h2><p>防犯カメラの映像記録やYouTube・業務向け動画撮影では、「購入したHDDの容量が予想よりはるかに早く上限に達してしまった」というトラブルが頻発します。この主な原因は、<strong>圧縮コーデック（H.264/H.265）によるデータレートの差</strong>と、<strong>RAID冗長化・ファイルシステムによる実効容量の目減り</strong>を事前に計算できていないことにあります。</p><p>例えば、同じフルHD画質でも旧来のH.264では4Mbps必要な記録が、高圧縮なH.265を採用すれば2Mbpsで済み、必要なHDD容量を半減させることができます。逆に、4K撮影や複数台のカメラを24時間常時稼働させる環境では、1台あたり1日十数GB〜数十GB単位で容量を消費するため、数台束ねるだけで1ヶ月で数TBのデータが蓄積されます。</p><h2>必要ストレージ容量を正確に見積もる4つの重要ステップ</h2><h3>1. ビットレート（Mbps）とカメラ台数の掛け合わせ</h3><p>映像データの容量は「ビットレート（Mbps）÷ 8 × 録画秒数」で決まります。1Mbpsはおよそ毎秒0.125MBです。4台の防犯カメラ（各8Mbps）で常時録画を行う場合、システム全体で毎秒4MB、1日（86,400秒）で約345GBものデータが生まれます。</p><h3>2. ファイルシステムと管理領域の「10%マージン」</h3><p>OSやファイルシステム（NTFS、ext4、Btrfsなど）の管理領域や、HDDのフォーマット換算差（1000倍と1024倍の差異）により、公称容量の約10%は実質的に利用できません。ドライブの満杯状態を避けてパフォーマンスを維持するためにも、計算値に最低10〜15%の空き容量マージンを上乗せするのが鉄則です。</p><h3>3. RAID構成によるパリティ容量の差し引き</h3><p>NASや録画サーバーでデータを保護するためにRAIDを組む場合、利用可能な実効容量が減少します。</p><ul><li><strong>RAID 1（ミラーリング）：</strong>2台のディスクに同じ内容を書き込むため、容量効率は50%になります。</li><li><strong>RAID 5：</strong>1台分のパリティを分散保存するため、4台構成時の実効容量は75%（3台分）となります。</li><li><strong>RAID 6：</strong>2台分のパリティを確保するため、4台構成時の実効容量は50%（2台分）となります。</li></ul><h3>4. ドライブの規格・耐久性（CMR方式の選択）</h3><p>大容量ストレージを選ぶ際は、単に容量（TB）を見るだけでなく、記録方式が<strong>CMR（従来型磁気記録）</strong>であるかを確認してください。安価なSMR方式のHDDは連続上書き録画やRAIDリビルド時に極端な速度低下を引き起こし、フレーム落ちやRAID崩壊を招くリスクがあります。常時録画やNAS用にはWD Red PlusやSeagate IronWolfなどの専用高耐久ドライブを選定しましょう。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/dehumidifier-dryer-cost.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機</h3>
+        <p>浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/solar-battery-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機</h3>
+        <p>ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ev-hybrid-gas-breakeven.html">
+        <span class="category-badge">暮らし・乗り物コスト</span>
+        <h3>ハイブリッド車・EV vs ガソリン車「走行距離何kmで元が取れる？」損益分岐シミュレーター</h3>
+        <p>ハイブリッド車（HV）や電気自動車（EV）はガソリン車より車両価格が高めですが、何km走れば車両価格の差額を燃料費で回収できるのか？走行距離や実燃費、電気代から元が取れる損益分岐点を一瞬で算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/mobile-plan-breakeven-calculator.html">
+        <span class="category-badge">暮らし・通信費節約</span>
+        <h3>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター</h3>
+        <p>現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/pc-power-electricity-calculator.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター</h3>
+        <p>CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function applyPreset() {
+  const preset = document.getElementById('presetSelect').value;
+  const bitrateInput = document.getElementById('bitrate');
+  if (preset !== 'custom') {
+    bitrateInput.value = preset;
+  }
+}
+
+function calculateStorage() {
+  const bitrate = parseFloat(document.getElementById('bitrate').value) || 0;
+  const streams = parseInt(document.getElementById('streamCount').value, 10) || 1;
+  const hours = parseFloat(document.getElementById('hoursPerDay').value) || 0;
+  const days = parseInt(document.getElementById('targetDays').value, 10) || 1;
+  const raid = document.getElementById('raidMode').value;
+  const driveCountInput = document.getElementById('driveCount');
+  let driveCount = parseInt(driveCountInput.value, 10) || 1;
+
+  // RAID最小台数の補正
+  if (raid === 'raid5' && driveCount < 3) {
+    driveCount = 3;
+    driveCountInput.value = 3;
+  } else if (raid === 'raid6' && driveCount < 4) {
+    driveCount = 4;
+    driveCountInput.value = 4;
+  } else if (raid === 'raid1' && driveCount < 2) {
+    driveCount = 2;
+    driveCountInput.value = 2;
+  }
+
+  // 1ストリーム 1秒あたりのMB = bitrate (Mbps) / 8
+  // 1日あたりの純粋容量 (GB) = (bitrate / 8) * 3600 * hours * streams / 1000
+  const gbPerDay = (bitrate / 8) * 3600 * hours * streams / 1000;
+  const rawTotalGb = gbPerDay * days;
+  const rawTotalTb = rawTotalGb / 1000;
+
+  // ファイルシステム管理領域やマージン (10%)
+  const effectiveRequiredTb = rawTotalTb * 1.10;
+
+  // RAID効率の計算
+  let raidEfficiency = 1.0;
+  if (raid === 'raid1') {
+    raidEfficiency = 1.0 / driveCount;
+  } else if (raid === 'raid5') {
+    raidEfficiency = (driveCount - 1) / driveCount;
+  } else if (raid === 'raid6') {
+    raidEfficiency = (driveCount - 2) / driveCount;
+  }
+
+  // 必要なドライブ総容量 (TB)
+  const totalPhysicalTb = effectiveRequiredTb / raidEfficiency;
+  // ドライブ1台あたり必要な容量 (TB)
+  const perDriveTb = raid === 'single' ? effectiveRequiredTb : (totalPhysicalTb / driveCount);
+
+  // 一般的な市販ドライブ容量（2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22TB）への繰り上げ提案
+  const commercialSizes = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
+  let recommendedDriveSize = commercialSizes[commercialSizes.length - 1];
+  for (let i = 0; i < commercialSizes.length; i++) {
+    if (commercialSizes[i] >= perDriveTb) {
+      recommendedDriveSize = commercialSizes[i];
+      break;
+    }
+  }
+
+  const recommendedTotalCapacity = raid === 'single' ? recommendedDriveSize : recommendedDriveSize * driveCount;
+
+  const resultBox = document.getElementById('calcResult');
+  resultBox.innerHTML = `
+    <div class="result-headline">
+      結論：推奨合計容量 <strong>${recommendedTotalCapacity} TB</strong>（実効容量: 約${rawTotalTb.toFixed(2)} TB必要）
+    </div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>1日のデータ増加量</span>
+        <strong>${gbPerDay >= 1000 ? (gbPerDay / 1000).toFixed(2) + ' TB' : gbPerDay.toFixed(1) + ' GB'}</strong>
+        <small>${streams}ストリーム / 1日${hours}時間</small>
+      </div>
+      <div class="metric-card">
+        <span>目標${days}日の純粋データ</span>
+        <strong>${rawTotalTb.toFixed(2)} TB</strong>
+        <small>マージン前 正味データ量</small>
+      </div>
+      <div class="metric-card">
+        <span>推奨ドライブ構成</span>
+        <strong>${recommendedDriveSize} TB × ${raid === 'single' ? '1' : driveCount}台</strong>
+        <small>${raid.toUpperCase()} 構成想定</small>
+      </div>
+      <div class="metric-card">
+        <span>実効RAIDストレージ効率</span>
+        <strong>${(raidEfficiency * 100).toFixed(0)}%</strong>
+        <small>冗長化による利用可能割合</small>
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', calculateStorage);
+  </script>
+</body>
+</html>
