@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。">
+  <meta name="keywords" content="ポータブル電源 元が取れる, ソーラーパネル 電気代 計算, ベランダ発電 採算 シミュレーター">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">家電・エネルギー</span>
+      <h1>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機</h1>
+      <p class="summary">ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="initialCost">導入セット費用（円）</label>
+    <input type="number" id="initialCost" value="148000" step="1000" min="10000" oninput="calculateSolarPayback()">
+  </div>
+  <div class="form-group">
+    <label for="panelWatts">ソーラーパネル合計出力（W）</label>
+    <input type="number" id="panelWatts" value="200" step="10" min="50" max="1200" oninput="calculateSolarPayback()">
+  </div>
+  <div class="form-group">
+    <label for="sunHours">1日の平均有効日照時間（時間/日）</label>
+    <select id="sunHours" onchange="calculateSolarPayback()">
+      <option value="2.0">悪条件（ベランダ一部日陰 / 約2.0時間）</option>
+      <option value="2.7" selected>標準条件（南向きベランダ・通年平均 / 約2.7時間）</option>
+      <option value="3.5">好条件（屋上・庭・遮蔽物なし / 約3.5時間）</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="electricityRate">電気料金単価（円/kWh）</label>
+    <input type="number" id="electricityRate" value="36" step="1" min="15" max="60" oninput="calculateSolarPayback()">
+  </div>
+  <div class="form-group">
+    <label for="systemLoss">充放電・変換ロス率（%）</label>
+    <select id="systemLoss" onchange="calculateSolarPayback()">
+      <option value="20">標準（約20%ロス・高効率MPPT）</option>
+      <option value="30" selected>保守的（約30%ロス・一般的な実効値）</option>
+      <option value="40">厳しめ（約40%ロス・高温時や小型機）</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="expectedLifespan">想定使用年数（バッテリー寿命）</label>
+    <select id="expectedLifespan" onchange="calculateSolarPayback()">
+      <option value="5">三元系リチウム等（約5年・800回）</option>
+      <option value="10" selected>リン酸鉄リチウム（約10年・3000回）</option>
+      <option value="15">リン酸鉄・長寿命モデル（約15年）</option>
+    </select>
+  </div>
+</div>
+<div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">リン酸鉄リチウム対応 ポータブル電源＋ソーラーパネルセット（1000Wh級）</div>
+        <p class="aff-item-desc">約3000回以上の充放電寿命（約10年）を誇り、元を取るための日常的なサイクル利用に最適なセットです。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%9D%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%E9%9B%BB%E6%BA%90%20%E3%82%BD%E3%83%BC%E3%83%A9%E3%83%BC%E3%83%91%E3%83%8D%E3%83%AB%20%E3%82%BB%E3%83%83%E3%83%88%20%E3%83%AA%E3%83%B3%E9%85%B8%E9%89%84%201000Wh&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">ワットモニター（消費電力・電気代チェッカー）</div>
+        <p class="aff-item-desc">ポタ電から給電する家電の消費電力をリアルタイム測定し、より効率的な節電運用を可能にします。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E7%AF%80%E9%9B%BB%20%E3%82%A8%E3%82%B3%E3%82%AD%E3%83%BC%E3%83%91%E3%83%BC%20%E3%83%AF%E3%83%83%E3%83%88%E3%83%A2%E3%83%8B%E3%82%BF%E3%83%BC%20%E3%82%B3%E3%83%B3%E3%82%BB%E3%83%B3%E3%83%88&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>ポータブル電源とソーラーパネルで「元が取れる」は本当か？</h2>
+<p>近年の電気料金高騰や防災意識の高まりを受け、「ベランダにソーラーパネルを置き、ポータブル電源に蓄電して日常使いすれば電気代をゼロに近づけられるのでは？」と考える方が急増しています。しかし結論から言うと、<strong>純粋な電気代削減だけで元を取る（投資回収する）ハードルは決して低くありません</strong>。採算を合わせるためには、現実的な発電スペックと寿命の計算が不可欠です。</p>
+
+<h3>回収期間を左右する3つの現実的ボトルネック</h3>
+<p>カタログスペックだけで「200Wパネル×5時間発電＝1kWh」と計算すると必ず失敗します。以下の実環境要因を把握しておくことが重要です。</p>
+<ul>
+  <li><strong>日照角と天候ロス（実効日照時間）：</strong>日本の年間平均で、快晴時のピークに相当する「実効日照時間」は1日あたり平均2.5〜3.2時間程度です。ベランダ設置で上階のひさしや手すりの影が入るとさらに短くなります。</li>
+  <li><strong>システム変換ロス（約20〜30%）：</strong>ソーラーパネルからポータブル電源への充電効率（MPPT制御ロス）、バッテリー内部の化学ロス、そして家電を使う際のDC→ACインバータ変換ロスにより、発電した電力の2〜3割は熱として失われます。</li>
+  <li><strong>バッテリーのサイクル寿命：</strong>旧来の三元系リチウムイオン（寿命約500〜800サイクル・約3〜5年）では元を取る前にバッテリーが劣化します。毎日使うなら、3000サイクル以上の寿命を持つ「リン酸鉄リチウムイオン（LiFePO4）」採用モデルが絶対条件です。</li>
+</ul>
+
+<h3>損益分岐点を早めるための賢い運用テクニック</h3>
+<p>試算で回収年数が10年を超えてしまった場合でも、以下の工夫によって実質的な費用対効果を劇的に引き上げることができます。</p>
+<ol>
+  <li><strong>セール・セット割引を狙う：</strong>大手メーカー（EcoFlow、Jackery、Anker等）のセール時には、定価より25〜40%安くセット導入できます。初期コストを10万円以下に抑えられれば、回収年数は一気に短縮されます。</li>
+  <li><strong>昼間のうちに常時消費家電へ充当：</strong>テレワーク用のPC、Wi-Fiルーター、冷蔵庫、スマートフォンの充電など、毎日必ず使うベースロード電源として使い切るルーティンを組むと、無駄な放電ロスを防げます。</li>
+  <li><strong>「防災保険料」としての価値を合算する：</strong>停電時に冷蔵庫を維持できたり、スマホの連絡手段を確保できる価値を考慮すれば、多少の赤字分は「家族の安心を買う防災保険」として十分にペイします。</li>
+</ol>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ev-hybrid-gas-breakeven.html">
+        <span class="category-badge">暮らし・乗り物コスト</span>
+        <h3>ハイブリッド車・EV vs ガソリン車「走行距離何kmで元が取れる？」損益分岐シミュレーター</h3>
+        <p>ハイブリッド車（HV）や電気自動車（EV）はガソリン車より車両価格が高めですが、何km走れば車両価格の差額を燃料費で回収できるのか？走行距離や実燃費、電気代から元が取れる損益分岐点を一瞬で算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/mobile-plan-breakeven-calculator.html">
+        <span class="category-badge">暮らし・通信費節約</span>
+        <h3>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター</h3>
+        <p>現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/pc-power-electricity-calculator.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター</h3>
+        <p>CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateSolarPayback() {
+  var cost = parseFloat(document.getElementById('initialCost').value) || 0;
+  var watts = parseFloat(document.getElementById('panelWatts').value) || 0;
+  var sunHours = parseFloat(document.getElementById('sunHours').value) || 0;
+  var rate = parseFloat(document.getElementById('electricityRate').value) || 0;
+  var loss = parseFloat(document.getElementById('systemLoss').value) || 0;
+  var lifespan = parseFloat(document.getElementById('expectedLifespan').value) || 10;
+
+  var eff = (100 - loss) / 100;
+  var dailyWh = watts * sunHours * eff;
+  var annualKwh = (dailyWh * 365) / 1000;
+  var annualSaving = Math.round(annualKwh * rate);
+  
+  var paybackYears = annualSaving > 0 ? (cost / annualSaving) : Infinity;
+  var lifetimeSaving = Math.round(annualSaving * lifespan);
+  var netBenefit = lifetimeSaving - cost;
+
+  var headlineText = '';
+  if (!isFinite(paybackYears) || paybackYears > 50) {
+    headlineText = '元を取るのは極めて困難（節電のみでの回収は不向き）';
+  } else if (paybackYears <= lifespan) {
+    headlineText = '寿命内の「約' + paybackYears.toFixed(1) + '年」で元が取れます！';
+  } else {
+    headlineText = '元を取るには「約' + paybackYears.toFixed(1) + '年」必要（寿命' + lifespan + '年を超過）';
+  }
+
+  var netClass = netBenefit >= 0 ? '#16a34a' : '#dc2626';
+  var netPrefix = netBenefit >= 0 ? '+' : '';
+
+  var html = '<div class="result-headline">結論：<strong>' + headlineText + '</strong></div>';
+  html += '<div class="metrics-row">';
+  html += '  <div class="metric-card"><span>年間発電量（実効）</span><strong>' + annualKwh.toFixed(1) + ' <small>kWh</small></strong><small>1日平均 ' + (dailyWh).toFixed(0) + ' Wh</small></div>';
+  html += '  <div class="metric-card"><span>年間の電気代節約額</span><strong>約 ' + annualSaving.toLocaleString() + ' <small>円</small></strong><small>単価 ' + rate + '円/kWh換算</small></div>';
+  html += '  <div class="metric-card"><span>回収までの年数</span><strong>' + (isFinite(paybackYears) ? paybackYears.toFixed(1) + ' <small>年</small>' : '測定不能') + '</strong><small>初期費用 ' + cost.toLocaleString() + '円</small></div>';
+  html += '  <div class="metric-card"><span>' + lifespan + '年間の生涯収支</span><strong style="color:' + netClass + ';">' + netPrefix + netBenefit.toLocaleString() + ' <small>円</small></strong><small>（節電総額 - 初期費用）</small></div>';
+  html += '</div>';
+
+  document.getElementById('calcResult').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', calculateSolarPayback);
+  </script>
+</body>
+</html>
