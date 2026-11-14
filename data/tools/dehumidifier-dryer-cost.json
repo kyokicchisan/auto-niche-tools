@@ -1,0 +1,28 @@
+{
+  "slug": "dehumidifier-dryer-cost",
+  "title": "浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機",
+  "category": "家電・エネルギー",
+  "summary": "浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。",
+  "targetKeywords": [
+    "浴室乾燥機 電気代 計算",
+    "除湿機 部屋干し 電気代 比較",
+    "ドラム式洗濯機 元が取れる"
+  ],
+  "affiliateSearchQuery": "衣類乾燥除湿機 ハイブリッド 省エネ",
+  "affiliateRecommendations": [
+    {
+      "name": "パナソニック 衣類乾燥除湿機 ナノイーX搭載 ハイブリッド方式",
+      "description": "一年中パワフルに乾かせるハイブリッド式。浴室乾燥機と比べて年間数万円の電気代節約につながる高効率モデルです。",
+      "searchQuery": "パナソニック 衣類乾燥除湿機 ハイブリッド ナノイーX"
+    },
+    {
+      "name": "サーキュレーター 節電 首振り 静音",
+      "description": "部屋干し除湿機と併用することで乾燥時間を最大30〜40%短縮し、電気代をさらに抑えられます。",
+      "searchQuery": "サーキュレーター DCモーター 静音 首振り"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\"><div class=\"form-group\"><label for=\"dryFrequency\">1週間の乾燥回数（回）</label><input type=\"number\" id=\"dryFrequency\" value=\"5\" min=\"1\" max=\"21\" step=\"1\" oninput=\"calculateDryerCost()\"></div><div class=\"form-group\"><label for=\"electricityRate\">電気料金単価（円/kWh）</label><input type=\"number\" id=\"electricityRate\" value=\"31\" min=\"15\" max=\"50\" step=\"0.5\" oninput=\"calculateDryerCost()\"></div><div class=\"form-group\"><label for=\"bathDryerHours\">浴室乾燥機の稼働時間（時間/回）</label><input type=\"number\" id=\"bathDryerHours\" value=\"3\" min=\"1\" max=\"6\" step=\"0.5\" oninput=\"calculateDryerCost()\"></div><div class=\"form-group\"><label for=\"dehumidifierHours\">除湿機の稼働時間（時間/回）</label><input type=\"number\" id=\"dehumidifierHours\" value=\"5\" min=\"1\" max=\"10\" step=\"0.5\" oninput=\"calculateDryerCost()\"></div></div><div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function calculateDryerCost() {\n  const freq = parseFloat(document.getElementById('dryFrequency').value) || 0;\n  const rate = parseFloat(document.getElementById('electricityRate').value) || 0;\n  const bathHours = parseFloat(document.getElementById('bathDryerHours').value) || 0;\n  const dehumHours = parseFloat(document.getElementById('dehumidifierHours').value) || 0;\n\n  const annualRuns = freq * 52;\n\n  // 浴室乾燥機: 一般的な電気ヒーター式 1250W (1.25kW)\n  const bathKwhPerRun = 1.25 * bathHours;\n  const bathCostPerRun = bathKwhPerRun * rate;\n  const bathCostAnnual = bathCostPerRun * annualRuns;\n\n  // 衣類乾燥除湿機: 省エネ/ハイブリッド平均 300W (0.30kW)\n  const dehumKwhPerRun = 0.30 * dehumHours;\n  const dehumCostPerRun = dehumKwhPerRun * rate;\n  const dehumCostAnnual = dehumCostPerRun * annualRuns;\n\n  // ドラム式洗濯乾燥機: ヒートポンプ式標準乾燥 1回あたり約0.85kWh\n  const drumKwhPerRun = 0.85;\n  const drumCostPerRun = drumKwhPerRun * rate;\n  const drumCostAnnual = drumCostPerRun * annualRuns;\n\n  const savingsVsDehum = bathCostAnnual - dehumCostAnnual;\n  const savingsVsDrum = bathCostAnnual - drumCostAnnual;\n\n  const container = document.getElementById('calcResult');\n  if (!container) return;\n\n  container.innerHTML = `\n    <div class=\"result-headline\">\n      結論：除湿機なら浴室乾燥機より年間<strong>約${Math.round(savingsVsDehum).toLocaleString()}円</strong>、ドラム式なら<strong>約${Math.round(savingsVsDrum).toLocaleString()}円</strong>おトクになります！\n    </div>\n    <div class=\"metrics-row\">\n      <div class=\"metric-card\">\n        <span>浴室乾燥機 (電気)</span>\n        <strong>${Math.round(bathCostPerRun)}円 /回</strong>\n        <small>年間: 約${Math.round(bathCostAnnual).toLocaleString()}円</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>衣類乾燥除湿機</span>\n        <strong>${Math.round(dehumCostPerRun)}円 /回</strong>\n        <small>年間: 約${Math.round(dehumCostAnnual).toLocaleString()}円</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>ドラム式(ヒートポンプ)</span>\n        <strong>${Math.round(drumCostPerRun)}円 /回</strong>\n        <small>年間: 約${Math.round(drumCostAnnual).toLocaleString()}円</small>\n      </div>\n    </div>\n  `;\n}\ndocument.addEventListener('DOMContentLoaded', calculateDryerCost);",
+  "articleHtml": "<h2>雨の日の洗濯乾燥、どれが一番コスパが良い？</h2><p>雨天や花粉の時期に欠かせない衣類乾燥ですが、「浴室乾燥機を使い続けたら電気代が高額になった」「除湿機とドラム式はどちらが経済的なのか」と悩む方は非常に多いです。乾燥方式によって熱効率や消費電力が大きく異なるため、毎日の使い方次第で年間数万円単位の差が生まれます。</p><h3>乾燥方式による1回あたりのコスト構造</h3><p>それぞれの乾燥方式には、仕組みの違いによる大きな特性があります。</p><ul><li><strong>電気式浴室乾燥機（温風ヒーター式）：</strong>浴室という広い空間全体をヒーター（約1200〜1300W）で温めるため、1回（約3時間）で110〜130円前後の電気代がかかります。</li><li><strong>衣類乾燥除湿機（ハイブリッド/コンプレッサー式）：</strong>狭い脱衣所や部屋を密閉して水分を回収します。消費電力は約200〜350Wと控えめで、5時間稼働しても1回あたり約30〜55円に抑えられます。</li><li><strong>ドラム式洗濯乾燥機（ヒートポンプ式）：</strong>密閉されたドラム内で熱を再利用しながら除湿乾燥を行うため最も効率が高く、1回あたり約0.8〜0.9kWh（約25〜30円）で乾かせます。</li></ul><h3>ドラム式洗濯乾燥機は「元が取れる」のか？</h3><p>本体価格が20万円以上するドラム式洗濯機ですが、浴室乾燥機（年間約30,000円〜35,000円）からヒートポンプ式ドラム乾燥（年間約7,000円）に切り替えた場合、年間で約2.3万〜2.8万円の電気代が浮く計算になります。7〜8年使用すれば、縦型洗濯機＋浴室乾燥機の組み合わせに対して電気代だけで約18万〜20万円の差がつき、干す手間や時間の削減価値も加味すると十分に元が取れる投資と言えます。</p><h3>初期費用を抑えて手軽に節約するなら「除湿機＋サーキュレーター」</h3><p>ドラム式を置くスペースがない場合や賃貸住宅では、2〜4万円台で購入できる「衣類乾燥除湿機」の導入が最も投資対効果に優れています。サーキュレーターで風を当てながら乾かすことで乾燥時間を3時間前後に短縮でき、1回あたりのコストを30円以下まで落とすことも可能です。</p>",
+  "createdAt": "2026-11-14"
+}

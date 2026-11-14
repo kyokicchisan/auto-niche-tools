@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。">
+  <meta name="keywords" content="浴室乾燥機 電気代 計算, 除湿機 部屋干し 電気代 比較, ドラム式洗濯機 元が取れる">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">家電・エネルギー</span>
+      <h1>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機</h1>
+      <p class="summary">浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。</p>
+      
+      <div class="calc-grid"><div class="form-group"><label for="dryFrequency">1週間の乾燥回数（回）</label><input type="number" id="dryFrequency" value="5" min="1" max="21" step="1" oninput="calculateDryerCost()"></div><div class="form-group"><label for="electricityRate">電気料金単価（円/kWh）</label><input type="number" id="electricityRate" value="31" min="15" max="50" step="0.5" oninput="calculateDryerCost()"></div><div class="form-group"><label for="bathDryerHours">浴室乾燥機の稼働時間（時間/回）</label><input type="number" id="bathDryerHours" value="3" min="1" max="6" step="0.5" oninput="calculateDryerCost()"></div><div class="form-group"><label for="dehumidifierHours">除湿機の稼働時間（時間/回）</label><input type="number" id="dehumidifierHours" value="5" min="1" max="10" step="0.5" oninput="calculateDryerCost()"></div></div><div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">パナソニック 衣類乾燥除湿機 ナノイーX搭載 ハイブリッド方式</div>
+        <p class="aff-item-desc">一年中パワフルに乾かせるハイブリッド式。浴室乾燥機と比べて年間数万円の電気代節約につながる高効率モデルです。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%91%E3%83%8A%E3%82%BD%E3%83%8B%E3%83%83%E3%82%AF%20%E8%A1%A3%E9%A1%9E%E4%B9%BE%E7%87%A5%E9%99%A4%E6%B9%BF%E6%A9%9F%20%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%20%E3%83%8A%E3%83%8E%E3%82%A4%E3%83%BCX&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">サーキュレーター 節電 首振り 静音</div>
+        <p class="aff-item-desc">部屋干し除湿機と併用することで乾燥時間を最大30〜40%短縮し、電気代をさらに抑えられます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%B5%E3%83%BC%E3%82%AD%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%20DC%E3%83%A2%E3%83%BC%E3%82%BF%E3%83%BC%20%E9%9D%99%E9%9F%B3%20%E9%A6%96%E6%8C%AF%E3%82%8A&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>雨の日の洗濯乾燥、どれが一番コスパが良い？</h2><p>雨天や花粉の時期に欠かせない衣類乾燥ですが、「浴室乾燥機を使い続けたら電気代が高額になった」「除湿機とドラム式はどちらが経済的なのか」と悩む方は非常に多いです。乾燥方式によって熱効率や消費電力が大きく異なるため、毎日の使い方次第で年間数万円単位の差が生まれます。</p><h3>乾燥方式による1回あたりのコスト構造</h3><p>それぞれの乾燥方式には、仕組みの違いによる大きな特性があります。</p><ul><li><strong>電気式浴室乾燥機（温風ヒーター式）：</strong>浴室という広い空間全体をヒーター（約1200〜1300W）で温めるため、1回（約3時間）で110〜130円前後の電気代がかかります。</li><li><strong>衣類乾燥除湿機（ハイブリッド/コンプレッサー式）：</strong>狭い脱衣所や部屋を密閉して水分を回収します。消費電力は約200〜350Wと控えめで、5時間稼働しても1回あたり約30〜55円に抑えられます。</li><li><strong>ドラム式洗濯乾燥機（ヒートポンプ式）：</strong>密閉されたドラム内で熱を再利用しながら除湿乾燥を行うため最も効率が高く、1回あたり約0.8〜0.9kWh（約25〜30円）で乾かせます。</li></ul><h3>ドラム式洗濯乾燥機は「元が取れる」のか？</h3><p>本体価格が20万円以上するドラム式洗濯機ですが、浴室乾燥機（年間約30,000円〜35,000円）からヒートポンプ式ドラム乾燥（年間約7,000円）に切り替えた場合、年間で約2.3万〜2.8万円の電気代が浮く計算になります。7〜8年使用すれば、縦型洗濯機＋浴室乾燥機の組み合わせに対して電気代だけで約18万〜20万円の差がつき、干す手間や時間の削減価値も加味すると十分に元が取れる投資と言えます。</p><h3>初期費用を抑えて手軽に節約するなら「除湿機＋サーキュレーター」</h3><p>ドラム式を置くスペースがない場合や賃貸住宅では、2〜4万円台で購入できる「衣類乾燥除湿機」の導入が最も投資対効果に優れています。サーキュレーターで風を当てながら乾かすことで乾燥時間を3時間前後に短縮でき、1回あたりのコストを30円以下まで落とすことも可能です。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/solar-battery-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機</h3>
+        <p>ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ev-hybrid-gas-breakeven.html">
+        <span class="category-badge">暮らし・乗り物コスト</span>
+        <h3>ハイブリッド車・EV vs ガソリン車「走行距離何kmで元が取れる？」損益分岐シミュレーター</h3>
+        <p>ハイブリッド車（HV）や電気自動車（EV）はガソリン車より車両価格が高めですが、何km走れば車両価格の差額を燃料費で回収できるのか？走行距離や実燃費、電気代から元が取れる損益分岐点を一瞬で算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/mobile-plan-breakeven-calculator.html">
+        <span class="category-badge">暮らし・通信費節約</span>
+        <h3>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター</h3>
+        <p>現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/pc-power-electricity-calculator.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>ゲーミングPC・自作PC「推奨電源容量（W）＆月々の電気代」逆算シミュレーター</h3>
+        <p>CPUとGPU（グラボ）の消費電力と1日のプレイ時間を入れるだけで、安全な電源ユニット容量（W数）と「毎月・毎年のリアルな電気代」を一発計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateDryerCost() {
+  const freq = parseFloat(document.getElementById('dryFrequency').value) || 0;
+  const rate = parseFloat(document.getElementById('electricityRate').value) || 0;
+  const bathHours = parseFloat(document.getElementById('bathDryerHours').value) || 0;
+  const dehumHours = parseFloat(document.getElementById('dehumidifierHours').value) || 0;
+
+  const annualRuns = freq * 52;
+
+  // 浴室乾燥機: 一般的な電気ヒーター式 1250W (1.25kW)
+  const bathKwhPerRun = 1.25 * bathHours;
+  const bathCostPerRun = bathKwhPerRun * rate;
+  const bathCostAnnual = bathCostPerRun * annualRuns;
+
+  // 衣類乾燥除湿機: 省エネ/ハイブリッド平均 300W (0.30kW)
+  const dehumKwhPerRun = 0.30 * dehumHours;
+  const dehumCostPerRun = dehumKwhPerRun * rate;
+  const dehumCostAnnual = dehumCostPerRun * annualRuns;
+
+  // ドラム式洗濯乾燥機: ヒートポンプ式標準乾燥 1回あたり約0.85kWh
+  const drumKwhPerRun = 0.85;
+  const drumCostPerRun = drumKwhPerRun * rate;
+  const drumCostAnnual = drumCostPerRun * annualRuns;
+
+  const savingsVsDehum = bathCostAnnual - dehumCostAnnual;
+  const savingsVsDrum = bathCostAnnual - drumCostAnnual;
+
+  const container = document.getElementById('calcResult');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="result-headline">
+      結論：除湿機なら浴室乾燥機より年間<strong>約${Math.round(savingsVsDehum).toLocaleString()}円</strong>、ドラム式なら<strong>約${Math.round(savingsVsDrum).toLocaleString()}円</strong>おトクになります！
+    </div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>浴室乾燥機 (電気)</span>
+        <strong>${Math.round(bathCostPerRun)}円 /回</strong>
+        <small>年間: 約${Math.round(bathCostAnnual).toLocaleString()}円</small>
+      </div>
+      <div class="metric-card">
+        <span>衣類乾燥除湿機</span>
+        <strong>${Math.round(dehumCostPerRun)}円 /回</strong>
+        <small>年間: 約${Math.round(dehumCostAnnual).toLocaleString()}円</small>
+      </div>
+      <div class="metric-card">
+        <span>ドラム式(ヒートポンプ)</span>
+        <strong>${Math.round(drumCostPerRun)}円 /回</strong>
+        <small>年間: 約${Math.round(drumCostAnnual).toLocaleString()}円</small>
+      </div>
+    </div>
+  `;
+}
+document.addEventListener('DOMContentLoaded', calculateDryerCost);
+  </script>
+</body>
+</html>
