@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import https from 'node:https';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildSite } from './build_site.mjs';
@@ -9,6 +10,29 @@ const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 const QUEUE_PATH = path.join(ROOT_DIR, 'data', 'topics_queue.json');
 const TOOLS_DIR = path.join(ROOT_DIR, 'data', 'tools');
+
+/**
+ * HTTPS で JSON を POST する関数
+ * Node.js 標準の fetch は「5分で応答ヘッダーが来ないと打ち切る」初期設定があり、
+ * AIの長文生成（5分前後かかる）で失敗するため、タイムアウトを自前で管理できる https モジュールを使う
+ */
+function postJson(url, headers, bodyStr, timeoutMs = 15 * 60 * 1000) {
+  return new Promise((resolve, reject) => {
+    const req = https.request(url, {
+      method: 'POST',
+      headers: { ...headers, 'Content-Length': Buffer.byteLength(bodyStr) }
+    }, res => {
+      const chunks = [];
+      res.on('data', c => chunks.push(c));
+      res.on('end', () => resolve({ status: res.statusCode, body: Buffer.concat(chunks).toString('utf-8') }));
+      res.on('error', reject);
+    });
+    req.setTimeout(timeoutMs, () => req.destroy(new Error(`${timeoutMs / 60000}分以内に応答がありませんでした`)));
+    req.on('error', reject);
+    req.write(bodyStr);
+    req.end();
+  });
+}
 
 /**
  * Gemini APIを呼び出してJSONレスポンスを取得する関数（外部パッケージ不要）
@@ -28,18 +52,34 @@ async function callGeminiJson(prompt, apiKey) {
   for (const model of models) {
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
     for (let attempt = 1; attempt <= maxAttemptsPerModel; attempt++) {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        // APIキーはURLに含めずヘッダーで送信（ログ流出防止）
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.4,
-            responseMimeType: 'application/json'
-          }
-        })
-      });
+      const startedAt = Date.now();
+      let res;
+      try {
+        res = await postJson(
+          endpoint,
+          // APIキーはURLに含めずヘッダーで送信（ログ流出防止）
+          { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+          JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+              temperature: 0.4,
+              responseMimeType: 'application/json'
+            }
+          })
+        );
+      } catch (netErr) {
+        // 通信の切断・タイムアウトも再試行の対象にする
+        lastError = new Error(`通信エラー (${model}): ${netErr.code || ''} ${netErr.message}`);
+        console.log(`⚠️ ${lastError.message} → 再試行します (${attempt}/${maxAttemptsPerModel})`);
+        continue;
+      }
+      console.log(`⏱️ ${model} の応答時間: ${Math.round((Date.now() - startedAt) / 1000)}秒 (HTTP ${res.status})`);
+      const response = {
+        ok: res.status >= 200 && res.status < 300,
+        status: res.status,
+        json: async () => JSON.parse(res.body),
+        text: async () => res.body
+      };
 
       if (response.ok) {
         const data = await response.json();
