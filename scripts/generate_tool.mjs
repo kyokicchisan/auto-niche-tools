@@ -44,10 +44,15 @@ async function callGeminiJson(prompt, apiKey) {
       if (response.ok) {
         const data = await response.json();
         const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!rawText) {
-          throw new Error('Gemini APIから有効なテキストが返されませんでした。');
+        try {
+          if (!rawText) throw new Error('空の応答');
+          return JSON.parse(rawText);
+        } catch (parseErr) {
+          // AIの出力が壊れたJSONだった場合も再試行する
+          lastError = new Error(`AIの出力をJSONとして読めませんでした (${model}): ${parseErr.message}`);
+          console.log(`⚠️ ${lastError.message} → 再試行します (${attempt}/${maxAttemptsPerModel})`);
+          continue;
         }
-        return JSON.parse(rawText);
       }
 
       const errText = await response.text();
@@ -98,9 +103,8 @@ ${existingSlugs.join(', ')}
 async function main() {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.log('⚠️ 環境変数 GEMINI_API_KEY が設定されていないため、AI新規生成をスキップし既存データでサイトをビルドします。');
-    buildSite();
-    return;
+    // ビルドは呼び出し元の run() で必ず行われる
+    throw new Error('GEMINI_API_KEY が設定されていません（GitHubのSecretsを確認してください）');
   }
 
   const queue = JSON.parse(fs.readFileSync(QUEUE_PATH, 'utf-8'));
@@ -167,6 +171,9 @@ async function main() {
   generatedTool.slug = nextTopic.slug;
   generatedTool.createdAt = new Date().toISOString().slice(0, 10);
 
+  // 壊れたツールを公開しないよう、保存前に検証する
+  validateTool(generatedTool);
+
   // ツールJSONの保存
   const outputPath = path.join(TOOLS_DIR, `${nextTopic.slug}.json`);
   fs.writeFileSync(outputPath, JSON.stringify(generatedTool, null, 2), 'utf-8');
@@ -175,13 +182,58 @@ async function main() {
   // キューのステータスを done に更新
   nextTopic.status = 'done';
   fs.writeFileSync(QUEUE_PATH, JSON.stringify(queue, null, 2), 'utf-8');
-
-  // サイト全体の再ビルド
-  buildSite();
 }
 
-main().catch(err => {
-  console.error('❌ エラーが発生しました:', err.message);
-  // Windowsでのprocess.exit()によるアサーションエラーを避けるため exitCode を使用
-  process.exitCode = 1;
-});
+/**
+ * AIが生成したツールの最低限の品質チェック（不合格なら例外を投げる）
+ */
+function validateTool(tool) {
+  for (const key of ['title', 'summary', 'calculatorHtml', 'calculatorJs', 'articleHtml']) {
+    if (typeof tool[key] !== 'string' || tool[key].trim() === '') {
+      throw new Error(`生成結果に必須項目「${key}」がありません`);
+    }
+  }
+  if (!tool.calculatorHtml.includes('calcResult')) {
+    throw new Error('計算結果の表示欄(calcResult)がHTMLにありません');
+  }
+  try {
+    // 構文チェックのみ（実行はしない）
+    new Function(tool.calculatorJs);
+  } catch (e) {
+    throw new Error(`計算機のJavaScriptに構文エラーがあります: ${e.message}`);
+  }
+}
+
+/**
+ * GitHub Actions上では、エラー内容を注釈(annotation)として残す
+ * （公開APIから読めるため、ログイン不要で原因を確認できる）
+ */
+function reportWarning(title, message) {
+  const safe = String(message).replace(/\s+/g, ' ').slice(0, 600);
+  if (process.env.GITHUB_ACTIONS) {
+    console.log(`::warning title=${title}::${safe}`);
+  } else {
+    console.warn(`⚠️ ${title}: ${safe}`);
+  }
+}
+
+/**
+ * 実行の入口：AI生成が失敗しても、サイトのビルド（＝公開）は必ず行う
+ */
+async function run() {
+  try {
+    await main();
+  } catch (err) {
+    console.error('❌ AIによるツール生成に失敗しました:', err.message);
+    reportWarning('AI生成失敗', err.message);
+  }
+  try {
+    buildSite();
+  } catch (err) {
+    // ビルド失敗はサイトが壊れる恐れがあるため、ここだけは実行全体を失敗扱いにする
+    console.error('❌ サイトのビルドに失敗しました:', err.message);
+    process.exitCode = 1;
+  }
+}
+
+run();
