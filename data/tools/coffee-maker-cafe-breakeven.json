@@ -1,0 +1,33 @@
+{
+  "slug": "coffee-maker-cafe-breakeven",
+  "title": "全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機",
+  "category": "暮らし・食費節約",
+  "summary": "全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。",
+  "targetKeywords": [
+    "コーヒーメーカー 元が取れる 計算",
+    "全自動コーヒーメーカー 1杯あたり コスト",
+    "カフェ代 節約 シミュレーター"
+  ],
+  "affiliateSearchQuery": "全自動コーヒーメーカー デロンギ コーヒー豆",
+  "affiliateRecommendations": [
+    {
+      "name": "デロンギ(DeLonghi) 全自動コーヒーマシン マグニフィカS",
+      "description": "エントリーモデルながら豆から挽きたての極上エスプレッソ＆ドリップを完全自動抽出。毎日2杯飲む人なら約半年〜1年で元が取れる定番マシン。",
+      "searchQuery": "デロンギ 全自動コーヒーマシン マグニフィカS"
+    },
+    {
+      "name": "コスパ抜群 大容量 自家焙煎コーヒー豆（2kgセット）",
+      "description": "1杯あたり約20〜30円までコストを抑えられる大容量ロースト豆。毎日のランニングコストを下げて損益分岐点を早める必須アイテム。",
+      "searchQuery": "コーヒー豆 2kg 自家焙煎"
+    },
+    {
+      "name": "真空断熱ステンレスタンブラー（蓋付き 350ml〜500ml）",
+      "description": "淹れたてのコーヒーをオフィスやドライブに持ち出すための保温マグ。外出先のコンビニ・カフェ立ち寄り衝動をゼロにして節約効果を最大化。",
+      "searchQuery": "サーモス 真空断熱タンブラー 蓋付き"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\">\n  <div class=\"form-group\">\n    <label for=\"machinePrice\">購入予定のマシン本体価格（円）</label>\n    <input type=\"number\" id=\"machinePrice\" value=\"65000\" min=\"0\" step=\"1000\" oninput=\"calculateCoffeeBreakeven()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"currentCupCost\">現在のコーヒー1杯あたりの支出（円）</label>\n    <select id=\"currentCupCost\" onchange=\"calculateCoffeeBreakeven()\">\n      <option value=\"130\">コンビニコーヒー（S〜Mサイズ / 約130円）</option>\n      <option value=\"250\">チェーン系カフェ（ドリップS / 約250円）</option>\n      <option value=\"450\" selected>有名カフェ・シアトル系（ラテ・トール / 約450円）</option>\n      <option value=\"650\">高級カフェ・専門店（約650円）</option>\n    </select>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"cupsPerDay\">1日の合計消費杯数（世帯全体）</label>\n    <input type=\"number\" id=\"cupsPerDay\" value=\"2\" min=\"1\" max=\"20\" step=\"1\" oninput=\"calculateCoffeeBreakeven()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"beanPricePerKg\">購入するコーヒー豆の価格（1kgあたり / 円）</label>\n    <input type=\"number\" id=\"beanPricePerKg\" value=\"3000\" min=\"500\" step=\"100\" oninput=\"calculateCoffeeBreakeven()\">\n  </div>\n</div>\n<div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function calculateCoffeeBreakeven() {\n  const machinePrice = parseFloat(document.getElementById('machinePrice').value) || 0;\n  const currentCupCost = parseFloat(document.getElementById('currentCupCost').value) || 0;\n  const cupsPerDay = parseFloat(document.getElementById('cupsPerDay').value) || 1;\n  const beanPricePerKg = parseFloat(document.getElementById('beanPricePerKg').value) || 0;\n\n  // 1杯あたり10g使用、水道光熱費・洗浄コスト約5円\n  const homeCupCost = Math.round((beanPricePerKg / 1000 * 10) + 5);\n  const savingsPerCup = currentCupCost - homeCupCost;\n\n  const resultEl = document.getElementById('calcResult');\n\n  if (savingsPerCup <= 0) {\n    resultEl.innerHTML = `\n      <div class=\"result-headline\">結論：<strong>自宅淹れの方が割高です</strong></div>\n      <p style=\"margin-top:8px;color:#c53030;\">豆のグレードを下げるか、比較対象の支出設定を見直してください。</p>\n    `;\n    return;\n  }\n\n  const breakevenCups = Math.ceil(machinePrice / savingsPerCup);\n  const breakevenDays = Math.ceil(breakevenCups / cupsPerDay);\n  const breakevenMonths = (breakevenDays / 30.4).toFixed(1);\n\n  const annualCurrentExpense = currentCupCost * cupsPerDay * 365;\n  const annualHomeExpense = homeCupCost * cupsPerDay * 365;\n  const annualSavings = annualCurrentExpense - annualHomeExpense;\n\n  resultEl.innerHTML = `\n    <div class=\"result-headline\">結論：<strong>約 ${breakevenDays} 日（約 ${breakevenMonths} ヶ月 / ${breakevenCups} 杯）</strong>で元が取れます</div>\n    <div class=\"metrics-row\">\n      <div class=\"metric-card\">\n        <span>自宅コーヒー1杯原価</span>\n        <strong>${homeCupCost.toLocaleString()} 円</strong>\n        <small>豆10g＋光熱費5円換算</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>1杯あたりの節約差額</span>\n        <strong>${savingsPerCup.toLocaleString()} 円</strong>\n        <small>普段の支出との差額</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>年間のカフェ代削減効果</span>\n        <strong>${annualSavings.toLocaleString()} 円</strong>\n        <small>本体代回収後の純節約額</small>\n      </div>\n    </div>\n  `;\n}\n\ndocument.addEventListener('DOMContentLoaded', calculateCoffeeBreakeven);",
+  "articleHtml": "<h2>全自動コーヒーメーカーは本当にコスパ最強なのか？</h2><p>毎朝の通勤時や仕事の合間に立ち寄るコンビニやカフェ。1杯数百円の出費でも、積もり積もれば年間で10万〜20万円規模の大きな固定費になります。「デロンギなどの全自動コーヒーマシンが気になるけれど、5万〜10万円の初期投資を回収できるか不安」という方も多いはずです。</p><p>結論から言うと、<strong>1日2杯以上飲む家庭やカップルであれば、半年から1年前後で確実に元が取れます</strong>。浮いたコストはそのまま生活費の純粋な節約に直結します。</p><h3>1杯あたりの原価内訳（豆・電気・水道代）</h3><p>全自動コーヒーメーカーで淹れるレギュラーコーヒー1杯（約120〜150ml）に必要なコーヒー豆は一般的に<strong>約10g</strong>です。業務スーパーやネット通販の大容量豆（1kgあたり2,000円〜3,000円）を使えば、豆代はわずか20〜30円。専門店の高級豆（100g 800円前後）を使ったとしても約80円で済みます。電気代・水道代・内部洗浄用資材を含めても1杯あたり＋5円程度です。</p><ul><li><strong>大容量コスパ豆：</strong>1杯 約25〜35円</li><li><strong>本格スペシャリティ豆：</strong>1杯 約85〜100円</li><li><strong>コンビニコーヒー：</strong>1杯 約130〜180円</li><li><strong>大手カフェチェーン：</strong>1杯 約450〜600円</li></ul><h3>損益分岐点を最短で迎える3つのポイント</h3><p>全自動マシンの投資回収スピードを極限まで早めるためのコツは以下の3点です。</p><ol><li><strong>保温タンブラーを併用する：</strong>自宅で作ったコーヒーを出勤時や車内に持ち出す習慣をつけることで、出先での「ついで買い」を完全に防ぎます。</li><li><strong>大容量豆を密閉冷凍保存する：</strong>1kg〜2kg単位のまとめ買いで豆単価を抑えつつ、小分け冷凍保存することで酸化を防ぎ、鮮度と低コストを両立させます。</li><li><strong>メンテナンス性を考慮した機種を選ぶ：</strong>抽出ユニットが丸洗いできるモデルや自動洗浄機能付きモデルを選ぶことで、故障リスクや専用クリーナー代を抑え、長く使い続けることができます。</li></ol>",
+  "createdAt": "2026-11-15"
+}

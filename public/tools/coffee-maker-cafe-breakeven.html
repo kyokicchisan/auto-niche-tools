@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。">
+  <meta name="keywords" content="コーヒーメーカー 元が取れる 計算, 全自動コーヒーメーカー 1杯あたり コスト, カフェ代 節約 シミュレーター">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">暮らし・食費節約</span>
+      <h1>全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機</h1>
+      <p class="summary">全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="machinePrice">購入予定のマシン本体価格（円）</label>
+    <input type="number" id="machinePrice" value="65000" min="0" step="1000" oninput="calculateCoffeeBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="currentCupCost">現在のコーヒー1杯あたりの支出（円）</label>
+    <select id="currentCupCost" onchange="calculateCoffeeBreakeven()">
+      <option value="130">コンビニコーヒー（S〜Mサイズ / 約130円）</option>
+      <option value="250">チェーン系カフェ（ドリップS / 約250円）</option>
+      <option value="450" selected>有名カフェ・シアトル系（ラテ・トール / 約450円）</option>
+      <option value="650">高級カフェ・専門店（約650円）</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="cupsPerDay">1日の合計消費杯数（世帯全体）</label>
+    <input type="number" id="cupsPerDay" value="2" min="1" max="20" step="1" oninput="calculateCoffeeBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="beanPricePerKg">購入するコーヒー豆の価格（1kgあたり / 円）</label>
+    <input type="number" id="beanPricePerKg" value="3000" min="500" step="100" oninput="calculateCoffeeBreakeven()">
+  </div>
+</div>
+<div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">デロンギ(DeLonghi) 全自動コーヒーマシン マグニフィカS</div>
+        <p class="aff-item-desc">エントリーモデルながら豆から挽きたての極上エスプレッソ＆ドリップを完全自動抽出。毎日2杯飲む人なら約半年〜1年で元が取れる定番マシン。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%87%E3%83%AD%E3%83%B3%E3%82%AE%20%E5%85%A8%E8%87%AA%E5%8B%95%E3%82%B3%E3%83%BC%E3%83%92%E3%83%BC%E3%83%9E%E3%82%B7%E3%83%B3%20%E3%83%9E%E3%82%B0%E3%83%8B%E3%83%95%E3%82%A3%E3%82%ABS&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">コスパ抜群 大容量 自家焙煎コーヒー豆（2kgセット）</div>
+        <p class="aff-item-desc">1杯あたり約20〜30円までコストを抑えられる大容量ロースト豆。毎日のランニングコストを下げて損益分岐点を早める必須アイテム。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%B3%E3%83%BC%E3%83%92%E3%83%BC%E8%B1%86%202kg%20%E8%87%AA%E5%AE%B6%E7%84%99%E7%85%8E&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">真空断熱ステンレスタンブラー（蓋付き 350ml〜500ml）</div>
+        <p class="aff-item-desc">淹れたてのコーヒーをオフィスやドライブに持ち出すための保温マグ。外出先のコンビニ・カフェ立ち寄り衝動をゼロにして節約効果を最大化。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%B5%E3%83%BC%E3%83%A2%E3%82%B9%20%E7%9C%9F%E7%A9%BA%E6%96%AD%E7%86%B1%E3%82%BF%E3%83%B3%E3%83%96%E3%83%A9%E3%83%BC%20%E8%93%8B%E4%BB%98%E3%81%8D&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>全自動コーヒーメーカーは本当にコスパ最強なのか？</h2><p>毎朝の通勤時や仕事の合間に立ち寄るコンビニやカフェ。1杯数百円の出費でも、積もり積もれば年間で10万〜20万円規模の大きな固定費になります。「デロンギなどの全自動コーヒーマシンが気になるけれど、5万〜10万円の初期投資を回収できるか不安」という方も多いはずです。</p><p>結論から言うと、<strong>1日2杯以上飲む家庭やカップルであれば、半年から1年前後で確実に元が取れます</strong>。浮いたコストはそのまま生活費の純粋な節約に直結します。</p><h3>1杯あたりの原価内訳（豆・電気・水道代）</h3><p>全自動コーヒーメーカーで淹れるレギュラーコーヒー1杯（約120〜150ml）に必要なコーヒー豆は一般的に<strong>約10g</strong>です。業務スーパーやネット通販の大容量豆（1kgあたり2,000円〜3,000円）を使えば、豆代はわずか20〜30円。専門店の高級豆（100g 800円前後）を使ったとしても約80円で済みます。電気代・水道代・内部洗浄用資材を含めても1杯あたり＋5円程度です。</p><ul><li><strong>大容量コスパ豆：</strong>1杯 約25〜35円</li><li><strong>本格スペシャリティ豆：</strong>1杯 約85〜100円</li><li><strong>コンビニコーヒー：</strong>1杯 約130〜180円</li><li><strong>大手カフェチェーン：</strong>1杯 約450〜600円</li></ul><h3>損益分岐点を最短で迎える3つのポイント</h3><p>全自動マシンの投資回収スピードを極限まで早めるためのコツは以下の3点です。</p><ol><li><strong>保温タンブラーを併用する：</strong>自宅で作ったコーヒーを出勤時や車内に持ち出す習慣をつけることで、出先での「ついで買い」を完全に防ぎます。</li><li><strong>大容量豆を密閉冷凍保存する：</strong>1kg〜2kg単位のまとめ買いで豆単価を抑えつつ、小分け冷凍保存することで酸化を防ぎ、鮮度と低コストを両立させます。</li><li><strong>メンテナンス性を考慮した機種を選ぶ：</strong>抽出ユニットが丸洗いできるモデルや自動洗浄機能付きモデルを選ぶことで、故障リスクや専用クリーナー代を抑え、長く使い続けることができます。</li></ol>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/dehumidifier-dryer-cost.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機</h3>
+        <p>浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/solar-battery-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機</h3>
+        <p>ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/storage-raid-capacity-calc.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>動画撮影・防犯カメラ・NAS用「必要ストレージ容量（TB）＆録画可能日数」逆算ツール</h3>
+        <p>防犯カメラの常時録画や4K動画撮影、NAS導入で何TBのHDD/SSDが必要かを即座に逆算シミュレーション。ビットレートやカメラ台数、RAID構成から最適なストレージ容量と録画可能日数を自動算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ev-hybrid-gas-breakeven.html">
+        <span class="category-badge">暮らし・乗り物コスト</span>
+        <h3>ハイブリッド車・EV vs ガソリン車「走行距離何kmで元が取れる？」損益分岐シミュレーター</h3>
+        <p>ハイブリッド車（HV）や電気自動車（EV）はガソリン車より車両価格が高めですが、何km走れば車両価格の差額を燃料費で回収できるのか？走行距離や実燃費、電気代から元が取れる損益分岐点を一瞬で算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/mobile-plan-breakeven-calculator.html">
+        <span class="category-badge">暮らし・通信費節約</span>
+        <h3>スマホ乗り換え・格安SIM「事務手数料を含めて何ヶ月で元が取れる？」損得シミュレーター</h3>
+        <p>現在のスマホ月額料金と乗り換え後のプラン料金・初期事務手数料を入力するだけで、何ヶ月目からプラスになり、2年間でいくら浮くかを自動計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateCoffeeBreakeven() {
+  const machinePrice = parseFloat(document.getElementById('machinePrice').value) || 0;
+  const currentCupCost = parseFloat(document.getElementById('currentCupCost').value) || 0;
+  const cupsPerDay = parseFloat(document.getElementById('cupsPerDay').value) || 1;
+  const beanPricePerKg = parseFloat(document.getElementById('beanPricePerKg').value) || 0;
+
+  // 1杯あたり10g使用、水道光熱費・洗浄コスト約5円
+  const homeCupCost = Math.round((beanPricePerKg / 1000 * 10) + 5);
+  const savingsPerCup = currentCupCost - homeCupCost;
+
+  const resultEl = document.getElementById('calcResult');
+
+  if (savingsPerCup <= 0) {
+    resultEl.innerHTML = `
+      <div class="result-headline">結論：<strong>自宅淹れの方が割高です</strong></div>
+      <p style="margin-top:8px;color:#c53030;">豆のグレードを下げるか、比較対象の支出設定を見直してください。</p>
+    `;
+    return;
+  }
+
+  const breakevenCups = Math.ceil(machinePrice / savingsPerCup);
+  const breakevenDays = Math.ceil(breakevenCups / cupsPerDay);
+  const breakevenMonths = (breakevenDays / 30.4).toFixed(1);
+
+  const annualCurrentExpense = currentCupCost * cupsPerDay * 365;
+  const annualHomeExpense = homeCupCost * cupsPerDay * 365;
+  const annualSavings = annualCurrentExpense - annualHomeExpense;
+
+  resultEl.innerHTML = `
+    <div class="result-headline">結論：<strong>約 ${breakevenDays} 日（約 ${breakevenMonths} ヶ月 / ${breakevenCups} 杯）</strong>で元が取れます</div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>自宅コーヒー1杯原価</span>
+        <strong>${homeCupCost.toLocaleString()} 円</strong>
+        <small>豆10g＋光熱費5円換算</small>
+      </div>
+      <div class="metric-card">
+        <span>1杯あたりの節約差額</span>
+        <strong>${savingsPerCup.toLocaleString()} 円</strong>
+        <small>普段の支出との差額</small>
+      </div>
+      <div class="metric-card">
+        <span>年間のカフェ代削減効果</span>
+        <strong>${annualSavings.toLocaleString()} 円</strong>
+        <small>本体代回収後の純節約額</small>
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', calculateCoffeeBreakeven);
+  </script>
+</body>
+</html>
