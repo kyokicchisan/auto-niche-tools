@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。">
+  <meta name="keywords" content="ウォーターサーバー ペットボトル どっちが安い 計算, 浄水器 コスト 比較 シミュレーター">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">暮らし・食費節約</span>
+      <h1>ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機</h1>
+      <p class="summary">ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="dailyWater">1人あたりの1日飲水量 (L)</label>
+    <input type="number" id="dailyWater" value="1.5" step="0.1" min="0.1" oninput="calculateWaterCost()">
+  </div>
+  <div class="form-group">
+    <label for="familySize">利用人数 (人)</label>
+    <input type="number" id="familySize" value="2" min="1" oninput="calculateWaterCost()">
+  </div>
+  <div class="form-group">
+    <label for="wsBottlePrice">サーバー: 12Lボトル1本価格 (円)</label>
+    <input type="number" id="wsBottlePrice" value="1500" step="50" oninput="calculateWaterCost()">
+  </div>
+  <div class="form-group">
+    <label for="wsMonthlyFee">サーバー: 月額電気代+レンタル料 (円)</label>
+    <input type="number" id="wsMonthlyFee" value="1000" step="100" oninput="calculateWaterCost()">
+  </div>
+  <div class="form-group">
+    <label for="petPrice">ペットボトル: 2L 1本価格 (円)</label>
+    <input type="number" id="petPrice" value="110" step="5" oninput="calculateWaterCost()">
+  </div>
+  <div class="form-group">
+    <label for="purifierYearly">浄水器: 年間維持費(カートリッジ込) (円)</label>
+    <input type="number" id="purifierYearly" value="10000" step="500" oninput="calculateWaterCost()">
+  </div>
+</div>
+<div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">クリンスイ 蛇口直結型浄水器 MONOシリーズ</div>
+        <p class="aff-item-desc">ランニングコストを最安レベルに抑えられる高除去能力カートリッジ付きの定番浄水器。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%AF%E3%83%AA%E3%83%B3%E3%82%B9%E3%82%A4%20%E8%9B%87%E5%8F%A3%E7%9B%B4%E7%B5%90%E5%9E%8B%20%E6%B5%84%E6%B0%B4%E5%99%A8%20MONO&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">キリン 富士山天然水 ラベルレス 2L×9本</div>
+        <p class="aff-item-desc">ラベルはがしの手間がなく、ゴミ捨ての手間とコストを削減できるお得な箱買い天然水。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%A9%E3%83%99%E3%83%AB%E3%83%AC%E3%82%B9%20%E6%B0%B4%202L%20%E7%AE%B1%E8%B2%B7%E3%81%84&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>水にかかる年間費用の現実：一番お得な選択肢は？</h2><p>毎日の飲料水や料理に使うお水、どのように確保していますか？「ウォーターサーバーは便利だけど高い？」「ペットボトルの箱買いは重くて大変？」「浄水器は本当に節約になるの？」と悩む人は非常に多いです。</p><p>結論から言うと、<strong>純粋な金銭的コストだけで選ぶなら「浄水器」が圧勝</strong>します。しかし、温水がすぐ出る利便性やボトルの保管スペース、ゴミ出しの手間など、生活スタイルに応じたメリット・デメリットが存在します。</p><h3>3大選択肢のコスト構造比較</h3><ul><li><strong>浄水器（蛇口直結・ポット型）：</strong>初期本体代＋年間カートリッジ代（約6,000円〜12,000円）＋水道代（1Lあたり約0.25円）。1Lあたり数円程度に収まり圧倒的に最安。</li><li><strong>ペットボトル箱買い（2L）：</strong>1本90円〜130円程度。1Lあたり45〜65円。安価だが、段ボールの保管場所の確保とプラスチックゴミの分別・処分が発生。</li><li><strong>ウォーターサーバー：</strong>12Lボトル1本1,200円〜2,000円＋サーバー電気代（月500〜1,000円）＋月額サポート費。1Lあたり100円〜150円超となり最も高額。</li></ul><h3>節約と利便性を両立させる選び方のコツ</h3><p>とにかく食費を削りたい方は、蛇口直結型やポット型の浄水器を導入するのが最も効果的です。年間で数万円単位の節約になります。</p><p>一方で、「美味しい天然水が飲みたい」「ゴミ捨ての手間を少しでも減らしたい」という場合は、<strong>ラベルレスのペットボトル箱買い</strong>が費用と手間のバランスに優れています。ご自身の優先順位に合わせてシミュレーターで比較してみてください。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/coffee-maker-cafe-breakeven.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機</h3>
+        <p>全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dehumidifier-dryer-cost.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機</h3>
+        <p>浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/solar-battery-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機</h3>
+        <p>ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/storage-raid-capacity-calc.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>動画撮影・防犯カメラ・NAS用「必要ストレージ容量（TB）＆録画可能日数」逆算ツール</h3>
+        <p>防犯カメラの常時録画や4K動画撮影、NAS導入で何TBのHDD/SSDが必要かを即座に逆算シミュレーション。ビットレートやカメラ台数、RAID構成から最適なストレージ容量と録画可能日数を自動算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ev-hybrid-gas-breakeven.html">
+        <span class="category-badge">暮らし・乗り物コスト</span>
+        <h3>ハイブリッド車・EV vs ガソリン車「走行距離何kmで元が取れる？」損益分岐シミュレーター</h3>
+        <p>ハイブリッド車（HV）や電気自動車（EV）はガソリン車より車両価格が高めですが、何km走れば車両価格の差額を燃料費で回収できるのか？走行距離や実燃費、電気代から元が取れる損益分岐点を一瞬で算出します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateWaterCost() {
+  const dailyWater = parseFloat(document.getElementById('dailyWater').value) || 0;
+  const familySize = parseInt(document.getElementById('familySize').value) || 0;
+  const wsBottlePrice = parseFloat(document.getElementById('wsBottlePrice').value) || 0;
+  const wsMonthlyFee = parseFloat(document.getElementById('wsMonthlyFee').value) || 0;
+  const petPrice = parseFloat(document.getElementById('petPrice').value) || 0;
+  const purifierYearly = parseFloat(document.getElementById('purifierYearly').value) || 0;
+
+  const totalLiterYear = dailyWater * familySize * 365;
+
+  const wsBottlesNeeded = totalLiterYear / 12;
+  const wsCost = (wsMonthlyFee * 12) + (wsBottlesNeeded * wsBottlePrice);
+
+  const petBottlesNeeded = totalLiterYear / 2;
+  const petCost = petBottlesNeeded * petPrice;
+
+  const waterBill = totalLiterYear * 0.25;
+  const purifierCost = purifierYearly + waterBill;
+
+  const costs = [
+    { name: "浄水器", cost: purifierCost },
+    { name: "ペットボトル箱買い", cost: petCost },
+    { name: "ウォーターサーバー", cost: wsCost }
+  ];
+  costs.sort((a, b) => a.cost - b.cost);
+
+  const cheapest = costs[0];
+  const mostExpensive = costs[2];
+  const diff = Math.round(mostExpensive.cost - cheapest.cost);
+
+  const resultBox = document.getElementById('calcResult');
+  resultBox.innerHTML = `
+    <div class="result-headline">結論：最もコスパが良いのは<strong>「${cheapest.name}」</strong>（年間 <strong>${Math.round(cheapest.cost).toLocaleString()}円</strong>）</div>
+    <p style="text-align:center; margin:8px 0 16px; font-size:0.9rem; color:#555;">最安と最高額の差は年間で <strong>${diff.toLocaleString()}円</strong> です。</p>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>浄水器</span>
+        <strong>${Math.round(purifierCost).toLocaleString()} 円/年</strong>
+        <small>1Lあたり約 ${ (purifierCost / (totalLiterYear || 1)).toFixed(1) } 円</small>
+      </div>
+      <div class="metric-card">
+        <span>ペットボトル箱買い</span>
+        <strong>${Math.round(petCost).toLocaleString()} 円/年</strong>
+        <small>1Lあたり約 ${ (petCost / (totalLiterYear || 1)).toFixed(1) } 円</small>
+      </div>
+      <div class="metric-card">
+        <span>ウォーターサーバー</span>
+        <strong>${Math.round(wsCost).toLocaleString()} 円/年</strong>
+        <small>1Lあたり約 ${ (wsCost / (totalLiterYear || 1)).toFixed(1) } 円</small>
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', calculateWaterCost);
+  </script>
+</body>
+</html>

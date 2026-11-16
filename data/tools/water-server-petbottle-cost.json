@@ -1,0 +1,27 @@
+{
+  "slug": "water-server-petbottle-cost",
+  "title": "ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機",
+  "category": "暮らし・食費節約",
+  "summary": "ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。",
+  "targetKeywords": [
+    "ウォーターサーバー ペットボトル どっちが安い 計算",
+    "浄水器 コスト 比較 シミュレーター"
+  ],
+  "affiliateSearchQuery": "浄水器 カートリッジ ラベルレス 水 2L 箱買い",
+  "affiliateRecommendations": [
+    {
+      "name": "クリンスイ 蛇口直結型浄水器 MONOシリーズ",
+      "description": "ランニングコストを最安レベルに抑えられる高除去能力カートリッジ付きの定番浄水器。",
+      "searchQuery": "クリンスイ 蛇口直結型 浄水器 MONO"
+    },
+    {
+      "name": "キリン 富士山天然水 ラベルレス 2L×9本",
+      "description": "ラベルはがしの手間がなく、ゴミ捨ての手間とコストを削減できるお得な箱買い天然水。",
+      "searchQuery": "ラベルレス 水 2L 箱買い"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\">\n  <div class=\"form-group\">\n    <label for=\"dailyWater\">1人あたりの1日飲水量 (L)</label>\n    <input type=\"number\" id=\"dailyWater\" value=\"1.5\" step=\"0.1\" min=\"0.1\" oninput=\"calculateWaterCost()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"familySize\">利用人数 (人)</label>\n    <input type=\"number\" id=\"familySize\" value=\"2\" min=\"1\" oninput=\"calculateWaterCost()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"wsBottlePrice\">サーバー: 12Lボトル1本価格 (円)</label>\n    <input type=\"number\" id=\"wsBottlePrice\" value=\"1500\" step=\"50\" oninput=\"calculateWaterCost()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"wsMonthlyFee\">サーバー: 月額電気代+レンタル料 (円)</label>\n    <input type=\"number\" id=\"wsMonthlyFee\" value=\"1000\" step=\"100\" oninput=\"calculateWaterCost()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"petPrice\">ペットボトル: 2L 1本価格 (円)</label>\n    <input type=\"number\" id=\"petPrice\" value=\"110\" step=\"5\" oninput=\"calculateWaterCost()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"purifierYearly\">浄水器: 年間維持費(カートリッジ込) (円)</label>\n    <input type=\"number\" id=\"purifierYearly\" value=\"10000\" step=\"500\" oninput=\"calculateWaterCost()\">\n  </div>\n</div>\n<div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function calculateWaterCost() {\n  const dailyWater = parseFloat(document.getElementById('dailyWater').value) || 0;\n  const familySize = parseInt(document.getElementById('familySize').value) || 0;\n  const wsBottlePrice = parseFloat(document.getElementById('wsBottlePrice').value) || 0;\n  const wsMonthlyFee = parseFloat(document.getElementById('wsMonthlyFee').value) || 0;\n  const petPrice = parseFloat(document.getElementById('petPrice').value) || 0;\n  const purifierYearly = parseFloat(document.getElementById('purifierYearly').value) || 0;\n\n  const totalLiterYear = dailyWater * familySize * 365;\n\n  const wsBottlesNeeded = totalLiterYear / 12;\n  const wsCost = (wsMonthlyFee * 12) + (wsBottlesNeeded * wsBottlePrice);\n\n  const petBottlesNeeded = totalLiterYear / 2;\n  const petCost = petBottlesNeeded * petPrice;\n\n  const waterBill = totalLiterYear * 0.25;\n  const purifierCost = purifierYearly + waterBill;\n\n  const costs = [\n    { name: \"浄水器\", cost: purifierCost },\n    { name: \"ペットボトル箱買い\", cost: petCost },\n    { name: \"ウォーターサーバー\", cost: wsCost }\n  ];\n  costs.sort((a, b) => a.cost - b.cost);\n\n  const cheapest = costs[0];\n  const mostExpensive = costs[2];\n  const diff = Math.round(mostExpensive.cost - cheapest.cost);\n\n  const resultBox = document.getElementById('calcResult');\n  resultBox.innerHTML = `\n    <div class=\"result-headline\">結論：最もコスパが良いのは<strong>「${cheapest.name}」</strong>（年間 <strong>${Math.round(cheapest.cost).toLocaleString()}円</strong>）</div>\n    <p style=\"text-align:center; margin:8px 0 16px; font-size:0.9rem; color:#555;\">最安と最高額の差は年間で <strong>${diff.toLocaleString()}円</strong> です。</p>\n    <div class=\"metrics-row\">\n      <div class=\"metric-card\">\n        <span>浄水器</span>\n        <strong>${Math.round(purifierCost).toLocaleString()} 円/年</strong>\n        <small>1Lあたり約 ${ (purifierCost / (totalLiterYear || 1)).toFixed(1) } 円</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>ペットボトル箱買い</span>\n        <strong>${Math.round(petCost).toLocaleString()} 円/年</strong>\n        <small>1Lあたり約 ${ (petCost / (totalLiterYear || 1)).toFixed(1) } 円</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>ウォーターサーバー</span>\n        <strong>${Math.round(wsCost).toLocaleString()} 円/年</strong>\n        <small>1Lあたり約 ${ (wsCost / (totalLiterYear || 1)).toFixed(1) } 円</small>\n      </div>\n    </div>\n  `;\n}\n\ndocument.addEventListener('DOMContentLoaded', calculateWaterCost);",
+  "articleHtml": "<h2>水にかかる年間費用の現実：一番お得な選択肢は？</h2><p>毎日の飲料水や料理に使うお水、どのように確保していますか？「ウォーターサーバーは便利だけど高い？」「ペットボトルの箱買いは重くて大変？」「浄水器は本当に節約になるの？」と悩む人は非常に多いです。</p><p>結論から言うと、<strong>純粋な金銭的コストだけで選ぶなら「浄水器」が圧勝</strong>します。しかし、温水がすぐ出る利便性やボトルの保管スペース、ゴミ出しの手間など、生活スタイルに応じたメリット・デメリットが存在します。</p><h3>3大選択肢のコスト構造比較</h3><ul><li><strong>浄水器（蛇口直結・ポット型）：</strong>初期本体代＋年間カートリッジ代（約6,000円〜12,000円）＋水道代（1Lあたり約0.25円）。1Lあたり数円程度に収まり圧倒的に最安。</li><li><strong>ペットボトル箱買い（2L）：</strong>1本90円〜130円程度。1Lあたり45〜65円。安価だが、段ボールの保管場所の確保とプラスチックゴミの分別・処分が発生。</li><li><strong>ウォーターサーバー：</strong>12Lボトル1本1,200円〜2,000円＋サーバー電気代（月500〜1,000円）＋月額サポート費。1Lあたり100円〜150円超となり最も高額。</li></ul><h3>節約と利便性を両立させる選び方のコツ</h3><p>とにかく食費を削りたい方は、蛇口直結型やポット型の浄水器を導入するのが最も効果的です。年間で数万円単位の節約になります。</p><p>一方で、「美味しい天然水が飲みたい」「ゴミ捨ての手間を少しでも減らしたい」という場合は、<strong>ラベルレスのペットボトル箱買い</strong>が費用と手間のバランスに優れています。ご自身の優先順位に合わせてシミュレーターで比較してみてください。</p>",
+  "createdAt": "2026-11-16"
+}
