@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="10万〜20万円する高級オフィスチェアやマットレスは本当に高いのか？耐用年数による「1日・1時間あたりのコスト」と整体・マッサージ代の削減額から、何年・何ヶ月で元が取れるかを瞬時に逆算します。">
+  <meta name="keywords" content="オフィスチェア 高い 元が取れる, マットレス 寿命 日割り計算, テレワーク 椅子 投資対効果">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">仕事・デスク環境</span>
+      <h1>高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター</h1>
+      <p class="summary">10万〜20万円する高級オフィスチェアやマットレスは本当に高いのか？耐用年数による「1日・1時間あたりのコスト」と整体・マッサージ代の削減額から、何年・何ヶ月で元が取れるかを瞬時に逆算します。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="productPrice">商品購入価格（税込・円）</label>
+    <input type="number" id="productPrice" value="150000" min="5000" step="5000" oninput="calculateErgoRoi()">
+  </div>
+  <div class="form-group">
+    <label for="lifespanYears">想定使用年数（耐用年数・年）</label>
+    <input type="number" id="lifespanYears" value="8" min="1" max="20" step="1" oninput="calculateErgoRoi()">
+  </div>
+  <div class="form-group">
+    <label for="dailyHours">1日の使用時間（時間/日）</label>
+    <input type="number" id="dailyHours" value="8" min="1" max="24" step="0.5" oninput="calculateErgoRoi()">
+  </div>
+  <div class="form-group">
+    <label for="monthlyTherapy">現在の月間整体・マッサージ・湿布代（円/月）</label>
+    <input type="number" id="monthlyTherapy" value="8000" min="0" step="1000" oninput="calculateErgoRoi()">
+  </div>
+  <div class="form-group">
+    <label for="reliefRate">腰痛・肩こり改善による通院削減率（%）</label>
+    <select id="reliefRate" onchange="calculateErgoRoi()">
+      <option value="0.3">30%削減（軽度改善）</option>
+      <option value="0.5" selected>50%削減（通院頻度が半減）</option>
+      <option value="0.7">70%削減（たまに行く程度に激減）</option>
+      <option value="1.0">100%削減（通院ゼロ・完治）</option>
+    </select>
+  </div>
+  <div id="calcResult" class="result-box"></div>
+</div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">高機能エルゴノミクス・メッシュオフィスチェア</div>
+        <p class="aff-item-desc">長時間のデスクワークでも体圧を分散し、腰痛リスクと整体通いを減らす最重要ギア。長期保証付きモデルなら10年以上使えて日割り数十円に。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%AA%E3%83%95%E3%82%A3%E3%82%B9%E3%83%81%E3%82%A7%E3%82%A2%20%E3%83%A1%E3%83%83%E3%82%B7%E3%83%A5%20%E4%BA%BA%E9%96%93%E5%B7%A5%E5%AD%A6%20%E3%82%A8%E3%83%AB%E3%82%B4%E3%83%92%E3%83%A5%E3%83%BC%E3%83%9E%E3%83%B3&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">体圧分散・高反発マットレス</div>
+        <p class="aff-item-desc">睡眠時の腰の沈み込みを防ぎ、翌朝の疲労蓄積をリセット。日中パフォーマンスと身体メンテナンス代を同時に改善します。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E9%AB%98%E5%8F%8D%E7%99%BA%E3%83%9E%E3%83%83%E3%83%88%E3%83%AC%E3%82%B9%20%E4%BD%93%E5%9C%A7%E5%88%86%E6%95%A3%20%E3%83%A2%E3%83%83%E3%83%88%E3%83%B3%20%E3%82%A8%E3%83%A0%E3%83%AA%E3%83%AA%E3%83%BC&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>なぜ「高級オフィスチェア・マットレス」は最も費用対効果が高い投資なのか？</h2><p>10万〜20万円もするエルゴノミクス（人間工学）チェアや高級高反発マットレスの購入を検討するとき、「家具に10万円以上出すのは高すぎるのではないか」と躊躇する方は少なくありません。しかし、これらを「一時的な出費」ではなく「1日の使用時間で割った時間単価」および「健康維持コストの削減」という投資視点で捉えると、全く異なる結論が見えてきます。</p><h3>1. 耐用年数から逆算する日割りコストの衝撃</h3><p>安価な1〜2万円のオフィスチェアはクッションのへたりやシリンダーの劣化が早く、2〜3年で買い替えが必要になるケースが大半です。一方、ハーマンミラーやエルゴヒューマン、オカムラなどの一流メーカー品は8年〜12年の長期保証が付いており、実際には10年以上使い続けられる頑丈な設計になっています。</p><p>例えば15万円のチェアを8年間（2,920日）使った場合、<strong>1日あたりの日割りコストは約51円</strong>です。1日8時間デスクワークをする人であれば、<strong>1時間あたりわずか約6.4円</strong>。コンビニで買うペットボトル飲料よりも圧倒的に安い負担で、最上級の作業環境が手に入ります。</p><h3>2. 整体・湿布代が減ることで「自然に元が取れる」メカニズム</h3><p>身体に合わない椅子やへたった寝具を使っていると、慢性的な腰痛や肩こり、頭痛を引き起こします。月に1〜2回整体やマッサージに通ったり、痛み止めの湿布や薬を購入したりしていると、月額5,000円〜10,000円（年間6万〜12万円）もの出費が静かに積み重なっています。</p><p>身体にフィットする適切な人間工学チェアや高反発マットレスを導入し、通院頻度が「月2回から月1回」へと半減するだけで、<strong>年間3万〜6万円以上の現金が浮く</strong>計算になります。つまり、3〜4年ほどでチェアやマットレスの購入代金が全額浮いた医療費・ケア費で相殺され、実質タダ（以後は使えば使うほど黒字）になるのです。</p><h3>3. 後悔しないための選び方と投資対効果を高めるコツ</h3><ul><li><strong>保証年数を確認する：</strong>メーカー保証が8年〜12年ある製品（ハーマンミラー等）は、初期費用が高くても1年あたりの実質単価が劇的に下がります。</li><li><strong>調整箇所の多さを重視：</strong>座面の前後奥行き、アームレストの3D/4D可動、ランバーサポートの強弱調整ができるモデルを選ぶことで、自身の体型に完璧に合わせられ整体代の削減効果が最大化します。</li><li><strong>リセールバリュー（売却価格）も計算に入れる：</strong>有名ブランドのオフィスチェアは5〜8年後でも数万円でフリマアプリ等で売却可能です。手放す時の残存価値まで含めると、実質負担はさらに数万円圧縮されます。</li></ul>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/water-server-petbottle-cost.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機</h3>
+        <p>ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/coffee-maker-cafe-breakeven.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機</h3>
+        <p>全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dehumidifier-dryer-cost.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機</h3>
+        <p>浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/solar-battery-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機</h3>
+        <p>ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/storage-raid-capacity-calc.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>動画撮影・防犯カメラ・NAS用「必要ストレージ容量（TB）＆録画可能日数」逆算ツール</h3>
+        <p>防犯カメラの常時録画や4K動画撮影、NAS導入で何TBのHDD/SSDが必要かを即座に逆算シミュレーション。ビットレートやカメラ台数、RAID構成から最適なストレージ容量と録画可能日数を自動算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/appliance-payback-calculator.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>省エネ家電 買い替え「何年で元が取れる？」損益分岐点シミュレーター</h3>
+        <p>エアコン・冷蔵庫・照明などを最新省エネモデルに買い替えた場合、電気代の差額で「何年何ヶ月で本体代の元が取れるか」を3秒で計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateErgoRoi() {
+  const price = parseFloat(document.getElementById('productPrice').value) || 0;
+  const years = parseFloat(document.getElementById('lifespanYears').value) || 1;
+  const hours = parseFloat(document.getElementById('dailyHours').value) || 1;
+  const therapy = parseFloat(document.getElementById('monthlyTherapy').value) || 0;
+  const reliefRate = parseFloat(document.getElementById('reliefRate').value) || 0;
+
+  const totalDays = years * 365;
+  const costPerDay = Math.round(price / totalDays);
+  const costPerHour = Math.round((costPerDay / hours) * 10) / 10;
+  
+  const monthlySaved = therapy * reliefRate;
+  const annualSaved = monthlySaved * 12;
+  const totalSaved = annualSaved * years;
+  const netCost = price - totalSaved;
+
+  let paybackText = '';
+  let headline = '';
+  if (monthlySaved > 0) {
+    const paybackMonths = Math.ceil(price / monthlySaved);
+    const paybackYears = (paybackMonths / 12).toFixed(1);
+    if (paybackMonths <= years * 12) {
+      paybackText = paybackMonths + 'ヶ月（約' + paybackYears + '年）';
+      if (netCost <= 0) {
+        headline = '約' + paybackYears + '年で完全回収！整体代節約で実質プラス +' + Math.abs(netCost).toLocaleString() + '円 の黒字';
+      } else {
+        headline = '1日たった約' + costPerDay + '円。約' + paybackYears + '年で元が取れます';
+      }
+    } else {
+      paybackText = paybackMonths + 'ヶ月（' + paybackYears + '年）';
+      headline = '耐用年数内の全額回収には届きませんが、日割りコストはわずか' + costPerDay + '円です';
+    }
+  } else {
+    paybackText = '節約額なし';
+    headline = '1日あたり' + costPerDay + '円（1時間 ' + costPerHour + '円）で利用可能';
+  }
+
+  const resultBox = document.getElementById('calcResult');
+  resultBox.innerHTML = '<div class="result-headline">結論：<strong>' + headline + '</strong></div>' +
+    '<div class="metrics-row">' +
+      '<div class="metric-card"><span>1日あたりのコスト</span><strong>約 ' + costPerDay.toLocaleString() + ' 円</strong><small>缶コーヒー1本以下の水準</small></div>' +
+      '<div class="metric-card"><span>1時間あたりのコスト</span><strong>約 ' + costPerHour + ' 円</strong><small>1日' + hours + '時間利用時</small></div>' +
+      '<div class="metric-card"><span>元が取れる期間（回収目安）</span><strong>' + paybackText + '</strong><small>整体代の削減のみで試算</small></div>' +
+      '<div class="metric-card"><span>' + years + '年間の実質負担額</span><strong>' + (netCost <= 0 ? '実質 0 円（黒字）' : netCost.toLocaleString() + ' 円') + '</strong><small>' + (netCost <= 0 ? '整体代削減が購入費を上回る' : '定価より' + totalSaved.toLocaleString() + '円お得') + '</small></div>' +
+    '</div>';
+}
+document.addEventListener('DOMContentLoaded', calculateErgoRoi);
+  </script>
+</body>
+</html>
