@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="食洗機の購入で本当に元が取れるのか？手洗いとの水道代・ガス代・電気代の差額だけでなく、浮いた時間の価値も含めて損益分岐（何年で元が取れるか）を即座に計算します。">
+  <meta name="keywords" content="食洗機 水道代 比較, 食洗機 元が取れるか, 食洗機 手洗い 光熱費 差額">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">家電・エネルギー</span>
+      <h1>食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】</h1>
+      <p class="summary">食洗機の購入で本当に元が取れるのか？手洗いとの水道代・ガス代・電気代の差額だけでなく、浮いた時間の価値も含めて損益分岐（何年で元が取れるか）を即座に計算します。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="machineCost">食洗機の購入・設置費用（円）</label>
+    <input type="number" id="machineCost" value="60000" step="1000" min="0" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="dailyFrequency">1日の皿洗い回数（回）</label>
+    <input type="number" id="dailyFrequency" value="2" step="1" min="1" max="10" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="handwashCost">手洗い1回あたりの水道・ガス代（円）</label>
+    <input type="number" id="handwashCost" value="50" step="1" min="0" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="dishwasherCost">食洗機1回あたりの電気・水道・洗剤代（円）</label>
+    <input type="number" id="dishwasherCost" value="25" step="1" min="0" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="handwashTime">手洗いにかかる時間（分/回）</label>
+    <input type="number" id="handwashTime" value="15" step="1" min="0" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="dishwasherTime">食洗機のセット・準備時間（分/回）</label>
+    <input type="number" id="dishwasherTime" value="5" step="1" min="0" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="hourlyWage">自分の時給換算（円/時間・0で光熱費のみ）</label>
+    <input type="number" id="hourlyWage" value="1000" step="100" min="0" oninput="calculateBreakeven()">
+  </div>
+</div>
+<div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">工事不要 タンク式 食洗機</div>
+        <p class="aff-item-desc">賃貸でも届いたその日から使える分岐水栓工事不要タイプ。初期費用と設置コストを大幅に抑えられます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E9%A3%9F%E6%B4%97%E6%A9%9F%20%E5%B7%A5%E4%BA%8B%E4%B8%8D%E8%A6%81%20%E3%82%BF%E3%83%B3%E3%82%AF%E5%BC%8F%20%E3%82%B3%E3%83%B3%E3%83%91%E3%82%AF%E3%83%88&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">食洗機専用タブレット洗剤</div>
+        <p class="aff-item-desc">1回あたりの洗剤コストを下げつつ、手洗いでは不可能な高温・高圧洗浄で油汚れを一発で落とします。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E9%A3%9F%E6%B4%97%E6%A9%9F%20%E6%B4%97%E5%89%A4%20%E3%82%BF%E3%83%96%E3%83%AC%E3%83%83%E3%83%88%20%E5%A4%A7%E5%AE%B9%E9%87%8F&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>食洗機は本当に節約になる？手洗いとのコスト比較と損益分岐点</h2><p>「食洗機を買うと水道代が安くなる」と聞くものの、高額な本体代金や電気代を考えると本当に得なのか疑問に思う方も多いでしょう。結論から言うと、<strong>手洗いは「大量の水とお湯（ガス代）」を使うため、食洗機を導入した方が水道光熱費そのものは安くなります。</strong></p><h3>水道代・ガス代・電気代の具体的な差額</h3><p>一般的に手洗いで1回あたり使う水量は約60〜80リットルと言われています。一方、食洗機は少ない水量を循環させて高圧洗浄するため、1回あたりの使用水量はわずか8〜10リットル程度まで削減できます。</p><ul><li><strong>手洗い1回：</strong>水道代＋お湯を沸かすガス代で約50〜60円</li><li><strong>食洗機1回：</strong>少量の水道代＋電気代＋専用洗剤代で約25〜30円</li></ul><p>毎日2回洗う家庭の場合、年間で約15,000円〜20,000円前後の水道光熱費の節約になります。</p><h3>真の価値は「水道光熱費＋時間（タイムパフォーマンス）」</h3><p>食洗機の最大のメリットは、金銭的な節約だけでなく**「自分の時間を取り戻せること」**です。1日2回・1回15分の手洗いを食洗機（予洗い・セットで5分）に切り替えると、1日20分、年間で約120時間もの自由時間が生まれます。</p><p>時給1,000円として計算すると、年間12万円相当の価値があります。本体代金が6万円だとしても、水道光熱費の差額と時間の節約価値を合わせれば、半年〜1年程度で十分に「元が取れる」計算になります。</p><h3>食洗機導入で失敗しないためのチェックポイント</h3><p>損益分岐点を早め、後悔しない購入をするための重要なポイントは以下の3点です。</p><ol><li><strong>工事不要のタンク式を検討する：</strong>賃貸や持ち家でも分岐水栓工事が難しい場合は、工事費がかからず本体代も安価な「タンク式」を選ぶことで初期費用を下げられます。</li><li><strong>洗剤は専用タブレットでコスト削減：</strong>液体タイプよりも一回分の量が決まっているタブレット型や大容量粉末タイプを使うと、洗剤代を抑えられます。</li><li><strong>まとめ洗いを徹底する：</strong>1日2回の稼働を夜の1回にまとめられる大容量タイプを選ぶと、さらに電気・水道代の効率が上がります。</li></ol><p>本ページのシミュレーターに、現在ご検討中の食洗機の価格や普段の手洗い時間を入力して、ご自身の家庭で何年で元が取れるかをぜひ試してみてください。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/ergonomic-chair-cost-per-day.html">
+        <span class="category-badge">仕事・デスク環境</span>
+        <h3>高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター</h3>
+        <p>10万〜20万円する高級オフィスチェアやマットレスは本当に高いのか？耐用年数による「1日・1時間あたりのコスト」と整体・マッサージ代の削減額から、何年・何ヶ月で元が取れるかを瞬時に逆算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/water-server-petbottle-cost.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機</h3>
+        <p>ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/coffee-maker-cafe-breakeven.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機</h3>
+        <p>全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dehumidifier-dryer-cost.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機</h3>
+        <p>浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/solar-battery-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機</h3>
+        <p>ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/storage-raid-capacity-calc.html">
+        <span class="category-badge">ガジェット・PC</span>
+        <h3>動画撮影・防犯カメラ・NAS用「必要ストレージ容量（TB）＆録画可能日数」逆算ツール</h3>
+        <p>防犯カメラの常時録画や4K動画撮影、NAS導入で何TBのHDD/SSDが必要かを即座に逆算シミュレーション。ビットレートやカメラ台数、RAID構成から最適なストレージ容量と録画可能日数を自動算出します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateBreakeven() {
+  const machineCost = parseFloat(document.getElementById('machineCost').value) || 0;
+  const dailyFrequency = parseFloat(document.getElementById('dailyFrequency').value) || 0;
+  const handwashCost = parseFloat(document.getElementById('handwashCost').value) || 0;
+  const dishwasherCost = parseFloat(document.getElementById('dishwasherCost').value) || 0;
+  const handwashTime = parseFloat(document.getElementById('handwashTime').value) || 0;
+  const dishwasherTime = parseFloat(document.getElementById('dishwasherTime').value) || 0;
+  const hourlyWage = parseFloat(document.getElementById('hourlyWage').value) || 0;
+
+  const utilitySavingPerRun = handwashCost - dishwasherCost;
+  const utilitySavingPerYear = utilitySavingPerRun * dailyFrequency * 365;
+
+  const timeSavedPerRunMin = handwashTime - dishwasherTime;
+  const timeSavedPerYearMin = timeSavedPerRunMin * dailyFrequency * 365;
+  const timeSavedPerYearHours = timeSavedPerYearMin / 60;
+  const timeValuePerYear = timeSavedPerYearHours * hourlyWage;
+
+  const totalBenefitPerYear = utilitySavingPerYear + timeValuePerYear;
+
+  let yearsTotal = totalBenefitPerYear > 0 ? (machineCost / totalBenefitPerYear) : Infinity;
+  let yearsUtility = utilitySavingPerYear > 0 ? (machineCost / utilitySavingPerYear) : Infinity;
+
+  let headlineText = '';
+  if (yearsTotal === Infinity || yearsTotal <= 0) {
+    headlineText = '現在の設定では回収が難しい条件です。';
+  } else {
+    const yearsDisplay = yearsTotal < 1 ? (Math.round(yearsTotal * 12) + 'ヶ月') : (yearsTotal.toFixed(1) + '年');
+    headlineText = `約<strong>${yearsDisplay}</strong>で本体代金の元が取れます！`;
+  }
+
+  const resultContainer = document.getElementById('calcResult');
+  resultContainer.innerHTML = `
+    <div class="result-headline">結論：${headlineText}</div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>年間節約額（水道光熱費）</span>
+        <strong>${Math.round(utilitySavingPerYear).toLocaleString()} 円</strong>
+        <small>水・ガス・電気・洗剤の年間差額</small>
+      </div>
+      <div class="metric-card">
+        <span>年間生み出す自由時間</span>
+        <strong>${Math.round(timeSavedPerYearHours)} 時間</strong>
+        <small>1日あたり約${Math.round(timeSavedPerRunMin * dailyFrequency)}分の時短</small>
+      </div>
+      <div class="metric-card">
+        <span>時間価値を含めた年間節約</span>
+        <strong>${Math.round(totalBenefitPerYear).toLocaleString()} 円</strong>
+        <small>時給${hourlyWage.toLocaleString()}円換算</small>
+      </div>
+      <div class="metric-card">
+        <span>光熱費のみでの回収期間</span>
+        <strong>${yearsUtility !== Infinity && yearsUtility > 0 ? yearsUtility.toFixed(1) + '年' : '回収不可'}</strong>
+        <small>時間価値を含めない場合</small>
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', calculateBreakeven);
+  </script>
+</body>
+</html>

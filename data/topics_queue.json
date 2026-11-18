@@ -81,5 +81,41 @@
     ],
     "affiliateSearchQuery": "オフィスチェア メッシュ 人間工学 高反発マットレス",
     "status": "done"
+  },
+  {
+    "slug": "dishwasher-handwash-cost-breakeven",
+    "title": "食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】",
+    "category": "家電・エネルギー",
+    "targetKeywords": [
+      "食洗機 水道代 比較",
+      "食洗機 元が取れるか",
+      "食洗機 手洗い 光熱費 差額"
+    ],
+    "affiliateSearchQuery": "食洗機 工事不要 タンク式",
+    "status": "done"
+  },
+  {
+    "slug": "soda-maker-petbottle-breakeven",
+    "title": "炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】",
+    "category": "暮らし・節約",
+    "targetKeywords": [
+      "炭酸水メーカー コスト比較",
+      "ソーダストリーム ペットボトル どっちが安い",
+      "炭酸水 コスパ 計算"
+    ],
+    "affiliateSearchQuery": "ソーダストリーム 炭酸水メーカー 本体",
+    "status": "pending"
+  },
+  {
+    "slug": "hair-removal-device-salon-breakeven",
+    "title": "家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター",
+    "category": "美容・ヘルスケア",
+    "targetKeywords": [
+      "脱毛器 サロン 費用 比較",
+      "家庭用脱毛器 コスパ 元が取れる",
+      "脱毛器 医療脱毛 どっちがお得"
+    ],
+    "affiliateSearchQuery": "家庭用脱毛器 光美容器 IPL",
+    "status": "pending"
   }
 ]
