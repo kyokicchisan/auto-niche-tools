@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="炭酸水を毎日飲むなら炭酸水メーカーと市販ペットボトルはどちらがお得？飲む量や購入価格を入力するだけで、500mlあたりの単価、年間節約額、本体代の元が取れるまでの損益分岐日数を即座にシミュレーションします。">
+  <meta name="keywords" content="炭酸水メーカー コスト比較, ソーダストリーム ペットボトル どっちが安い, 炭酸水 コスパ 計算">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">暮らし・節約</span>
+      <h1>炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】</h1>
+      <p class="summary">炭酸水を毎日飲むなら炭酸水メーカーと市販ペットボトルはどちらがお得？飲む量や購入価格を入力するだけで、500mlあたりの単価、年間節約額、本体代の元が取れるまでの損益分岐日数を即座にシミュレーションします。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="dailyBottles">1日の消費量（500ml換算）</label>
+    <input type="number" id="dailyBottles" value="2" min="0.5" max="10" step="0.5" oninput="calculateSodaCost()">
+    <small>例: 1日1L飲むなら「2本」</small>
+  </div>
+  <div class="form-group">
+    <label for="petPrice">ペットボトルの価格（500ml 1本あたり/円）</label>
+    <input type="number" id="petPrice" value="68" min="30" max="200" step="1" oninput="calculateSodaCost()">
+    <small>箱買い安売りで約60〜70円、コンビニで約110円</small>
+  </div>
+  <div class="form-group">
+    <label for="makerCost">本体導入費用（円）</label>
+    <input type="number" id="makerCost" value="14300" min="5000" max="50000" step="100" oninput="calculateSodaCost()">
+    <small>スターターキット平均実売価格</small>
+  </div>
+  <div class="form-group">
+    <label for="gasCost">交換ガス1本あたりの価格（円）</label>
+    <input type="number" id="gasCost" value="2160" min="1500" max="4000" step="10" oninput="calculateSodaCost()">
+    <small>標準60L用シリンダー交換価格（約2,160円）</small>
+  </div>
+  <div class="form-group">
+    <label for="fizzLevel">炭酸の強さ目安</label>
+    <select id="fizzLevel" onchange="calculateSodaCost()">
+      <option value="1">微炭酸〜普通（カタログスペック通り：約60L分）</option>
+      <option value="1.35" selected>強炭酸（ガス消費多め：約45L分）</option>
+      <option value="1.7">激強炭酸（ハイボール等：約35L分）</option>
+    </select>
+    <small>強炭酸で作ると作れる容量が減少します</small>
+  </div>
+  <div class="form-group">
+    <label for="waterCostPerL">ベースの水代（1Lあたり/円）</label>
+    <input type="number" id="waterCostPerL" value="2" min="0.2" max="50" step="0.5" oninput="calculateSodaCost()">
+    <small>水道水約0.2円、浄水器ろ過水約2〜4円、市販水約40円</small>
+  </div>
+  <div id="calcResult" class="result-box"></div>
+</div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">ソーダストリーム 本体（スターターキット）</div>
+        <p class="aff-item-desc">ボトルやガスシリンダーが付属し、届いたその日からペットボトルのゴミ出しストレスから解放されます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%BD%E3%83%BC%E3%83%80%E3%82%B9%E3%83%88%E3%83%AA%E3%83%BC%E3%83%A0%20%E6%9C%AC%E4%BD%93%20%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%AD%E3%83%83%E3%83%88&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">交換用ガスシリンダー（お得な複数本セット）</div>
+        <p class="aff-item-desc">予備シリンダーをストックしておけばガス切れ時も安心。空シリンダーと交換購入することでランニングコストを最安に抑えられます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%BD%E3%83%BC%E3%83%80%E3%82%B9%E3%83%88%E3%83%AA%E3%83%BC%E3%83%A0%20%E4%BA%A4%E6%8F%9B%E7%94%A8%E3%82%AC%E3%82%B9%E3%82%B7%E3%83%AA%E3%83%B3%E3%83%80%E3%83%BC&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">蛇口直結型・ポット型浄水器</div>
+        <p class="aff-item-desc">水道水を美味しくろ過して炭酸水を作れば、ミネラルウォーターを買う必要がなくなり1Lあたり約2〜3円でベース水を用意できます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%AF%E3%83%AA%E3%83%B3%E3%82%B9%E3%82%A4%20%E3%83%9D%E3%83%83%E3%83%88%E5%9E%8B%E6%B5%84%E6%B0%B4%E5%99%A8&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>炭酸水メーカーとペットボトルはどっちが得？損益分岐点の真実</h2>
+<p>ハイボールやお風呂上がりのリフレッシュに欠かせない炭酸水。ネット通販でケース買い（500ml×24本）している方も多いですが、「ソーダストリームなどの炭酸水メーカーを導入したほうが本当に安くなるのか？」は気になるポイントです。</p>
+<p>結論から言うと、<strong>「1日1本（500ml）以上を日常的に飲む人」であれば、約半年〜1年以内に本体代の元が取れ、以降は年間1万〜2万円以上の節約</strong>になります。しかし、飲む頻度が少ない人や極度の強炭酸派の場合、計算通りのコスパにならないケースもあります。</p>
+
+<h3>コスト計算の落とし穴：「カタログスペック通り」には作れない？</h3>
+<p>多くの炭酸水メーカー（ソーダストリームやドリンクメイトなど）は、「ガスシリンダー1本（約2,160円）で約60L作れる＝500mlあたり約18円！」と謳っています。しかし、これは「微炭酸〜普通」の強さで作った場合です。</p>
+<ul>
+  <li><strong>強炭酸派（ハイボール用など）：</strong>1回の注入で多めにガスを消費するため、実際に作れるのは40〜45L程度になります。この場合、500mlあたりのガス代は約24〜27円になります。</li>
+  <li><strong>ベースにする水代：</strong>水道水ならほぼ0円ですが、浄水器のカートリッジ代（1Lあたり約2〜4円）や市販のミネラルウォーター（2L約100円＝1L50円）を使うと、その分単価が上乗せされます。</li>
+</ul>
+<p>それでも、市販ペットボトルを最安値クラス（1本65〜70円）で箱買いしている場合と比較しても、<strong>炭酸水メーカーなら1本当たり約25〜30円で作れるため、半額以下</strong>に抑えられる計算です。</p>
+
+<h3>お金以上の価値！炭酸水メーカー導入の隠れた3大メリット</h3>
+<p>コスト面の節約効果に加えて、実際に使っているユーザーが強く実感しているのが「生活の快適化」です。</p>
+<ol>
+  <li><strong>ペットボトルのゴミ出し・分別ストレスがゼロに：</strong>毎週のように溜まる大量の空きボトルを潰し、回収日まで保管する手間から完全に解放されます。</li>
+  <li><strong>重いダンボールの運搬・保管場所が不要：</strong>24本入り（約12kg）のケースを玄関から運んだり、ストックスペースを確保したりする必要がありません。</li>
+  <li><strong>いつでも出来立ての「抜けのない炭酸」が飲める：</strong>飲み残して気が抜けてしまう心配がなく、必要な分だけ瞬時に作れます。</li>
+</ol>
+
+<h3>失敗しない運用のコツ：ガスシリンダーは「予備」を持っておく</h3>
+<p>炭酸水メーカーのランニングコストを最安に抑える秘訣は、<strong>「空になったシリンダーと交換で新しいシリンダーを購入すること」</strong>です（新規購入より1,000円以上安くなります）。そのため、常に手元に「使用中」と「予備」の計2本を保有しておく運用が最もスムーズでおすすめです。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/dishwasher-handwash-cost-breakeven.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】</h3>
+        <p>食洗機の購入で本当に元が取れるのか？手洗いとの水道代・ガス代・電気代の差額だけでなく、浮いた時間の価値も含めて損益分岐（何年で元が取れるか）を即座に計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ergonomic-chair-cost-per-day.html">
+        <span class="category-badge">仕事・デスク環境</span>
+        <h3>高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター</h3>
+        <p>10万〜20万円する高級オフィスチェアやマットレスは本当に高いのか？耐用年数による「1日・1時間あたりのコスト」と整体・マッサージ代の削減額から、何年・何ヶ月で元が取れるかを瞬時に逆算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/water-server-petbottle-cost.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機</h3>
+        <p>ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/coffee-maker-cafe-breakeven.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機</h3>
+        <p>全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dehumidifier-dryer-cost.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機</h3>
+        <p>浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/solar-battery-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ポータブル電源＋ソーラーパネル「電気代節約で何年で元が取れる？」回収期間計算機</h3>
+        <p>ポータブル電源とソーラーパネルのセット購入費用が、ベランダ発電や電気代高騰対策で何年で元が取れるかを即座に試算。実発電量やパネル効率、電気代単価を考慮した現実的な回収年数と生涯節約額を逆算できます。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateSodaCost() {
+  const dailyBottles = parseFloat(document.getElementById('dailyBottles').value) || 0;
+  const petPrice = parseFloat(document.getElementById('petPrice').value) || 0;
+  const makerCost = parseFloat(document.getElementById('makerCost').value) || 0;
+  const gasCost = parseFloat(document.getElementById('gasCost').value) || 0;
+  const fizzFactor = parseFloat(document.getElementById('fizzLevel').value) || 1;
+  const waterCostPerL = parseFloat(document.getElementById('waterCostPerL').value) || 0;
+
+  // 1本のガス(基準60L)から作れる実質L数
+  const actualLitersPerGas = 60 / fizzFactor;
+  // 500ml換算で作れる本数
+  const actualBottlesPerGas = actualLitersPerGas * 2;
+  // 炭酸水メーカーで作る500mlあたりの単価 (ガス代 + 水代0.5L分)
+  const maker500mlCost = (gasCost / actualBottlesPerGas) + (waterCostPerL * 0.5);
+
+  // 500ml 1本あたりの差額
+  const diffPerBottle = petPrice - maker500mlCost;
+  
+  // 年間本数
+  const annualBottles = dailyBottles * 365;
+  // 年間のランニングコスト差額
+  const annualSavings = diffPerBottle * annualBottles;
+
+  // 損益分岐点（元が取れるまでの日数）
+  let breakEvenDays = 0;
+  let breakEvenText = '';
+  if (diffPerBottle <= 0) {
+    breakEvenText = '元は取れません（ペットボトルのほうが割安）';
+  } else {
+    const dailySavings = diffPerBottle * dailyBottles;
+    breakEvenDays = Math.ceil(makerCost / dailySavings);
+    const months = (breakEvenDays / 30.4).toFixed(1);
+    breakEvenText = `${breakEvenDays}日（約${months}ヶ月）で回収`;
+  }
+
+  // 3年間の実質トータル節約額 (年間節約額 * 3 - 本体代)
+  const threeYearNetSavings = Math.round((annualSavings * 3) - makerCost);
+
+  const resultDiv = document.getElementById('calcResult');
+  if (!resultDiv) return;
+
+  if (diffPerBottle <= 0) {
+    resultDiv.innerHTML = `
+      <div class="result-headline">結論：<strong>現在の設定ではペットボトルのほうが安価です</strong></div>
+      <div class="metrics-row">
+        <div class="metric-card"><span>ペットボトル500ml</span><strong>${petPrice.toFixed(1)}円</strong><small>購入単価</small></div>
+        <div class="metric-card"><span>メーカー製500ml</span><strong>${maker500mlCost.toFixed(1)}円</strong><small>ガス＋水代</small></div>
+      </div>
+    `;
+    return;
+  }
+
+  resultDiv.innerHTML = `
+    <div class="result-headline">結論：<strong>約${Math.ceil(breakEvenDays / 30.4)}ヶ月で本体代を回収！年間【約${Math.round(annualSavings).toLocaleString()}円】の節約</strong></div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>500mlあたりの単価</span>
+        <strong>${maker500mlCost.toFixed(1)}円</strong>
+        <small>ペットボトル比 -${diffPerBottle.toFixed(1)}円</small>
+      </div>
+      <div class="metric-card">
+        <span>元が取れる損益分岐点</span>
+        <strong>${breakEvenDays}日</strong>
+        <small>約${(breakEvenDays / 30.4).toFixed(1)}ヶ月で本体代償却</small>
+      </div>
+      <div class="metric-card">
+        <span>年間のランニング節約額</span>
+        <strong>${Math.round(annualSavings).toLocaleString()}円</strong>
+        <small>1日${dailyBottles}本（年間${annualBottles}本）消費時</small>
+      </div>
+      <div class="metric-card">
+        <span>3年間の純トータル節約額</span>
+        <strong>${threeYearNetSavings.toLocaleString()}円</strong>
+        <small>本体購入費を差し引いた純利益</small>
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', calculateSodaCost);
+  </script>
+</body>
+</html>
