@@ -1,0 +1,33 @@
+{
+  "slug": "hair-removal-device-salon-breakeven",
+  "title": "家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター",
+  "category": "美容・ヘルスケア",
+  "summary": "家庭用脱毛器と脱毛サロン・医療脱毛、本当にお得なのはどっち？本体代・通院交通費・施術部位別の総額コストと「何回使えば元が取れるか」の損益分岐点を瞬時にシミュレーションします。",
+  "targetKeywords": [
+    "脱毛器 サロン 費用 比較",
+    "家庭用脱毛器 コスパ 元が取れる",
+    "脱毛器 医療脱毛 どっちがお得"
+  ],
+  "affiliateSearchQuery": "家庭用脱毛器 光美容器 IPL",
+  "affiliateRecommendations": [
+    {
+      "name": "高出力IPL光美容器（冷却クーリング機能付き）",
+      "description": "照射パワーが高くサロン品質に近い減毛ケアが可能。冷却機能付きならジェル不要でランニングコストを抑えられます。",
+      "searchQuery": "IPL 光美容器 冷却 家庭用脱毛器"
+    },
+    {
+      "name": "ボディ用電気シェーバー（替刃付き）",
+      "description": "光照射前の自己処理で肌を痛めず深剃りを防ぐ必須アイテム。カミソリ負けを防ぎ脱毛効果を最大化します。",
+      "searchQuery": "ボディシェーバー レディース 電気シェーバー"
+    },
+    {
+      "name": "大容量鎮静・高保湿アロエジェル",
+      "description": "照射後のデリケートな肌を素早くクールダウン＆保湿。肌トラブルを防いで継続的な照射を支えます。",
+      "searchQuery": "アロエベラジェル 保湿 大容量"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\">\n  <div class=\"form-group\">\n    <label for=\"targetArea\">脱毛したい希望部位</label>\n    <select id=\"targetArea\" onchange=\"calculateBreakeven()\">\n      <option value=\"full\" selected>全身脱毛（顔・VIO含む）</option>\n      <option value=\"partial\">主要部位のみ（ワキ・腕・脚）</option>\n      <option value=\"faceVio\">部分集中（VIOまたはヒゲ・顔）</option>\n    </select>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"devicePrice\">検討中の家庭用脱毛器 本体価格 (円)</label>\n    <input type=\"number\" id=\"devicePrice\" value=\"65000\" min=\"10000\" step=\"5000\" oninput=\"calculateBreakeven()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"salonType\">比較対象の施設タイプ</label>\n    <select id=\"salonType\" onchange=\"updateDefaultCost(); calculateBreakeven();\">\n      <option value=\"medical\" selected>医療脱毛クリニック（目安5〜8回）</option>\n      <option value=\"salon\">エステ脱毛サロン（目安12〜18回）</option>\n    </select>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"clinicTotalCost\">サロン・クリニック総額見積り (円)</label>\n    <input type=\"number\" id=\"clinicTotalCost\" value=\"240000\" min=\"30000\" step=\"10000\" oninput=\"calculateBreakeven()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"transportCost\">通院1回あたりの往復交通費 (円)</label>\n    <input type=\"number\" id=\"transportCost\" value=\"800\" min=\"0\" step=\"100\" oninput=\"calculateBreakeven()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"visitCount\">通院予定回数 (回)</label>\n    <input type=\"number\" id=\"visitCount\" value=\"8\" min=\"1\" max=\"30\" oninput=\"calculateBreakeven()\">\n  </div>\n  <div id=\"calcResult\" class=\"result-box\"></div>\n</div>",
+  "calculatorJs": "function updateDefaultCost() {\n  const area = document.getElementById('targetArea').value;\n  const type = document.getElementById('salonType').value;\n  const costInput = document.getElementById('clinicTotalCost');\n  const visitInput = document.getElementById('visitCount');\n  \n  if (type === 'medical') {\n    if (area === 'full') { costInput.value = 240000; visitInput.value = 8; }\n    else if (area === 'partial') { costInput.value = 130000; visitInput.value = 6; }\n    else { costInput.value = 90000; visitInput.value = 6; }\n  } else {\n    if (area === 'full') { costInput.value = 180000; visitInput.value = 16; }\n    else if (area === 'partial') { costInput.value = 95000; visitInput.value = 12; }\n    else { costInput.value = 70000; visitInput.value = 12; }\n  }\n}\n\nfunction calculateBreakeven() {\n  const devicePrice = parseFloat(document.getElementById('devicePrice').value) || 0;\n  const clinicCost = parseFloat(document.getElementById('clinicTotalCost').value) || 0;\n  const transport = parseFloat(document.getElementById('transportCost').value) || 0;\n  const visits = parseFloat(document.getElementById('visitCount').value) || 0;\n  \n  const clinicTotal = clinicCost + (transport * visits);\n  const deviceMaintenance = 3000; // カミソリや保湿剤など最低限の消耗品費\n  const deviceTotal = devicePrice + deviceMaintenance;\n  \n  const diff = clinicTotal - deviceTotal;\n  const isDeviceCheaper = diff > 0;\n  const perSessionEquivalent = visits > 0 ? (clinicTotal / visits) : 0;\n  const breakevenSessions = perSessionEquivalent > 0 ? Math.ceil(deviceTotal / perSessionEquivalent) : 0;\n\n  const resultBox = document.getElementById('calcResult');\n  if (!resultBox) return;\n\n  let headlineText = '';\n  if (isDeviceCheaper) {\n    headlineText = `家庭用脱毛器の方が約 <strong>${Math.abs(diff).toLocaleString()}円</strong> お得！ 通院 ${breakevenSessions}回分 で元が取れます`;\n  } else {\n    headlineText = `サロン・医療脱毛の方が約 <strong>${Math.abs(diff).toLocaleString()}円</strong> 割安（または同等）です`;\n  }\n\n  resultBox.innerHTML = `\n    <div class=\"result-headline\">結論：${headlineText}</div>\n    <div class=\"metrics-row\">\n      <div class=\"metric-card\">\n        <span>家庭用脱毛器 想定総額</span>\n        <strong>¥${deviceTotal.toLocaleString()}</strong>\n        <small>本体＋初期ケア用品含む</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>サロン・医療 実質総額</span>\n        <strong>¥${clinicTotal.toLocaleString()}</strong>\n        <small>交通費 ¥${(transport * visits).toLocaleString()} 含む</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>損益分岐の目安</span>\n        <strong>約 ${breakevenSessions} 回分</strong>\n        <small>サロン施術回数換算</small>\n      </div>\n    </div>\n  `;\n}\n\ndocument.addEventListener('DOMContentLoaded', calculateBreakeven);",
+  "articleHtml": "<h2>家庭用脱毛器とサロン・医療脱毛、コスパが良いのはどっち？</h2>\n<p>ムダ毛ケアを始める際に最も悩むのが「サロンや医療脱毛に通うべきか、それとも家庭用光美容器を買うべきか」という選択です。結論から言うと、<strong>費用総額だけを純粋に比較した場合、全身脱毛であれば家庭用脱毛器が圧倒的に低コスト（元が取れる）</strong>になります。</p>\n<p>一般的に医療脱毛の全身コースは20万〜30万円、サロン脱毛でも15万〜20万円前後かかります。一方で、ハイエンドな家庭用光美容器は5万〜8万円程度で購入でき、一度購入すれば家族やパートナーとシェアすることも可能です。上記シミュレーターの通り、クリニックへ2〜3回通う金額で本体代金が回収できてしまいます。</p>\n\n<h2>見落としがちな「隠れコスト」を徹底比較</h2>\n<p>単純なコース料金だけでなく、以下の見えない支出や手間を考慮することが後悔しない判断につながります。</p>\n<ul>\n  <li><strong>通院コスト・移動時間：</strong>サロン通いは交通費に加え、往復の移動や待ち時間が発生します。予約の取りにくさによるストレスも無視できません。</li>\n  <li><strong>追加施術料金：</strong>毛量や肌質によっては規定回数で満足できず、追加照射（1回あたり数万円）が必要になるケースが多々あります。</li>\n  <li><strong>家庭用のタイムコスト：</strong>家庭用脱毛器は背中など手が届きにくい部位の自己処理に時間がかかります。一人で全身を照射する場合、1回あたり40分〜1時間程度の労力が必要です。</li>\n</ul>\n\n<h2>永久脱毛を求めるか、手軽な減毛・ツルスベ維持かで選ぶ</h2>\n<h3>医療脱毛が向いている人</h3>\n<p>「毛根を完全に破壊して自己処理から一生解放されたい」「短期間（半年〜1年）で目に見える成果を出したい」という方は医療レーザー脱毛一択です。照射出力が高いため痛みは伴いますが、減毛効果は最も確実です。</p>\n\n<h3>家庭用脱毛器が向いている人</h3>\n<p>「他人に肌を見られるのが恥ずかしい」「サロンに通うまとまった時間がない」「ツルスベ肌をキープできる減毛・抑毛レベルで十分」という方は家庭用光美容器がベストです。最近のIPL光美容器は照射スピードも速く、自宅で好きなタイミングで継続できるため、タイパ・コスパともに非常に高い選択肢となります。</p>",
+  "createdAt": "2026-11-20"
+}

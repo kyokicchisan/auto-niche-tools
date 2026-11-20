@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="家庭用脱毛器と脱毛サロン・医療脱毛、本当にお得なのはどっち？本体代・通院交通費・施術部位別の総額コストと「何回使えば元が取れるか」の損益分岐点を瞬時にシミュレーションします。">
+  <meta name="keywords" content="脱毛器 サロン 費用 比較, 家庭用脱毛器 コスパ 元が取れる, 脱毛器 医療脱毛 どっちがお得">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">美容・ヘルスケア</span>
+      <h1>家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター</h1>
+      <p class="summary">家庭用脱毛器と脱毛サロン・医療脱毛、本当にお得なのはどっち？本体代・通院交通費・施術部位別の総額コストと「何回使えば元が取れるか」の損益分岐点を瞬時にシミュレーションします。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="targetArea">脱毛したい希望部位</label>
+    <select id="targetArea" onchange="calculateBreakeven()">
+      <option value="full" selected>全身脱毛（顔・VIO含む）</option>
+      <option value="partial">主要部位のみ（ワキ・腕・脚）</option>
+      <option value="faceVio">部分集中（VIOまたはヒゲ・顔）</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="devicePrice">検討中の家庭用脱毛器 本体価格 (円)</label>
+    <input type="number" id="devicePrice" value="65000" min="10000" step="5000" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="salonType">比較対象の施設タイプ</label>
+    <select id="salonType" onchange="updateDefaultCost(); calculateBreakeven();">
+      <option value="medical" selected>医療脱毛クリニック（目安5〜8回）</option>
+      <option value="salon">エステ脱毛サロン（目安12〜18回）</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="clinicTotalCost">サロン・クリニック総額見積り (円)</label>
+    <input type="number" id="clinicTotalCost" value="240000" min="30000" step="10000" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="transportCost">通院1回あたりの往復交通費 (円)</label>
+    <input type="number" id="transportCost" value="800" min="0" step="100" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="visitCount">通院予定回数 (回)</label>
+    <input type="number" id="visitCount" value="8" min="1" max="30" oninput="calculateBreakeven()">
+  </div>
+  <div id="calcResult" class="result-box"></div>
+</div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">高出力IPL光美容器（冷却クーリング機能付き）</div>
+        <p class="aff-item-desc">照射パワーが高くサロン品質に近い減毛ケアが可能。冷却機能付きならジェル不要でランニングコストを抑えられます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=IPL%20%E5%85%89%E7%BE%8E%E5%AE%B9%E5%99%A8%20%E5%86%B7%E5%8D%B4%20%E5%AE%B6%E5%BA%AD%E7%94%A8%E8%84%B1%E6%AF%9B%E5%99%A8&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">ボディ用電気シェーバー（替刃付き）</div>
+        <p class="aff-item-desc">光照射前の自己処理で肌を痛めず深剃りを防ぐ必須アイテム。カミソリ負けを防ぎ脱毛効果を最大化します。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%9C%E3%83%87%E3%82%A3%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%90%E3%83%BC%20%E3%83%AC%E3%83%87%E3%82%A3%E3%83%BC%E3%82%B9%20%E9%9B%BB%E6%B0%97%E3%82%B7%E3%82%A7%E3%83%BC%E3%83%90%E3%83%BC&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">大容量鎮静・高保湿アロエジェル</div>
+        <p class="aff-item-desc">照射後のデリケートな肌を素早くクールダウン＆保湿。肌トラブルを防いで継続的な照射を支えます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%83%AD%E3%82%A8%E3%83%99%E3%83%A9%E3%82%B8%E3%82%A7%E3%83%AB%20%E4%BF%9D%E6%B9%BF%20%E5%A4%A7%E5%AE%B9%E9%87%8F&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>家庭用脱毛器とサロン・医療脱毛、コスパが良いのはどっち？</h2>
+<p>ムダ毛ケアを始める際に最も悩むのが「サロンや医療脱毛に通うべきか、それとも家庭用光美容器を買うべきか」という選択です。結論から言うと、<strong>費用総額だけを純粋に比較した場合、全身脱毛であれば家庭用脱毛器が圧倒的に低コスト（元が取れる）</strong>になります。</p>
+<p>一般的に医療脱毛の全身コースは20万〜30万円、サロン脱毛でも15万〜20万円前後かかります。一方で、ハイエンドな家庭用光美容器は5万〜8万円程度で購入でき、一度購入すれば家族やパートナーとシェアすることも可能です。上記シミュレーターの通り、クリニックへ2〜3回通う金額で本体代金が回収できてしまいます。</p>
+
+<h2>見落としがちな「隠れコスト」を徹底比較</h2>
+<p>単純なコース料金だけでなく、以下の見えない支出や手間を考慮することが後悔しない判断につながります。</p>
+<ul>
+  <li><strong>通院コスト・移動時間：</strong>サロン通いは交通費に加え、往復の移動や待ち時間が発生します。予約の取りにくさによるストレスも無視できません。</li>
+  <li><strong>追加施術料金：</strong>毛量や肌質によっては規定回数で満足できず、追加照射（1回あたり数万円）が必要になるケースが多々あります。</li>
+  <li><strong>家庭用のタイムコスト：</strong>家庭用脱毛器は背中など手が届きにくい部位の自己処理に時間がかかります。一人で全身を照射する場合、1回あたり40分〜1時間程度の労力が必要です。</li>
+</ul>
+
+<h2>永久脱毛を求めるか、手軽な減毛・ツルスベ維持かで選ぶ</h2>
+<h3>医療脱毛が向いている人</h3>
+<p>「毛根を完全に破壊して自己処理から一生解放されたい」「短期間（半年〜1年）で目に見える成果を出したい」という方は医療レーザー脱毛一択です。照射出力が高いため痛みは伴いますが、減毛効果は最も確実です。</p>
+
+<h3>家庭用脱毛器が向いている人</h3>
+<p>「他人に肌を見られるのが恥ずかしい」「サロンに通うまとまった時間がない」「ツルスベ肌をキープできる減毛・抑毛レベルで十分」という方は家庭用光美容器がベストです。最近のIPL光美容器は照射スピードも速く、自宅で好きなタイミングで継続できるため、タイパ・コスパともに非常に高い選択肢となります。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/soda-maker-petbottle-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】</h3>
+        <p>炭酸水を毎日飲むなら炭酸水メーカーと市販ペットボトルはどちらがお得？飲む量や購入価格を入力するだけで、500mlあたりの単価、年間節約額、本体代の元が取れるまでの損益分岐日数を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dishwasher-handwash-cost-breakeven.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】</h3>
+        <p>食洗機の購入で本当に元が取れるのか？手洗いとの水道代・ガス代・電気代の差額だけでなく、浮いた時間の価値も含めて損益分岐（何年で元が取れるか）を即座に計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ergonomic-chair-cost-per-day.html">
+        <span class="category-badge">仕事・デスク環境</span>
+        <h3>高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター</h3>
+        <p>10万〜20万円する高級オフィスチェアやマットレスは本当に高いのか？耐用年数による「1日・1時間あたりのコスト」と整体・マッサージ代の削減額から、何年・何ヶ月で元が取れるかを瞬時に逆算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/water-server-petbottle-cost.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機</h3>
+        <p>ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/coffee-maker-cafe-breakeven.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機</h3>
+        <p>全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dehumidifier-dryer-cost.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>浴室乾燥機 vs 除湿機 vs ドラム式洗濯機「1回あたりの電気代＆年間コスト」比較計算機</h3>
+        <p>浴室乾燥機・衣類乾燥除湿機・ドラム式洗濯乾燥機の1回あたり＆年間の電気代を徹底比較！ご家庭の使用頻度に合わせて最もコスパの高い乾燥方法と年間差額を即座にシミュレーションします。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function updateDefaultCost() {
+  const area = document.getElementById('targetArea').value;
+  const type = document.getElementById('salonType').value;
+  const costInput = document.getElementById('clinicTotalCost');
+  const visitInput = document.getElementById('visitCount');
+  
+  if (type === 'medical') {
+    if (area === 'full') { costInput.value = 240000; visitInput.value = 8; }
+    else if (area === 'partial') { costInput.value = 130000; visitInput.value = 6; }
+    else { costInput.value = 90000; visitInput.value = 6; }
+  } else {
+    if (area === 'full') { costInput.value = 180000; visitInput.value = 16; }
+    else if (area === 'partial') { costInput.value = 95000; visitInput.value = 12; }
+    else { costInput.value = 70000; visitInput.value = 12; }
+  }
+}
+
+function calculateBreakeven() {
+  const devicePrice = parseFloat(document.getElementById('devicePrice').value) || 0;
+  const clinicCost = parseFloat(document.getElementById('clinicTotalCost').value) || 0;
+  const transport = parseFloat(document.getElementById('transportCost').value) || 0;
+  const visits = parseFloat(document.getElementById('visitCount').value) || 0;
+  
+  const clinicTotal = clinicCost + (transport * visits);
+  const deviceMaintenance = 3000; // カミソリや保湿剤など最低限の消耗品費
+  const deviceTotal = devicePrice + deviceMaintenance;
+  
+  const diff = clinicTotal - deviceTotal;
+  const isDeviceCheaper = diff > 0;
+  const perSessionEquivalent = visits > 0 ? (clinicTotal / visits) : 0;
+  const breakevenSessions = perSessionEquivalent > 0 ? Math.ceil(deviceTotal / perSessionEquivalent) : 0;
+
+  const resultBox = document.getElementById('calcResult');
+  if (!resultBox) return;
+
+  let headlineText = '';
+  if (isDeviceCheaper) {
+    headlineText = `家庭用脱毛器の方が約 <strong>${Math.abs(diff).toLocaleString()}円</strong> お得！ 通院 ${breakevenSessions}回分 で元が取れます`;
+  } else {
+    headlineText = `サロン・医療脱毛の方が約 <strong>${Math.abs(diff).toLocaleString()}円</strong> 割安（または同等）です`;
+  }
+
+  resultBox.innerHTML = `
+    <div class="result-headline">結論：${headlineText}</div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>家庭用脱毛器 想定総額</span>
+        <strong>¥${deviceTotal.toLocaleString()}</strong>
+        <small>本体＋初期ケア用品含む</small>
+      </div>
+      <div class="metric-card">
+        <span>サロン・医療 実質総額</span>
+        <strong>¥${clinicTotal.toLocaleString()}</strong>
+        <small>交通費 ¥${(transport * visits).toLocaleString()} 含む</small>
+      </div>
+      <div class="metric-card">
+        <span>損益分岐の目安</span>
+        <strong>約 ${breakevenSessions} 回分</strong>
+        <small>サロン施術回数換算</small>
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', calculateBreakeven);
+  </script>
+</body>
+</html>
