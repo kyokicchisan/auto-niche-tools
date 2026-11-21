@@ -1,0 +1,33 @@
+{
+  "slug": "home-gym-membership-breakeven",
+  "title": "ホームジム vs 24時間ジム会費 損益分岐点シミュレーター【何ヶ月で元が取れる？】",
+  "category": "暮らし・節約",
+  "summary": "ホームジム器具（可変式ダンベルやインクラインベンチ）の初期投資が、24時間ジムの月会費・交通費に対して何ヶ月で回収できるかを瞬時に計算。年間の浮く移動時間や長期的な節約額もひと目でわかります。",
+  "targetKeywords": [
+    "ホームジム ジム 比較",
+    "可変式ダンベル 元が取れる",
+    "ジム代 節約 自宅トレ"
+  ],
+  "affiliateSearchQuery": "可変式ダンベル インクラインベンチ",
+  "affiliateRecommendations": [
+    {
+      "name": "可変式ダンベル（20kg〜32kgペア）",
+      "description": "プレートの付け替え不要で数秒で重量変更可能。省スペースでホームジムのコスパを最大化する必須アイテムです。",
+      "searchQuery": "可変式ダンベル 32kg アジャスタブル"
+    },
+    {
+      "name": "折りたたみ式 インクラインベンチ",
+      "description": "大胸筋上部や肩トレの種目を激増させ、使わない時は部屋の隅やベッド下にコンパクト収納できます。",
+      "searchQuery": "インクラインベンチ 折りたたみ 耐荷重300kg"
+    },
+    {
+      "name": "高硬度 ジョイントトレーニングマット",
+      "description": "床のへこみ防止と防音・防振に必須。賃貸でも安心してダンベルトレーニングが可能になります。",
+      "searchQuery": "トレーニングマット ジョイント 大判 防音 極厚"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\"><div class=\"form-group\"><label for=\"gymMonthlyFee\">ジム月会費（円/月）</label><input type=\"number\" id=\"gymMonthlyFee\" value=\"8000\" min=\"0\" step=\"500\" oninput=\"calculateHomeGymBreakeven()\"></div><div class=\"form-group\"><label for=\"travelCostMonthly\">ジム通いの月間交通費・オプション（円/月）</label><input type=\"number\" id=\"travelCostMonthly\" value=\"1500\" min=\"0\" step=\"100\" oninput=\"calculateHomeGymBreakeven()\"></div><div class=\"form-group\"><label for=\"homeGymCost\">ホームジム初期導入費（ダンベル・ベンチ・マット等）</label><input type=\"number\" id=\"homeGymCost\" value=\"65000\" min=\"0\" step=\"1000\" oninput=\"calculateHomeGymBreakeven()\"></div><div class=\"form-group\"><label for=\"roundTripMinutes\">1回の往復移動＋着替え時間（分）</label><input type=\"number\" id=\"roundTripMinutes\" value=\"35\" min=\"0\" step=\"5\" oninput=\"calculateHomeGymBreakeven()\"></div><div class=\"form-group\"><label for=\"monthlyWorkouts\">月のトレーニング回数（回/月）</label><input type=\"number\" id=\"monthlyWorkouts\" value=\"12\" min=\"1\" max=\"31\" step=\"1\" oninput=\"calculateHomeGymBreakeven()\"></div><div id=\"calcResult\" class=\"result-box\"></div></div>",
+  "calculatorJs": "function calculateHomeGymBreakeven() {\n  const gymMonthly = parseFloat(document.getElementById('gymMonthlyFee').value) || 0;\n  const travelMonthly = parseFloat(document.getElementById('travelCostMonthly').value) || 0;\n  const homeGymCost = parseFloat(document.getElementById('homeGymCost').value) || 0;\n  const tripMinutes = parseFloat(document.getElementById('roundTripMinutes').value) || 0;\n  const monthlyWorkouts = parseFloat(document.getElementById('monthlyWorkouts').value) || 0;\n\n  const totalMonthlyGymCost = gymMonthly + travelMonthly;\n  const resultEl = document.getElementById('calcResult');\n\n  if (totalMonthlyGymCost <= 0) {\n    resultEl.innerHTML = '<div class=\"result-headline\">ジム代金を入力してください</div>';\n    return;\n  }\n\n  const breakevenMonths = (homeGymCost / totalMonthlyGymCost).toFixed(1);\n  const yearlyGymSavings = (totalMonthlyGymCost * 12) - (homeGymCost);\n  const threeYearSavings = (totalMonthlyGymCost * 36) - homeGymCost;\n  const annualSavedHours = Math.round((tripMinutes * monthlyWorkouts * 12) / 60);\n\n  let conclusionText = '';\n  if (parseFloat(breakevenMonths) <= 12) {\n    conclusionText = '約 ' + breakevenMonths + ' ヶ月（1年未満）で元が取れます！';\n  } else {\n    conclusionText = '約 ' + breakevenMonths + ' ヶ月で元が取れます！';\n  }\n\n  resultEl.innerHTML = `\n    <div class=\"result-headline\">結論：<strong>${conclusionText}</strong></div>\n    <div class=\"metrics-row\">\n      <div class=\"metric-card\">\n        <span>損益分岐点</span>\n        <strong>${breakevenMonths} ヶ月</strong>\n        <small>初期費用を回収できる期間</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>3年間の純節約額</span>\n        <strong>${threeYearSavings.toLocaleString()} 円</strong>\n        <small>ジム代・交通費から器具代を引いた浮くお金</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>年間の節約移動時間</span>\n        <strong>${annualSavedHours} 時間</strong>\n        <small>移動・準備に使わずに済む自由時間</small>\n      </div>\n    </div>\n  `;\n}\ndocument.addEventListener('DOMContentLoaded', calculateHomeGymBreakeven);",
+  "articleHtml": "<h2>ホームジム vs 24時間ジム：本当にお得なのはどっち？</h2><p>筋トレを始めるとき、あるいは毎月の固定費を見直したいときに真っ先に候補へ挙がるのが「ホームジム化（自宅トレーニング）」です。24時間フィットネスジムの月会費は一般的に7,000円〜9,000円程度。そこに交通費やロッカー代、プロテインバー利用料などが加わると、年間で10万円以上の出費になります。</p><p>一方、自宅で本格的なトレーニング環境を構築する場合、可変式ダンベル（約3万〜5万円）とインクラインベンチ（約1.5万円）、床保護用のジョイントマット（約5,000円）を揃えると、初期投資として約5万〜7万円程度が必要です。「初期費用が高い」と感じるかもしれませんが、シミュレーターの結果が示す通り、<strong>わずか7〜10ヶ月程度で完全に元が取れる</strong>計算になります。</p><h3>お金だけではない！「時間コスト」の圧倒的な削減</h3><p>ホームジムの最大のメリットは、金銭的な節約以上に「移動時間がゼロになること」です。ジムへの往復・着替え・器具の順番待ちで1回あたり30分〜45分消費している場合、月12回の利用で年間約70〜90時間もの時間を移動に費やしていることになります。自宅トレならウェアに着替える必要もなく、思い立ったら1秒でスタート可能。このタイパ（タイムパフォーマンス）の高さは、忙しいビジネスパーソンや子育て世代にとって計り知れない価値があります。</p><h3>失敗しないホームジム構築の3大ステップ</h3><p>これから自宅環境を整える方は、最初から巨大なパワーラックを買うのではなく、以下の3ステップで導入するのがおすすめです。</p><ul><li><strong>第1段階：可変式ダンベル（ペア）</strong> - 最も重要。ワンタッチで重量を変えられるタイプを選ぶことで、種目ごとの重量変更ストレスをゼロにし、省スペース化を実現します。</li><li><strong>第2段階：アジャスタブル（インクライン）ベンチ</strong> - フラットだけでなく角度調整ができるベンチがあれば、胸・肩・背中・腕の全身をジム同等のバリエーションで追い込めます。</li><li><strong>第3段階：高硬度ジョイントマット</strong> - ダンベルを置いた際の床へのダメージ・騒音を防ぎ、賃貸住宅でも安心してトレーニングできる環境を確保します。</li></ul><p>2年、3年と筋トレを継続するなら、ホームジムの費用対効果は年を追うごとに跳ね上がります。ぜひ当シミュレーターで回収期間と節約額を確認し、快適な家トレ生活への第一歩を踏み出してみてください。</p>",
+  "createdAt": "2026-11-21"
+}

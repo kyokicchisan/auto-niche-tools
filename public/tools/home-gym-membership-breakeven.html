@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ホームジム vs 24時間ジム会費 損益分岐点シミュレーター【何ヶ月で元が取れる？】 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="ホームジム器具（可変式ダンベルやインクラインベンチ）の初期投資が、24時間ジムの月会費・交通費に対して何ヶ月で回収できるかを瞬時に計算。年間の浮く移動時間や長期的な節約額もひと目でわかります。">
+  <meta name="keywords" content="ホームジム ジム 比較, 可変式ダンベル 元が取れる, ジム代 節約 自宅トレ">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">暮らし・節約</span>
+      <h1>ホームジム vs 24時間ジム会費 損益分岐点シミュレーター【何ヶ月で元が取れる？】</h1>
+      <p class="summary">ホームジム器具（可変式ダンベルやインクラインベンチ）の初期投資が、24時間ジムの月会費・交通費に対して何ヶ月で回収できるかを瞬時に計算。年間の浮く移動時間や長期的な節約額もひと目でわかります。</p>
+      
+      <div class="calc-grid"><div class="form-group"><label for="gymMonthlyFee">ジム月会費（円/月）</label><input type="number" id="gymMonthlyFee" value="8000" min="0" step="500" oninput="calculateHomeGymBreakeven()"></div><div class="form-group"><label for="travelCostMonthly">ジム通いの月間交通費・オプション（円/月）</label><input type="number" id="travelCostMonthly" value="1500" min="0" step="100" oninput="calculateHomeGymBreakeven()"></div><div class="form-group"><label for="homeGymCost">ホームジム初期導入費（ダンベル・ベンチ・マット等）</label><input type="number" id="homeGymCost" value="65000" min="0" step="1000" oninput="calculateHomeGymBreakeven()"></div><div class="form-group"><label for="roundTripMinutes">1回の往復移動＋着替え時間（分）</label><input type="number" id="roundTripMinutes" value="35" min="0" step="5" oninput="calculateHomeGymBreakeven()"></div><div class="form-group"><label for="monthlyWorkouts">月のトレーニング回数（回/月）</label><input type="number" id="monthlyWorkouts" value="12" min="1" max="31" step="1" oninput="calculateHomeGymBreakeven()"></div><div id="calcResult" class="result-box"></div></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">可変式ダンベル（20kg〜32kgペア）</div>
+        <p class="aff-item-desc">プレートの付け替え不要で数秒で重量変更可能。省スペースでホームジムのコスパを最大化する必須アイテムです。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E5%8F%AF%E5%A4%89%E5%BC%8F%E3%83%80%E3%83%B3%E3%83%99%E3%83%AB%2032kg%20%E3%82%A2%E3%82%B8%E3%83%A3%E3%82%B9%E3%82%BF%E3%83%96%E3%83%AB&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">折りたたみ式 インクラインベンチ</div>
+        <p class="aff-item-desc">大胸筋上部や肩トレの種目を激増させ、使わない時は部屋の隅やベッド下にコンパクト収納できます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%A4%E3%83%B3%E3%82%AF%E3%83%A9%E3%82%A4%E3%83%B3%E3%83%99%E3%83%B3%E3%83%81%20%E6%8A%98%E3%82%8A%E3%81%9F%E3%81%9F%E3%81%BF%20%E8%80%90%E8%8D%B7%E9%87%8D300kg&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">高硬度 ジョイントトレーニングマット</div>
+        <p class="aff-item-desc">床のへこみ防止と防音・防振に必須。賃貸でも安心してダンベルトレーニングが可能になります。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%88%E3%83%AC%E3%83%BC%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%9E%E3%83%83%E3%83%88%20%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%B3%E3%83%88%20%E5%A4%A7%E5%88%A4%20%E9%98%B2%E9%9F%B3%20%E6%A5%B5%E5%8E%9A&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>ホームジム vs 24時間ジム：本当にお得なのはどっち？</h2><p>筋トレを始めるとき、あるいは毎月の固定費を見直したいときに真っ先に候補へ挙がるのが「ホームジム化（自宅トレーニング）」です。24時間フィットネスジムの月会費は一般的に7,000円〜9,000円程度。そこに交通費やロッカー代、プロテインバー利用料などが加わると、年間で10万円以上の出費になります。</p><p>一方、自宅で本格的なトレーニング環境を構築する場合、可変式ダンベル（約3万〜5万円）とインクラインベンチ（約1.5万円）、床保護用のジョイントマット（約5,000円）を揃えると、初期投資として約5万〜7万円程度が必要です。「初期費用が高い」と感じるかもしれませんが、シミュレーターの結果が示す通り、<strong>わずか7〜10ヶ月程度で完全に元が取れる</strong>計算になります。</p><h3>お金だけではない！「時間コスト」の圧倒的な削減</h3><p>ホームジムの最大のメリットは、金銭的な節約以上に「移動時間がゼロになること」です。ジムへの往復・着替え・器具の順番待ちで1回あたり30分〜45分消費している場合、月12回の利用で年間約70〜90時間もの時間を移動に費やしていることになります。自宅トレならウェアに着替える必要もなく、思い立ったら1秒でスタート可能。このタイパ（タイムパフォーマンス）の高さは、忙しいビジネスパーソンや子育て世代にとって計り知れない価値があります。</p><h3>失敗しないホームジム構築の3大ステップ</h3><p>これから自宅環境を整える方は、最初から巨大なパワーラックを買うのではなく、以下の3ステップで導入するのがおすすめです。</p><ul><li><strong>第1段階：可変式ダンベル（ペア）</strong> - 最も重要。ワンタッチで重量を変えられるタイプを選ぶことで、種目ごとの重量変更ストレスをゼロにし、省スペース化を実現します。</li><li><strong>第2段階：アジャスタブル（インクライン）ベンチ</strong> - フラットだけでなく角度調整ができるベンチがあれば、胸・肩・背中・腕の全身をジム同等のバリエーションで追い込めます。</li><li><strong>第3段階：高硬度ジョイントマット</strong> - ダンベルを置いた際の床へのダメージ・騒音を防ぎ、賃貸住宅でも安心してトレーニングできる環境を確保します。</li></ul><p>2年、3年と筋トレを継続するなら、ホームジムの費用対効果は年を追うごとに跳ね上がります。ぜひ当シミュレーターで回収期間と節約額を確認し、快適な家トレ生活への第一歩を踏み出してみてください。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/hair-removal-device-salon-breakeven.html">
+        <span class="category-badge">美容・ヘルスケア</span>
+        <h3>家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター</h3>
+        <p>家庭用脱毛器と脱毛サロン・医療脱毛、本当にお得なのはどっち？本体代・通院交通費・施術部位別の総額コストと「何回使えば元が取れるか」の損益分岐点を瞬時にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/soda-maker-petbottle-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】</h3>
+        <p>炭酸水を毎日飲むなら炭酸水メーカーと市販ペットボトルはどちらがお得？飲む量や購入価格を入力するだけで、500mlあたりの単価、年間節約額、本体代の元が取れるまでの損益分岐日数を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dishwasher-handwash-cost-breakeven.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】</h3>
+        <p>食洗機の購入で本当に元が取れるのか？手洗いとの水道代・ガス代・電気代の差額だけでなく、浮いた時間の価値も含めて損益分岐（何年で元が取れるか）を即座に計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ergonomic-chair-cost-per-day.html">
+        <span class="category-badge">仕事・デスク環境</span>
+        <h3>高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター</h3>
+        <p>10万〜20万円する高級オフィスチェアやマットレスは本当に高いのか？耐用年数による「1日・1時間あたりのコスト」と整体・マッサージ代の削減額から、何年・何ヶ月で元が取れるかを瞬時に逆算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/water-server-petbottle-cost.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機</h3>
+        <p>ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/coffee-maker-cafe-breakeven.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>全自動コーヒーメーカー vs コンビニ・カフェ「何杯飲めば元が取れる？」1杯あたり原価計算機</h3>
+        <p>全自動コーヒーメーカーの導入で何杯・何ヶ月で本体代の元が取れるかを瞬時に逆算！コンビニやカフェの利用頻度、豆のグレードに応じた1杯あたりの原価と年間節約額をシミュレーションします。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateHomeGymBreakeven() {
+  const gymMonthly = parseFloat(document.getElementById('gymMonthlyFee').value) || 0;
+  const travelMonthly = parseFloat(document.getElementById('travelCostMonthly').value) || 0;
+  const homeGymCost = parseFloat(document.getElementById('homeGymCost').value) || 0;
+  const tripMinutes = parseFloat(document.getElementById('roundTripMinutes').value) || 0;
+  const monthlyWorkouts = parseFloat(document.getElementById('monthlyWorkouts').value) || 0;
+
+  const totalMonthlyGymCost = gymMonthly + travelMonthly;
+  const resultEl = document.getElementById('calcResult');
+
+  if (totalMonthlyGymCost <= 0) {
+    resultEl.innerHTML = '<div class="result-headline">ジム代金を入力してください</div>';
+    return;
+  }
+
+  const breakevenMonths = (homeGymCost / totalMonthlyGymCost).toFixed(1);
+  const yearlyGymSavings = (totalMonthlyGymCost * 12) - (homeGymCost);
+  const threeYearSavings = (totalMonthlyGymCost * 36) - homeGymCost;
+  const annualSavedHours = Math.round((tripMinutes * monthlyWorkouts * 12) / 60);
+
+  let conclusionText = '';
+  if (parseFloat(breakevenMonths) <= 12) {
+    conclusionText = '約 ' + breakevenMonths + ' ヶ月（1年未満）で元が取れます！';
+  } else {
+    conclusionText = '約 ' + breakevenMonths + ' ヶ月で元が取れます！';
+  }
+
+  resultEl.innerHTML = `
+    <div class="result-headline">結論：<strong>${conclusionText}</strong></div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>損益分岐点</span>
+        <strong>${breakevenMonths} ヶ月</strong>
+        <small>初期費用を回収できる期間</small>
+      </div>
+      <div class="metric-card">
+        <span>3年間の純節約額</span>
+        <strong>${threeYearSavings.toLocaleString()} 円</strong>
+        <small>ジム代・交通費から器具代を引いた浮くお金</small>
+      </div>
+      <div class="metric-card">
+        <span>年間の節約移動時間</span>
+        <strong>${annualSavedHours} 時間</strong>
+        <small>移動・準備に使わずに済む自由時間</small>
+      </div>
+    </div>
+  `;
+}
+document.addEventListener('DOMContentLoaded', calculateHomeGymBreakeven);
+  </script>
+</body>
+</html>

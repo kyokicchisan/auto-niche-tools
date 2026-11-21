@@ -117,5 +117,41 @@
     ],
     "affiliateSearchQuery": "家庭用脱毛器 光美容器 IPL",
     "status": "done"
+  },
+  {
+    "slug": "home-gym-membership-breakeven",
+    "title": "ホームジム vs 24時間ジム会費 損益分岐点シミュレーター【何ヶ月で元が取れる？】",
+    "category": "暮らし・節約",
+    "targetKeywords": [
+      "ホームジム ジム 比較",
+      "可変式ダンベル 元が取れる",
+      "ジム代 節約 自宅トレ"
+    ],
+    "affiliateSearchQuery": "可変式ダンベル インクラインベンチ",
+    "status": "done"
+  },
+  {
+    "slug": "drum-washer-dryer-payback",
+    "title": "ドラム式洗濯乾燥機 vs 縦型＋干す手間 損益分岐点・時短価値シミュレーター",
+    "category": "家電・エネルギー",
+    "targetKeywords": [
+      "ドラム式洗濯機 縦型 どっちがお得 計算",
+      "ドラム式 元が取れる 何年",
+      "洗濯乾燥機 電気代 水道代 比較"
+    ],
+    "affiliateSearchQuery": "ドラム式洗濯乾燥機",
+    "status": "pending"
+  },
+  {
+    "slug": "food-waste-composter-payback",
+    "title": "生ごみ処理機 損益分岐点計算機【自治体助成金＆ゴミ袋代で何年で元が取れる？】",
+    "category": "暮らし・節約",
+    "targetKeywords": [
+      "生ごみ処理機 助成金 元が取れる",
+      "家庭用生ごみ乾燥機 コスパ",
+      "生ごみ処理機 電気代 ゴミ袋代 比較"
+    ],
+    "affiliateSearchQuery": "生ごみ処理機 ルーフェン パナソニック",
+    "status": "pending"
   }
 ]
