@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ドラム式洗濯乾燥機 vs 縦型＋干す手間 損益分岐点・時短価値シミュレーター | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="ドラム式洗濯乾燥機の本体価格差を「時短効果の時給換算」で徹底シミュレーション！干す手間の削減時間や光熱費の差額から、何年で元が取れるか損益分岐点を一瞬で算出します。">
+  <meta name="keywords" content="ドラム式洗濯機 縦型 どっちがお得 計算, ドラム式 元が取れる 何年, 洗濯乾燥機 電気代 水道代 比較">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">家電・エネルギー</span>
+      <h1>ドラム式洗濯乾燥機 vs 縦型＋干す手間 損益分岐点・時短価値シミュレーター</h1>
+      <p class="summary">ドラム式洗濯乾燥機の本体価格差を「時短効果の時給換算」で徹底シミュレーション！干す手間の削減時間や光熱費の差額から、何年で元が取れるか損益分岐点を一瞬で算出します。</p>
+      
+      <div class="calc-grid"><div class="form-group"><label for="drumPrice">ドラム式 購入価格 (円)</label><input type="number" id="drumPrice" value="250000" step="5000" oninput="calculatePayback()"></div><div class="form-group"><label for="verticalPrice">縦型洗濯機 購入価格 (円)</label><input type="number" id="verticalPrice" value="80000" step="5000" oninput="calculatePayback()"></div><div class="form-group"><label for="washPerDay">1日の洗濯回数 (回)</label><input type="number" id="washPerDay" value="1" step="0.5" min="0.5" oninput="calculatePayback()"></div><div class="form-group"><label for="hourlyWage">自分の時給換算 (円/時間)</label><input type="number" id="hourlyWage" value="1500" step="100" oninput="calculatePayback()"></div><div class="form-group"><label for="dryTimeSaved">干す・取り込む手間 (分/回)</label><input type="number" id="dryTimeSaved" value="25" step="5" oninput="calculatePayback()"></div><div class="form-group"><label for="utilityDiff">1回あたりの光熱費差額 (円)</label><input type="number" id="utilityDiff" value="35" step="5" oninput="calculatePayback()"></div></div><div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">ヒートポンプ式 ドラム式洗濯乾燥機</div>
+        <p class="aff-item-desc">ヒーター式に比べて電気代が大幅に安く、衣類にも優しいおすすめモデル。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%89%E3%83%A9%E3%83%A0%E5%BC%8F%E6%B4%97%E6%BF%AF%E4%B9%BE%E7%87%A5%E6%A9%9F%20%E3%83%92%E3%83%BC%E3%83%88%E3%83%9D%E3%83%B3%E3%83%97%E5%BC%8F&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">洗濯用自動投入洗剤（濃縮タイプ）</div>
+        <p class="aff-item-desc">ドラム式の自動投入機能を最大限に活かし、毎日の洗濯ストレスをゼロに。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E6%B4%97%E6%BF%AF%E6%B4%97%E5%89%A4%20%E6%B6%B2%E4%BD%93%20%E8%87%AA%E5%8B%95%E6%8A%95%E5%85%A5%E7%94%A8&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>ドラム式洗濯乾燥機は高い？「時短価値」で考える損益分岐点</h2><p>ドラム式洗濯乾燥機は本体価格が20万円〜30万円前後と、縦型洗濯機（5万〜10万円）に比べて高価です。そのため「本当に元が取れるのか？」と悩む人が少なくありません。</p><p>しかし、購入判断で最も重要なのは単なる「本体価格や電気代の差額」ではなく、<strong>「干す・取り込むという家事時間をどれだけ削減できるか」</strong>という時間価値です。</p><h3>1. 洗濯物を「干して取り込む」作業は年間150時間以上のコスト</h3><p>縦型洗濯機で洗濯物を干し、取り込んで畳む作業には、1回あたり20〜30分ほどかかります。毎日1回洗濯をする家庭の場合、年間で約120〜180時間もの時間を洗濯作業に費やしている計算になります。</p><p>ドラム式洗濯乾燥機を導入すれば、ボタン一つで乾燥まで完了するため、この作業の9割以上を削減できます。</p><h3>2. 自分の時給で換算すると、実質1〜2年で元が取れる</h3><p>自分の時間を「時給1,500円」と評価した場合、年間150時間の節約は**年間22.5万円分**の価値を生み出すことになります。</p><p>ドラム式は縦型に比べて1回あたりの電気代が30〜50円ほど高くなる場合がありますが、時短価値を含めたトータルコスパで見ると、本体の差額（約15万円）は**わずか1年〜2年程度で十分に回収**できます。</p><h3>3. 電気代を抑えるなら「ヒートポンプ式」一択</h3><p>ドラム式洗濯乾燥機を購入する際は、乾燥方式に注意が必要です。</p><ul><li><strong>ヒートポンプ式：</strong> 省エネで電気代が安い（1回あたり約30〜40円）。衣類が傷みにくく痛みにくい。</li><li><strong>ヒーター乾燥式：</strong> 本体は安いが電気代が高い（1回あたり約80〜100円）。</li></ul><p>長期的なコストパフォーマンスと衣類の痛みを考慮すると、迷わず「ヒートポンプ式」を選ぶのがおすすめです。</p><h3>まとめ：ドラム式は時間と心のゆとりを買う投資</h3><p>ドラム式洗濯乾燥機は単なる家電ではなく、毎日の時間と心のゆとりを生み出す「投資」です。共働き世帯や子育て世帯はもちろん、自分の時間を大切にしたい一人暮らしの方にとっても、非常に高いコスパを誇るリターンが得られます。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/home-gym-membership-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>ホームジム vs 24時間ジム会費 損益分岐点シミュレーター【何ヶ月で元が取れる？】</h3>
+        <p>ホームジム器具（可変式ダンベルやインクラインベンチ）の初期投資が、24時間ジムの月会費・交通費に対して何ヶ月で回収できるかを瞬時に計算。年間の浮く移動時間や長期的な節約額もひと目でわかります。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/hair-removal-device-salon-breakeven.html">
+        <span class="category-badge">美容・ヘルスケア</span>
+        <h3>家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター</h3>
+        <p>家庭用脱毛器と脱毛サロン・医療脱毛、本当にお得なのはどっち？本体代・通院交通費・施術部位別の総額コストと「何回使えば元が取れるか」の損益分岐点を瞬時にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/soda-maker-petbottle-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】</h3>
+        <p>炭酸水を毎日飲むなら炭酸水メーカーと市販ペットボトルはどちらがお得？飲む量や購入価格を入力するだけで、500mlあたりの単価、年間節約額、本体代の元が取れるまでの損益分岐日数を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dishwasher-handwash-cost-breakeven.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】</h3>
+        <p>食洗機の購入で本当に元が取れるのか？手洗いとの水道代・ガス代・電気代の差額だけでなく、浮いた時間の価値も含めて損益分岐（何年で元が取れるか）を即座に計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ergonomic-chair-cost-per-day.html">
+        <span class="category-badge">仕事・デスク環境</span>
+        <h3>高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター</h3>
+        <p>10万〜20万円する高級オフィスチェアやマットレスは本当に高いのか？耐用年数による「1日・1時間あたりのコスト」と整体・マッサージ代の削減額から、何年・何ヶ月で元が取れるかを瞬時に逆算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/water-server-petbottle-cost.html">
+        <span class="category-badge">暮らし・食費節約</span>
+        <h3>ウォーターサーバー vs ペットボトル箱買い vs 浄水器「年間トータル費用（電気代込）」比較計算機</h3>
+        <p>ウォーターサーバー・ペットボトル箱買い・浄水器のどれが最も安いのか、家族人数や使用量に合わせて年間トータル費用（電気代・カートリッジ・送料込）をシミュレーション比較できます。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculatePayback() { const drumPrice = parseFloat(document.getElementById('drumPrice').value) || 0; const verticalPrice = parseFloat(document.getElementById('verticalPrice').value) || 0; const washPerDay = parseFloat(document.getElementById('washPerDay').value) || 0; const hourlyWage = parseFloat(document.getElementById('hourlyWage').value) || 0; const dryTimeSaved = parseFloat(document.getElementById('dryTimeSaved').value) || 0; const utilityDiff = parseFloat(document.getElementById('utilityDiff').value) || 0; const initialCostDiff = drumPrice - verticalPrice; const dailyTimeSavedHours = (dryTimeSaved / 60) * washPerDay; const dailyTimeValue = dailyTimeSavedHours * hourlyWage; const dailyUtilityCostDiff = utilityDiff * washPerDay; const dailyNetBenefit = dailyTimeValue - dailyUtilityCostDiff; const yearlyNetBenefit = dailyNetBenefit * 365; const yearlyTimeSavedHours = dailyTimeSavedHours * 365; const resultContainer = document.getElementById('calcResult'); if (initialCostDiff <= 0) { resultContainer.innerHTML = '<div class="result-headline">ドラム式の方が安いため、<strong>購入時点で元が取れています！</strong></div>'; return; } if (dailyNetBenefit <= 0) { resultContainer.innerHTML = '<div class="result-headline">現在の設定では<strong>時給換算での回収が困難です</strong>（光熱費差額が時短価値を上回っています）。</div>'; return; } const daysToPayback = initialCostDiff / dailyNetBenefit; const years = (daysToPayback / 365).toFixed(1); const months = Math.ceil(daysToPayback / 30.4); resultContainer.innerHTML = `<div class="result-headline">実質回収期間：<strong>約 ${years} 年 (${months}ヶ月) で元が取れる！</strong></div><div class="metrics-row"><div class="metric-card"><span>本体価格差額</span><strong>${Math.round(initialCostDiff).toLocaleString()} 円</strong><small>初期投資の差</small></div><div class="metric-card"><span>年間創出時間</span><strong>約 ${Math.round(yearlyTimeSavedHours)} 時間</strong><small>自由に使える時間</small></div><div class="metric-card"><span>年間実質お得額</span><strong>${Math.round(yearlyNetBenefit).toLocaleString()} 円/年</strong><small>時短価値 - 光熱費増加分</small></div></div>`; } document.addEventListener('DOMContentLoaded', calculatePayback);
+  </script>
+</body>
+</html>

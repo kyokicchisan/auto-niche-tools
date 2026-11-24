@@ -1,0 +1,28 @@
+{
+  "slug": "drum-washer-dryer-payback",
+  "title": "ドラム式洗濯乾燥機 vs 縦型＋干す手間 損益分岐点・時短価値シミュレーター",
+  "category": "家電・エネルギー",
+  "summary": "ドラム式洗濯乾燥機の本体価格差を「時短効果の時給換算」で徹底シミュレーション！干す手間の削減時間や光熱費の差額から、何年で元が取れるか損益分岐点を一瞬で算出します。",
+  "targetKeywords": [
+    "ドラム式洗濯機 縦型 どっちがお得 計算",
+    "ドラム式 元が取れる 何年",
+    "洗濯乾燥機 電気代 水道代 比較"
+  ],
+  "affiliateSearchQuery": "ドラム式洗濯乾燥機",
+  "affiliateRecommendations": [
+    {
+      "name": "ヒートポンプ式 ドラム式洗濯乾燥機",
+      "description": "ヒーター式に比べて電気代が大幅に安く、衣類にも優しいおすすめモデル。",
+      "searchQuery": "ドラム式洗濯乾燥機 ヒートポンプ式"
+    },
+    {
+      "name": "洗濯用自動投入洗剤（濃縮タイプ）",
+      "description": "ドラム式の自動投入機能を最大限に活かし、毎日の洗濯ストレスをゼロに。",
+      "searchQuery": "洗濯洗剤 液体 自動投入用"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\"><div class=\"form-group\"><label for=\"drumPrice\">ドラム式 購入価格 (円)</label><input type=\"number\" id=\"drumPrice\" value=\"250000\" step=\"5000\" oninput=\"calculatePayback()\"></div><div class=\"form-group\"><label for=\"verticalPrice\">縦型洗濯機 購入価格 (円)</label><input type=\"number\" id=\"verticalPrice\" value=\"80000\" step=\"5000\" oninput=\"calculatePayback()\"></div><div class=\"form-group\"><label for=\"washPerDay\">1日の洗濯回数 (回)</label><input type=\"number\" id=\"washPerDay\" value=\"1\" step=\"0.5\" min=\"0.5\" oninput=\"calculatePayback()\"></div><div class=\"form-group\"><label for=\"hourlyWage\">自分の時給換算 (円/時間)</label><input type=\"number\" id=\"hourlyWage\" value=\"1500\" step=\"100\" oninput=\"calculatePayback()\"></div><div class=\"form-group\"><label for=\"dryTimeSaved\">干す・取り込む手間 (分/回)</label><input type=\"number\" id=\"dryTimeSaved\" value=\"25\" step=\"5\" oninput=\"calculatePayback()\"></div><div class=\"form-group\"><label for=\"utilityDiff\">1回あたりの光熱費差額 (円)</label><input type=\"number\" id=\"utilityDiff\" value=\"35\" step=\"5\" oninput=\"calculatePayback()\"></div></div><div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function calculatePayback() { const drumPrice = parseFloat(document.getElementById('drumPrice').value) || 0; const verticalPrice = parseFloat(document.getElementById('verticalPrice').value) || 0; const washPerDay = parseFloat(document.getElementById('washPerDay').value) || 0; const hourlyWage = parseFloat(document.getElementById('hourlyWage').value) || 0; const dryTimeSaved = parseFloat(document.getElementById('dryTimeSaved').value) || 0; const utilityDiff = parseFloat(document.getElementById('utilityDiff').value) || 0; const initialCostDiff = drumPrice - verticalPrice; const dailyTimeSavedHours = (dryTimeSaved / 60) * washPerDay; const dailyTimeValue = dailyTimeSavedHours * hourlyWage; const dailyUtilityCostDiff = utilityDiff * washPerDay; const dailyNetBenefit = dailyTimeValue - dailyUtilityCostDiff; const yearlyNetBenefit = dailyNetBenefit * 365; const yearlyTimeSavedHours = dailyTimeSavedHours * 365; const resultContainer = document.getElementById('calcResult'); if (initialCostDiff <= 0) { resultContainer.innerHTML = '<div class=\"result-headline\">ドラム式の方が安いため、<strong>購入時点で元が取れています！</strong></div>'; return; } if (dailyNetBenefit <= 0) { resultContainer.innerHTML = '<div class=\"result-headline\">現在の設定では<strong>時給換算での回収が困難です</strong>（光熱費差額が時短価値を上回っています）。</div>'; return; } const daysToPayback = initialCostDiff / dailyNetBenefit; const years = (daysToPayback / 365).toFixed(1); const months = Math.ceil(daysToPayback / 30.4); resultContainer.innerHTML = `<div class=\"result-headline\">実質回収期間：<strong>約 ${years} 年 (${months}ヶ月) で元が取れる！</strong></div><div class=\"metrics-row\"><div class=\"metric-card\"><span>本体価格差額</span><strong>${Math.round(initialCostDiff).toLocaleString()} 円</strong><small>初期投資の差</small></div><div class=\"metric-card\"><span>年間創出時間</span><strong>約 ${Math.round(yearlyTimeSavedHours)} 時間</strong><small>自由に使える時間</small></div><div class=\"metric-card\"><span>年間実質お得額</span><strong>${Math.round(yearlyNetBenefit).toLocaleString()} 円/年</strong><small>時短価値 - 光熱費増加分</small></div></div>`; } document.addEventListener('DOMContentLoaded', calculatePayback);",
+  "articleHtml": "<h2>ドラム式洗濯乾燥機は高い？「時短価値」で考える損益分岐点</h2><p>ドラム式洗濯乾燥機は本体価格が20万円〜30万円前後と、縦型洗濯機（5万〜10万円）に比べて高価です。そのため「本当に元が取れるのか？」と悩む人が少なくありません。</p><p>しかし、購入判断で最も重要なのは単なる「本体価格や電気代の差額」ではなく、<strong>「干す・取り込むという家事時間をどれだけ削減できるか」</strong>という時間価値です。</p><h3>1. 洗濯物を「干して取り込む」作業は年間150時間以上のコスト</h3><p>縦型洗濯機で洗濯物を干し、取り込んで畳む作業には、1回あたり20〜30分ほどかかります。毎日1回洗濯をする家庭の場合、年間で約120〜180時間もの時間を洗濯作業に費やしている計算になります。</p><p>ドラム式洗濯乾燥機を導入すれば、ボタン一つで乾燥まで完了するため、この作業の9割以上を削減できます。</p><h3>2. 自分の時給で換算すると、実質1〜2年で元が取れる</h3><p>自分の時間を「時給1,500円」と評価した場合、年間150時間の節約は**年間22.5万円分**の価値を生み出すことになります。</p><p>ドラム式は縦型に比べて1回あたりの電気代が30〜50円ほど高くなる場合がありますが、時短価値を含めたトータルコスパで見ると、本体の差額（約15万円）は**わずか1年〜2年程度で十分に回収**できます。</p><h3>3. 電気代を抑えるなら「ヒートポンプ式」一択</h3><p>ドラム式洗濯乾燥機を購入する際は、乾燥方式に注意が必要です。</p><ul><li><strong>ヒートポンプ式：</strong> 省エネで電気代が安い（1回あたり約30〜40円）。衣類が傷みにくく痛みにくい。</li><li><strong>ヒーター乾燥式：</strong> 本体は安いが電気代が高い（1回あたり約80〜100円）。</li></ul><p>長期的なコストパフォーマンスと衣類の痛みを考慮すると、迷わず「ヒートポンプ式」を選ぶのがおすすめです。</p><h3>まとめ：ドラム式は時間と心のゆとりを買う投資</h3><p>ドラム式洗濯乾燥機は単なる家電ではなく、毎日の時間と心のゆとりを生み出す「投資」です。共働き世帯や子育て世帯はもちろん、自分の時間を大切にしたい一人暮らしの方にとっても、非常に高いコスパを誇るリターンが得られます。</p>",
+  "createdAt": "2026-11-24"
+}
