@@ -1,0 +1,28 @@
+{
+  "slug": "food-waste-composter-payback",
+  "title": "生ごみ処理機 損益分岐点計算機【自治体助成金＆ゴミ袋代で何年で元が取れる？】",
+  "category": "暮らし・節約",
+  "summary": "生ごみ処理機の購入費・自治体助成金・電気代・フィルター代と、削減できる有料ゴミ袋代から「何年で元が取れるか」を即座にシミュレーション。金銭的損得とQOL向上コストを可視化します。",
+  "targetKeywords": [
+    "生ごみ処理機 助成金 元が取れる",
+    "家庭用生ごみ乾燥機 コスパ",
+    "生ごみ処理機 電気代 ゴミ袋代 比較"
+  ],
+  "affiliateSearchQuery": "生ごみ処理機 ルーフェン パナソニック",
+  "affiliateRecommendations": [
+    {
+      "name": "パナソニック 家庭用生ごみ処理機 温風乾燥式 MS-N53XD",
+      "description": "大容量でスピーディに乾燥・減容し、肥料作りにも最適。自治体助成金の対象実績が最も豊富な定番ハイエンド機です。",
+      "searchQuery": "パナソニック 生ごみ処理機 MS-N53XD"
+    },
+    {
+      "name": "loofen（ルーフェン） 生ごみ乾燥機 静音・省電力モデル",
+      "description": "デザイン性が高く投入口が広い人気モデル。電気代を抑えつつキッチン周りの悪臭やコバエを劇的に防ぎます。",
+      "searchQuery": "ルーフェン 生ごみ処理機"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\">\n  <div class=\"form-group\">\n    <label for=\"devicePrice\">本体購入価格（税込・円）</label>\n    <input type=\"number\" id=\"devicePrice\" value=\"60000\" step=\"1000\" min=\"0\" oninput=\"calculatePayback()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"subsidyAmount\">自治体助成金・補助金（円）</label>\n    <input type=\"number\" id=\"subsidyAmount\" value=\"20000\" step=\"1000\" min=\"0\" oninput=\"calculatePayback()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"costPerRun\">1回あたりの電気代（円）</label>\n    <input type=\"number\" id=\"costPerRun\" value=\"22\" step=\"1\" min=\"0\" oninput=\"calculatePayback()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"monthlyRuns\">月間稼働回数（回/月）</label>\n    <input type=\"number\" id=\"monthlyRuns\" value=\"25\" step=\"1\" min=\"1\" oninput=\"calculatePayback()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"annualFilterCost\">年間フィルター消耗品代（円/年）</label>\n    <input type=\"number\" id=\"annualFilterCost\" value=\"4000\" step=\"500\" min=\"0\" oninput=\"calculatePayback()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"monthlyTrashSaving\">生ごみ削減によるゴミ袋代節約（月額・円）</label>\n    <input type=\"number\" id=\"monthlyTrashSaving\" value=\"350\" step=\"50\" min=\"0\" oninput=\"calculatePayback()\">\n  </div>\n</div>\n<div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function calculatePayback() {\n  const price = parseFloat(document.getElementById('devicePrice').value) || 0;\n  const subsidy = parseFloat(document.getElementById('subsidyAmount').value) || 0;\n  const costPerRun = parseFloat(document.getElementById('costPerRun').value) || 0;\n  const runs = parseFloat(document.getElementById('monthlyRuns').value) || 0;\n  const filter = parseFloat(document.getElementById('annualFilterCost').value) || 0;\n  const trashSaving = parseFloat(document.getElementById('monthlyTrashSaving').value) || 0;\n\n  const netInitialCost = Math.max(0, price - subsidy);\n  const annualElectricity = costPerRun * runs * 12;\n  const annualRunningCost = annualElectricity + filter;\n  const annualSaving = trashSaving * 12;\n  const annualNetBalance = annualSaving - annualRunningCost;\n\n  let headlineHtml = '';\n  let paybackYearsText = '';\n\n  if (annualNetBalance > 0) {\n    const years = (netInitialCost / annualNetBalance).toFixed(1);\n    paybackYearsText = years + '年';\n    headlineHtml = '結論：約 <strong>' + years + '年</strong> で初期費用の元が取れます！';\n  } else {\n    const monthlyNetDeficit = Math.round(Math.abs(annualNetBalance) / 12);\n    paybackYearsText = '金銭回収不可';\n    headlineHtml = '結論：ゴミ袋代だけでは元は取れませんが、<strong>実質月額 ' + monthlyNetDeficit.toLocaleString() + '円</strong> で悪臭・コバエのない快適空間が買えます。';\n  }\n\n  const monthlyNetCost = Math.round(annualRunningCost / 12);\n\n  const html = '<div class=\"result-headline\">' + headlineHtml + '</div>' +\n    '<div class=\"metrics-row\">' +\n      '<div class=\"metric-card\"><span>実質本体負担額</span><strong>' + netInitialCost.toLocaleString() + '円</strong><small>助成金適用後</small></div>' +\n      '<div class=\"metric-card\"><span>年間ランニングコスト</span><strong>' + Math.round(annualRunningCost).toLocaleString() + '円</strong><small>電気代＋フィルター代</small></div>' +\n      '<div class=\"metric-card\"><span>年間ゴミ袋節約額</span><strong>' + Math.round(annualSaving).toLocaleString() + '円</strong><small>指定袋削減分</small></div>' +\n      '<div class=\"metric-card\"><span>回収判定（損益分岐）</span><strong>' + paybackYearsText + '</strong><small>' + (annualNetBalance > 0 ? '年間 ' + Math.round(annualNetBalance).toLocaleString() + '円 節約' : '月実質 ' + Math.round(Math.abs(annualNetBalance) / 12).toLocaleString() + '円 のQOL投資') + '</small></div>' +\n    '</div>';\n\n  document.getElementById('calcResult').innerHTML = html;\n}\ndocument.addEventListener('DOMContentLoaded', calculatePayback);",
+  "articleHtml": "<h2>生ごみ処理機は「ゴミ袋代」だけで元が取れるのか？</h2><p>生ごみ処理機を導入する際、最も気になるのが「自治体の助成金を使えば何年で元が取れるのか？」というコストパフォーマンスです。生ごみは約80%が水分であるため、乾燥式処理機を使うことで重量と体積を約5分の1から7分の1程度まで圧縮できます。有料ゴミ袋を採用している自治体では、袋のサイズダウン（45Lから20Lへ変更など）や収集に出す頻度の減少によって、月数百円のゴミ袋代削減が可能です。</p><h3>助成金の活用が損益分岐の最大の鍵</h3><p>多くの市区町村では、生ごみ減量対策として家庭用生ごみ処理機の購入に対する助成制度（補助金）を設けています。一般的な補助率は「購入本体価格の1/2〜2/3」、上限額は「20,000円〜30,000円」程度が相場です。実質購入価格を半額近くまで圧縮できるため、購入前には必ずお住まいの自治体ホームページで要件を確認しましょう。多くの自治体で「購入前の事前申請」または「指定領収書の提出」が必要となります。</p><h3>金銭回収よりも「悪臭・コバエ対策のQOL向上」が本質</h3><p>シミュレーション結果からも分かる通り、電気代（1回あたり約15〜30円）と脱臭フィルター消耗品代（年間約3,000〜6,000円）が発生するため、ゴミ袋代の節約分だけでは年間ランニングコストを完全に相殺できないケースが少なくありません。しかし、生ごみ処理機利用者の満足度が極めて高い理由は「金銭的メリット」ではなく「生活の劇的な改善」にあります。夏場の生ごみ悪臭ゼロ、コバエの発生防止、ゴミ出し回数の半減、液だれのストレス解消といった快適性を、「月数百円〜千円前後のサブスク感覚」で手に入れられると考えれば、極めて費用対効果の高い家電と言えます。</p>",
+  "createdAt": "2026-11-25"
+}

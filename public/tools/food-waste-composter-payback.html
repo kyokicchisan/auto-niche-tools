@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生ごみ処理機 損益分岐点計算機【自治体助成金＆ゴミ袋代で何年で元が取れる？】 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="生ごみ処理機の購入費・自治体助成金・電気代・フィルター代と、削減できる有料ゴミ袋代から「何年で元が取れるか」を即座にシミュレーション。金銭的損得とQOL向上コストを可視化します。">
+  <meta name="keywords" content="生ごみ処理機 助成金 元が取れる, 家庭用生ごみ乾燥機 コスパ, 生ごみ処理機 電気代 ゴミ袋代 比較">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">暮らし・節約</span>
+      <h1>生ごみ処理機 損益分岐点計算機【自治体助成金＆ゴミ袋代で何年で元が取れる？】</h1>
+      <p class="summary">生ごみ処理機の購入費・自治体助成金・電気代・フィルター代と、削減できる有料ゴミ袋代から「何年で元が取れるか」を即座にシミュレーション。金銭的損得とQOL向上コストを可視化します。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="devicePrice">本体購入価格（税込・円）</label>
+    <input type="number" id="devicePrice" value="60000" step="1000" min="0" oninput="calculatePayback()">
+  </div>
+  <div class="form-group">
+    <label for="subsidyAmount">自治体助成金・補助金（円）</label>
+    <input type="number" id="subsidyAmount" value="20000" step="1000" min="0" oninput="calculatePayback()">
+  </div>
+  <div class="form-group">
+    <label for="costPerRun">1回あたりの電気代（円）</label>
+    <input type="number" id="costPerRun" value="22" step="1" min="0" oninput="calculatePayback()">
+  </div>
+  <div class="form-group">
+    <label for="monthlyRuns">月間稼働回数（回/月）</label>
+    <input type="number" id="monthlyRuns" value="25" step="1" min="1" oninput="calculatePayback()">
+  </div>
+  <div class="form-group">
+    <label for="annualFilterCost">年間フィルター消耗品代（円/年）</label>
+    <input type="number" id="annualFilterCost" value="4000" step="500" min="0" oninput="calculatePayback()">
+  </div>
+  <div class="form-group">
+    <label for="monthlyTrashSaving">生ごみ削減によるゴミ袋代節約（月額・円）</label>
+    <input type="number" id="monthlyTrashSaving" value="350" step="50" min="0" oninput="calculatePayback()">
+  </div>
+</div>
+<div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">パナソニック 家庭用生ごみ処理機 温風乾燥式 MS-N53XD</div>
+        <p class="aff-item-desc">大容量でスピーディに乾燥・減容し、肥料作りにも最適。自治体助成金の対象実績が最も豊富な定番ハイエンド機です。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%91%E3%83%8A%E3%82%BD%E3%83%8B%E3%83%83%E3%82%AF%20%E7%94%9F%E3%81%94%E3%81%BF%E5%87%A6%E7%90%86%E6%A9%9F%20MS-N53XD&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">loofen（ルーフェン） 生ごみ乾燥機 静音・省電力モデル</div>
+        <p class="aff-item-desc">デザイン性が高く投入口が広い人気モデル。電気代を抑えつつキッチン周りの悪臭やコバエを劇的に防ぎます。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%AB%E3%83%BC%E3%83%95%E3%82%A7%E3%83%B3%20%E7%94%9F%E3%81%94%E3%81%BF%E5%87%A6%E7%90%86%E6%A9%9F&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>生ごみ処理機は「ゴミ袋代」だけで元が取れるのか？</h2><p>生ごみ処理機を導入する際、最も気になるのが「自治体の助成金を使えば何年で元が取れるのか？」というコストパフォーマンスです。生ごみは約80%が水分であるため、乾燥式処理機を使うことで重量と体積を約5分の1から7分の1程度まで圧縮できます。有料ゴミ袋を採用している自治体では、袋のサイズダウン（45Lから20Lへ変更など）や収集に出す頻度の減少によって、月数百円のゴミ袋代削減が可能です。</p><h3>助成金の活用が損益分岐の最大の鍵</h3><p>多くの市区町村では、生ごみ減量対策として家庭用生ごみ処理機の購入に対する助成制度（補助金）を設けています。一般的な補助率は「購入本体価格の1/2〜2/3」、上限額は「20,000円〜30,000円」程度が相場です。実質購入価格を半額近くまで圧縮できるため、購入前には必ずお住まいの自治体ホームページで要件を確認しましょう。多くの自治体で「購入前の事前申請」または「指定領収書の提出」が必要となります。</p><h3>金銭回収よりも「悪臭・コバエ対策のQOL向上」が本質</h3><p>シミュレーション結果からも分かる通り、電気代（1回あたり約15〜30円）と脱臭フィルター消耗品代（年間約3,000〜6,000円）が発生するため、ゴミ袋代の節約分だけでは年間ランニングコストを完全に相殺できないケースが少なくありません。しかし、生ごみ処理機利用者の満足度が極めて高い理由は「金銭的メリット」ではなく「生活の劇的な改善」にあります。夏場の生ごみ悪臭ゼロ、コバエの発生防止、ゴミ出し回数の半減、液だれのストレス解消といった快適性を、「月数百円〜千円前後のサブスク感覚」で手に入れられると考えれば、極めて費用対効果の高い家電と言えます。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/drum-washer-dryer-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ドラム式洗濯乾燥機 vs 縦型＋干す手間 損益分岐点・時短価値シミュレーター</h3>
+        <p>ドラム式洗濯乾燥機の本体価格差を「時短効果の時給換算」で徹底シミュレーション！干す手間の削減時間や光熱費の差額から、何年で元が取れるか損益分岐点を一瞬で算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/home-gym-membership-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>ホームジム vs 24時間ジム会費 損益分岐点シミュレーター【何ヶ月で元が取れる？】</h3>
+        <p>ホームジム器具（可変式ダンベルやインクラインベンチ）の初期投資が、24時間ジムの月会費・交通費に対して何ヶ月で回収できるかを瞬時に計算。年間の浮く移動時間や長期的な節約額もひと目でわかります。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/hair-removal-device-salon-breakeven.html">
+        <span class="category-badge">美容・ヘルスケア</span>
+        <h3>家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター</h3>
+        <p>家庭用脱毛器と脱毛サロン・医療脱毛、本当にお得なのはどっち？本体代・通院交通費・施術部位別の総額コストと「何回使えば元が取れるか」の損益分岐点を瞬時にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/soda-maker-petbottle-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】</h3>
+        <p>炭酸水を毎日飲むなら炭酸水メーカーと市販ペットボトルはどちらがお得？飲む量や購入価格を入力するだけで、500mlあたりの単価、年間節約額、本体代の元が取れるまでの損益分岐日数を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dishwasher-handwash-cost-breakeven.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】</h3>
+        <p>食洗機の購入で本当に元が取れるのか？手洗いとの水道代・ガス代・電気代の差額だけでなく、浮いた時間の価値も含めて損益分岐（何年で元が取れるか）を即座に計算します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/ergonomic-chair-cost-per-day.html">
+        <span class="category-badge">仕事・デスク環境</span>
+        <h3>高級オフィスチェア・マットレス「日割りコスト＆整体代節約での元取り期間」シミュレーター</h3>
+        <p>10万〜20万円する高級オフィスチェアやマットレスは本当に高いのか？耐用年数による「1日・1時間あたりのコスト」と整体・マッサージ代の削減額から、何年・何ヶ月で元が取れるかを瞬時に逆算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculatePayback() {
+  const price = parseFloat(document.getElementById('devicePrice').value) || 0;
+  const subsidy = parseFloat(document.getElementById('subsidyAmount').value) || 0;
+  const costPerRun = parseFloat(document.getElementById('costPerRun').value) || 0;
+  const runs = parseFloat(document.getElementById('monthlyRuns').value) || 0;
+  const filter = parseFloat(document.getElementById('annualFilterCost').value) || 0;
+  const trashSaving = parseFloat(document.getElementById('monthlyTrashSaving').value) || 0;
+
+  const netInitialCost = Math.max(0, price - subsidy);
+  const annualElectricity = costPerRun * runs * 12;
+  const annualRunningCost = annualElectricity + filter;
+  const annualSaving = trashSaving * 12;
+  const annualNetBalance = annualSaving - annualRunningCost;
+
+  let headlineHtml = '';
+  let paybackYearsText = '';
+
+  if (annualNetBalance > 0) {
+    const years = (netInitialCost / annualNetBalance).toFixed(1);
+    paybackYearsText = years + '年';
+    headlineHtml = '結論：約 <strong>' + years + '年</strong> で初期費用の元が取れます！';
+  } else {
+    const monthlyNetDeficit = Math.round(Math.abs(annualNetBalance) / 12);
+    paybackYearsText = '金銭回収不可';
+    headlineHtml = '結論：ゴミ袋代だけでは元は取れませんが、<strong>実質月額 ' + monthlyNetDeficit.toLocaleString() + '円</strong> で悪臭・コバエのない快適空間が買えます。';
+  }
+
+  const monthlyNetCost = Math.round(annualRunningCost / 12);
+
+  const html = '<div class="result-headline">' + headlineHtml + '</div>' +
+    '<div class="metrics-row">' +
+      '<div class="metric-card"><span>実質本体負担額</span><strong>' + netInitialCost.toLocaleString() + '円</strong><small>助成金適用後</small></div>' +
+      '<div class="metric-card"><span>年間ランニングコスト</span><strong>' + Math.round(annualRunningCost).toLocaleString() + '円</strong><small>電気代＋フィルター代</small></div>' +
+      '<div class="metric-card"><span>年間ゴミ袋節約額</span><strong>' + Math.round(annualSaving).toLocaleString() + '円</strong><small>指定袋削減分</small></div>' +
+      '<div class="metric-card"><span>回収判定（損益分岐）</span><strong>' + paybackYearsText + '</strong><small>' + (annualNetBalance > 0 ? '年間 ' + Math.round(annualNetBalance).toLocaleString() + '円 節約' : '月実質 ' + Math.round(Math.abs(annualNetBalance) / 12).toLocaleString() + '円 のQOL投資') + '</small></div>' +
+    '</div>';
+
+  document.getElementById('calcResult').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', calculatePayback);
+  </script>
+</body>
+</html>
