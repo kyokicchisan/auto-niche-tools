@@ -1,0 +1,33 @@
+{
+  "slug": "inner-sash-insulation-payback",
+  "title": "二重窓・内窓リフォーム電気代削減シミュレーター！何年で元が取れる？補助金対応版",
+  "category": "暮らし・節約",
+  "summary": "内窓（二重窓）の設置費用と国の補助金を考慮し、年間の電気代削減額と投資回収年数を即座に試算！何年で元が取れるかをシミュレーションして、賢くお得に住まいの断熱化を進めましょう。",
+  "targetKeywords": [
+    "二重窓 リフォーム 元が取れる",
+    "内窓 電気代 削減 シミュレーション",
+    "二重窓 断熱 費用対効果"
+  ],
+  "affiliateSearchQuery": "二重窓 DIY 内窓 キット 断熱",
+  "affiliateRecommendations": [
+    {
+      "name": "DIY簡易二重窓作成フレームキット",
+      "description": "賃貸や小窓にも工具不要で手軽に設置でき、数千円から冷暖房効率をアップさせられる高コスパキット。",
+      "searchQuery": "簡易内窓 フレームキット DIY"
+    },
+    {
+      "name": "窓用断熱中空ポリカボード",
+      "description": "空気層で高い保温効果を発揮し、結露対策とエアコン代節約を両立する軽量断熱パネル。",
+      "searchQuery": "中空ポリカーボネート板 窓 断熱"
+    },
+    {
+      "name": "窓枠用高気密隙間モヘアテープ",
+      "description": "サッシのわずかな隙間風をシャットアウトし、内窓の断熱性能を最大化する補助部材。",
+      "searchQuery": "隙間テープ モヘア 窓 防音 断熱"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\">\n  <div class=\"form-group\">\n    <label for=\"totalCost\">リフォーム工事総費用（円）</label>\n    <input type=\"number\" id=\"totalCost\" value=\"450000\" step=\"10000\" min=\"10000\" oninput=\"calculatePayback()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"subsidyAmount\">補助金額（国の補助金・先進的窓リノベ等）（円）</label>\n    <input type=\"number\" id=\"subsidyAmount\" value=\"200000\" step=\"10000\" min=\"0\" oninput=\"calculatePayback()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"annualElecBill\">年間のエアコン・冷暖房費（目安）（円）</label>\n    <input type=\"number\" id=\"annualElecBill\" value=\"140000\" step=\"5000\" min=\"10000\" oninput=\"calculatePayback()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"savingRate\">想定される冷暖房費削減率</label>\n    <select id=\"savingRate\" onchange=\"calculatePayback()\">\n      <option value=\"0.15\">15%（小〜中規模・単板ガラス内窓）</option>\n      <option value=\"0.22\" selected>22%（標準的・複層ペアガラス内窓）</option>\n      <option value=\"0.30\">30%（全面施工・高断熱Low-E複層ガラス）</option>\n    </select>\n  </div>\n</div>\n<div id=\"calcResult\" class=\"result-box\"></div>",
+  "calculatorJs": "function calculatePayback() {\n  const totalCost = parseFloat(document.getElementById('totalCost').value) || 0;\n  const subsidyAmount = parseFloat(document.getElementById('subsidyAmount').value) || 0;\n  const annualElecBill = parseFloat(document.getElementById('annualElecBill').value) || 0;\n  const savingRate = parseFloat(document.getElementById('savingRate').value) || 0.22;\n\n  const netCost = Math.max(0, totalCost - subsidyAmount);\n  const annualSaving = Math.round(annualElecBill * savingRate);\n  const paybackYears = annualSaving > 0 ? (netCost / annualSaving).toFixed(1) : '∞';\n  const tenYearsBenefit = Math.round((annualSaving * 10) - netCost);\n\n  const resultBox = document.getElementById('calcResult');\n  resultBox.innerHTML = `\n    <div class=\"result-headline\">\n      結論：実質自己負担は <strong>${netCost.toLocaleString()}円</strong>！ 約<strong>${paybackYears}年</strong> で元が取れます\n    </div>\n    <div class=\"metrics-row\">\n      <div class=\"metric-card\">\n        <span>年間削減額</span>\n        <strong>${annualSaving.toLocaleString()} 円/年</strong>\n        <small>毎月の電気代が約${Math.round(annualSaving / 12).toLocaleString()}円安くなる試算</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>実質負担額</span>\n        <strong>${netCost.toLocaleString()} 円</strong>\n        <small>総費用から補助金を差し引いた額</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>10年後の累計収支</span>\n        <strong style=\"color: ${tenYearsBenefit >= 0 ? '#10b981' : '#ef4444'}\">${tenYearsBenefit >= 0 ? '+' : ''}${tenYearsBenefit.toLocaleString()} 円</strong>\n        <small>${tenYearsBenefit >= 0 ? '10年間で完全にプラスへ転換' : '10年超で回収見込み'}</small>\n      </div>\n    </div>\n  `;\n}\n\ndocument.addEventListener('DOMContentLoaded', calculatePayback);",
+  "articleHtml": "<h2>二重窓（内窓）リフォームで元が取れる仕組みと費用対効果</h2><p>冬の寒さや夏の室温上昇、そして毎月の高額な電気代にお悩みなら、二重窓（インナーサッシ）のリフォームが最も効果的な解決策の一つです。建物の熱の約60〜70%は開口部（窓）から出入りしているため、既存の窓の内側にもう1枚断熱窓を追加することで、魔法瓶のように室内の温度を維持できるようになります。</p><p>その結果、エアコンの稼働負荷が劇的に下がり、一般的に冷暖房費を年間15%〜30%前後カットすることが可能です。「工事費用がかかりすぎるのでは？」と懸念されがちですが、国の大型補助金を活用すれば実質負担を大幅に抑えられ、数年から十数年で投資回収できます。</p><h3>大型補助金（先進的窓リノベ事業など）のインパクト</h3><p>現在、国が主導する省エネリフォーム補助金（先進的窓リノベ事業など）を利用すると、グレードや窓サイズに応じて工事費用の約40%〜50%相当が還元されるケースがあります。通常40万〜50万円かかる複数箇所の内窓工事でも、実質自己負担20万〜25万円程度まで抑えられるため、回収期間が従来の半分近くに短縮されます。</p><h3>電気代削減だけではない内窓の3大メリット</h3><ul><li><strong>結露の激減：</strong>冬場に毎朝行っていた窓拭き作業がなくなり、カビやダニの発生を抑えられます。</li><li><strong>圧倒的な防音性：</strong>道路の騒音や電車の音、ペットの鳴き声が大幅に遮断され、静かな室内環境が手に入ります。</li><li><strong>防犯性の向上：</strong>窓が二重になることで侵入に時間がかかるため、空き巣に対する防犯効果が高まります。</li></ul><h3>まずはDIYや部分リフォームから始めるのもおすすめ</h3><p>「家中の窓を一気にリフォームする予算がない」「賃貸住宅なので本格的な工事ができない」という場合は、中空ポリカーボネート板やDIYキットを使った簡易内窓の自作も有効です。滞在時間の長いリビングや寝室の腰高窓だけでも対策することで、初期費用を抑えながら確実な節電効果を実感できます。</p>",
+  "createdAt": "2026-11-26"
+}

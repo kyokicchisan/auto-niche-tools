@@ -153,5 +153,41 @@
     ],
     "affiliateSearchQuery": "生ごみ処理機 ルーフェン パナソニック",
     "status": "done"
+  },
+  {
+    "slug": "inner-sash-insulation-payback",
+    "title": "二重窓・内窓リフォーム電気代削減シミュレーター！何年で元が取れる？補助金対応版",
+    "category": "暮らし・節約",
+    "targetKeywords": [
+      "二重窓 リフォーム 元が取れる",
+      "内窓 電気代 削減 シミュレーション",
+      "二重窓 断熱 費用対効果"
+    ],
+    "affiliateSearchQuery": "二重窓 DIY 内窓 キット 断熱",
+    "status": "done"
+  },
+  {
+    "slug": "auto-cooker-meal-prep-breakeven",
+    "title": "自動調理鍋（ホットクック等）節約シミュレーター！外食・惣菜カットで何ヶ月で元が取れる？",
+    "category": "家電・エネルギー",
+    "targetKeywords": [
+      "自動調理鍋 元が取れる",
+      "ホットクック 節約 シミュレーション",
+      "電気圧力鍋 外食費 削減"
+    ],
+    "affiliateSearchQuery": "自動調理鍋 ホットクック 電気圧力鍋",
+    "status": "pending"
+  },
+  {
+    "slug": "robot-vacuum-time-savings-calculator",
+    "title": "ロボット掃除機 時短＆時給換算コスパ計算機！本体代は何ヶ月で回収できる？",
+    "category": "家電・エネルギー",
+    "targetKeywords": [
+      "ロボット掃除機 コスパ 計算",
+      "ロボット掃除機 元が取れる",
+      "ルンバ 時速換算 比較"
+    ],
+    "affiliateSearchQuery": "ロボット掃除機 自動ゴミ収集 水拭き",
+    "status": "pending"
   }
 ]

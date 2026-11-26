@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>二重窓・内窓リフォーム電気代削減シミュレーター！何年で元が取れる？補助金対応版 | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="内窓（二重窓）の設置費用と国の補助金を考慮し、年間の電気代削減額と投資回収年数を即座に試算！何年で元が取れるかをシミュレーションして、賢くお得に住まいの断熱化を進めましょう。">
+  <meta name="keywords" content="二重窓 リフォーム 元が取れる, 内窓 電気代 削減 シミュレーション, 二重窓 断熱 費用対効果">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">暮らし・節約</span>
+      <h1>二重窓・内窓リフォーム電気代削減シミュレーター！何年で元が取れる？補助金対応版</h1>
+      <p class="summary">内窓（二重窓）の設置費用と国の補助金を考慮し、年間の電気代削減額と投資回収年数を即座に試算！何年で元が取れるかをシミュレーションして、賢くお得に住まいの断熱化を進めましょう。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="totalCost">リフォーム工事総費用（円）</label>
+    <input type="number" id="totalCost" value="450000" step="10000" min="10000" oninput="calculatePayback()">
+  </div>
+  <div class="form-group">
+    <label for="subsidyAmount">補助金額（国の補助金・先進的窓リノベ等）（円）</label>
+    <input type="number" id="subsidyAmount" value="200000" step="10000" min="0" oninput="calculatePayback()">
+  </div>
+  <div class="form-group">
+    <label for="annualElecBill">年間のエアコン・冷暖房費（目安）（円）</label>
+    <input type="number" id="annualElecBill" value="140000" step="5000" min="10000" oninput="calculatePayback()">
+  </div>
+  <div class="form-group">
+    <label for="savingRate">想定される冷暖房費削減率</label>
+    <select id="savingRate" onchange="calculatePayback()">
+      <option value="0.15">15%（小〜中規模・単板ガラス内窓）</option>
+      <option value="0.22" selected>22%（標準的・複層ペアガラス内窓）</option>
+      <option value="0.30">30%（全面施工・高断熱Low-E複層ガラス）</option>
+    </select>
+  </div>
+</div>
+<div id="calcResult" class="result-box"></div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">DIY簡易二重窓作成フレームキット</div>
+        <p class="aff-item-desc">賃貸や小窓にも工具不要で手軽に設置でき、数千円から冷暖房効率をアップさせられる高コスパキット。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E7%B0%A1%E6%98%93%E5%86%85%E7%AA%93%20%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%82%AD%E3%83%83%E3%83%88%20DIY&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">窓用断熱中空ポリカボード</div>
+        <p class="aff-item-desc">空気層で高い保温効果を発揮し、結露対策とエアコン代節約を両立する軽量断熱パネル。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E4%B8%AD%E7%A9%BA%E3%83%9D%E3%83%AA%E3%82%AB%E3%83%BC%E3%83%9C%E3%83%8D%E3%83%BC%E3%83%88%E6%9D%BF%20%E7%AA%93%20%E6%96%AD%E7%86%B1&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">窓枠用高気密隙間モヘアテープ</div>
+        <p class="aff-item-desc">サッシのわずかな隙間風をシャットアウトし、内窓の断熱性能を最大化する補助部材。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E9%9A%99%E9%96%93%E3%83%86%E3%83%BC%E3%83%97%20%E3%83%A2%E3%83%98%E3%82%A2%20%E7%AA%93%20%E9%98%B2%E9%9F%B3%20%E6%96%AD%E7%86%B1&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>二重窓（内窓）リフォームで元が取れる仕組みと費用対効果</h2><p>冬の寒さや夏の室温上昇、そして毎月の高額な電気代にお悩みなら、二重窓（インナーサッシ）のリフォームが最も効果的な解決策の一つです。建物の熱の約60〜70%は開口部（窓）から出入りしているため、既存の窓の内側にもう1枚断熱窓を追加することで、魔法瓶のように室内の温度を維持できるようになります。</p><p>その結果、エアコンの稼働負荷が劇的に下がり、一般的に冷暖房費を年間15%〜30%前後カットすることが可能です。「工事費用がかかりすぎるのでは？」と懸念されがちですが、国の大型補助金を活用すれば実質負担を大幅に抑えられ、数年から十数年で投資回収できます。</p><h3>大型補助金（先進的窓リノベ事業など）のインパクト</h3><p>現在、国が主導する省エネリフォーム補助金（先進的窓リノベ事業など）を利用すると、グレードや窓サイズに応じて工事費用の約40%〜50%相当が還元されるケースがあります。通常40万〜50万円かかる複数箇所の内窓工事でも、実質自己負担20万〜25万円程度まで抑えられるため、回収期間が従来の半分近くに短縮されます。</p><h3>電気代削減だけではない内窓の3大メリット</h3><ul><li><strong>結露の激減：</strong>冬場に毎朝行っていた窓拭き作業がなくなり、カビやダニの発生を抑えられます。</li><li><strong>圧倒的な防音性：</strong>道路の騒音や電車の音、ペットの鳴き声が大幅に遮断され、静かな室内環境が手に入ります。</li><li><strong>防犯性の向上：</strong>窓が二重になることで侵入に時間がかかるため、空き巣に対する防犯効果が高まります。</li></ul><h3>まずはDIYや部分リフォームから始めるのもおすすめ</h3><p>「家中の窓を一気にリフォームする予算がない」「賃貸住宅なので本格的な工事ができない」という場合は、中空ポリカーボネート板やDIYキットを使った簡易内窓の自作も有効です。滞在時間の長いリビングや寝室の腰高窓だけでも対策することで、初期費用を抑えながら確実な節電効果を実感できます。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/food-waste-composter-payback.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>生ごみ処理機 損益分岐点計算機【自治体助成金＆ゴミ袋代で何年で元が取れる？】</h3>
+        <p>生ごみ処理機の購入費・自治体助成金・電気代・フィルター代と、削減できる有料ゴミ袋代から「何年で元が取れるか」を即座にシミュレーション。金銭的損得とQOL向上コストを可視化します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/drum-washer-dryer-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ドラム式洗濯乾燥機 vs 縦型＋干す手間 損益分岐点・時短価値シミュレーター</h3>
+        <p>ドラム式洗濯乾燥機の本体価格差を「時短効果の時給換算」で徹底シミュレーション！干す手間の削減時間や光熱費の差額から、何年で元が取れるか損益分岐点を一瞬で算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/home-gym-membership-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>ホームジム vs 24時間ジム会費 損益分岐点シミュレーター【何ヶ月で元が取れる？】</h3>
+        <p>ホームジム器具（可変式ダンベルやインクラインベンチ）の初期投資が、24時間ジムの月会費・交通費に対して何ヶ月で回収できるかを瞬時に計算。年間の浮く移動時間や長期的な節約額もひと目でわかります。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/hair-removal-device-salon-breakeven.html">
+        <span class="category-badge">美容・ヘルスケア</span>
+        <h3>家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター</h3>
+        <p>家庭用脱毛器と脱毛サロン・医療脱毛、本当にお得なのはどっち？本体代・通院交通費・施術部位別の総額コストと「何回使えば元が取れるか」の損益分岐点を瞬時にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/soda-maker-petbottle-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】</h3>
+        <p>炭酸水を毎日飲むなら炭酸水メーカーと市販ペットボトルはどちらがお得？飲む量や購入価格を入力するだけで、500mlあたりの単価、年間節約額、本体代の元が取れるまでの損益分岐日数を即座にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/dishwasher-handwash-cost-breakeven.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>食洗機vs手洗い 節約・損益分岐点シミュレーター【水道光熱費＋時短価値で何年で元が取れる？】</h3>
+        <p>食洗機の購入で本当に元が取れるのか？手洗いとの水道代・ガス代・電気代の差額だけでなく、浮いた時間の価値も含めて損益分岐（何年で元が取れるか）を即座に計算します。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculatePayback() {
+  const totalCost = parseFloat(document.getElementById('totalCost').value) || 0;
+  const subsidyAmount = parseFloat(document.getElementById('subsidyAmount').value) || 0;
+  const annualElecBill = parseFloat(document.getElementById('annualElecBill').value) || 0;
+  const savingRate = parseFloat(document.getElementById('savingRate').value) || 0.22;
+
+  const netCost = Math.max(0, totalCost - subsidyAmount);
+  const annualSaving = Math.round(annualElecBill * savingRate);
+  const paybackYears = annualSaving > 0 ? (netCost / annualSaving).toFixed(1) : '∞';
+  const tenYearsBenefit = Math.round((annualSaving * 10) - netCost);
+
+  const resultBox = document.getElementById('calcResult');
+  resultBox.innerHTML = `
+    <div class="result-headline">
+      結論：実質自己負担は <strong>${netCost.toLocaleString()}円</strong>！ 約<strong>${paybackYears}年</strong> で元が取れます
+    </div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>年間削減額</span>
+        <strong>${annualSaving.toLocaleString()} 円/年</strong>
+        <small>毎月の電気代が約${Math.round(annualSaving / 12).toLocaleString()}円安くなる試算</small>
+      </div>
+      <div class="metric-card">
+        <span>実質負担額</span>
+        <strong>${netCost.toLocaleString()} 円</strong>
+        <small>総費用から補助金を差し引いた額</small>
+      </div>
+      <div class="metric-card">
+        <span>10年後の累計収支</span>
+        <strong style="color: ${tenYearsBenefit >= 0 ? '#10b981' : '#ef4444'}">${tenYearsBenefit >= 0 ? '+' : ''}${tenYearsBenefit.toLocaleString()} 円</strong>
+        <small>${tenYearsBenefit >= 0 ? '10年間で完全にプラスへ転換' : '10年超で回収見込み'}</small>
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', calculatePayback);
+  </script>
+</body>
+</html>
