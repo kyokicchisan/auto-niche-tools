@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自動調理鍋（ホットクック等）節約シミュレーター！外食・惣菜カットで何ヶ月で元が取れる？ | 損得・コスト逆算シミュレーター Lab</title>
+  <meta name="description" content="ホットクックや電気圧力鍋の購入で迷っている方必見！外食や惣菜を自炊に置き換えた場合の月間節約額と、本体代の元が取れるまでの月数を簡単シミュレーションします。">
+  <meta name="keywords" content="自動調理鍋 元が取れる, ホットクック 節約 シミュレーション, 電気圧力鍋 外食費 削減">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --good: #16a34a;
+      --neg: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .site-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .site-sub {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem 0 3rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .category-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.55rem;
+      line-height: 1.4;
+      margin: 0.3rem 0 0.75rem;
+    }
+    .summary {
+      color: var(--muted);
+      margin-top: 0;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      color: #1e293b;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .result-box {
+      background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      padding: 1.35rem;
+      margin-top: 1rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-headline strong {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      background: #fef08a;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+    }
+    .verdict-line {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .badge-good { color: #15803d; }
+    .badge-mid { color: #b45309; }
+    .badge-low { color: #b91c1c; }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-card span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .metric-card strong {
+      font-size: 1.35rem;
+      margin: 0.2rem 0;
+      color: var(--text);
+    }
+    .metric-card strong.pos { color: var(--good); }
+    .metric-card strong.neg { color: var(--neg); }
+    .metric-card small {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .affiliate-section {
+      border: 2px solid #fde68a;
+      background: #fffbeb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .affiliate-badge {
+      font-weight: 800;
+      color: #b45309;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .aff-item {
+      background: #fff;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .aff-item:last-child { margin-bottom: 0; }
+    .aff-item-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .aff-item-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .aff-btn {
+      display: inline-block;
+      align-self: flex-start;
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      transition: background 0.15s;
+    }
+    .aff-btn:hover { background: #d97706; }
+    .article-content h2 {
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin-top: 1.75rem;
+    }
+    .article-content h3 {
+      font-size: 1.08rem;
+      color: #1e3a8a;
+      margin-top: 1.3rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .tool-link-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.09);
+    }
+    .tool-link-card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .tool-link-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <p class="site-title"><a href="../index.html">⚡ 損得・コスト逆算シミュレーター Lab</a></p>
+      <p class="site-sub">「買い替えたら何年で元が取れる？」「自分の使い方だとどのスペックが最適？」を3秒で計算できる無料シミュレーター集</p>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <span class="category-badge">家電・エネルギー</span>
+      <h1>自動調理鍋（ホットクック等）節約シミュレーター！外食・惣菜カットで何ヶ月で元が取れる？</h1>
+      <p class="summary">ホットクックや電気圧力鍋の購入で迷っている方必見！外食や惣菜を自炊に置き換えた場合の月間節約額と、本体代の元が取れるまでの月数を簡単シミュレーションします。</p>
+      
+      <div class="calc-grid">
+  <div class="form-group">
+    <label for="devicePrice">自動調理鍋の購入予定価格（円）</label>
+    <input type="number" id="devicePrice" value="55000" step="1000" min="5000" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="eatingOutCost">置き換える外食・惣菜の1回費用（世帯合計・円）</label>
+    <input type="number" id="eatingOutCost" value="2800" step="100" min="500" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="homeCookCost">自動調理鍋1回分の食材費（世帯合計・円）</label>
+    <input type="number" id="homeCookCost" value="900" step="50" min="200" oninput="calculateBreakeven()">
+  </div>
+  <div class="form-group">
+    <label for="timesPerWeek">自炊に置き換える頻度（週あたり回数）</label>
+    <select id="timesPerWeek" onchange="calculateBreakeven()">
+      <option value="1">週1回（休日のみ）</option>
+      <option value="2">週2回</option>
+      <option value="3" selected>週3回（平日2回＋休日1回）</option>
+      <option value="4">週4回</option>
+      <option value="5">週5回（平日の外食・惣菜ゼロ化）</option>
+      <option value="7">週7回（毎日活用）</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="electricCost">1回あたりの電気代目安（円）</label>
+    <input type="number" id="electricCost" value="16" step="1" min="5" oninput="calculateBreakeven()">
+  </div>
+  <div id="calcResult" class="result-box"></div>
+</div>
+    </div>
+
+    <div class="affiliate-section">
+      <span class="affiliate-badge">💡 計算結果とあわせてチェック</span>
+      
+      <div class="aff-item">
+        <div class="aff-item-title">シャープ ヘルシオ ホットクック 2.4L</div>
+        <p class="aff-item-desc">無水調理やかき混ぜ機能が優秀で、カレーや煮込み料理を完全放置で作れる大定番モデル。外食カット効果が最も高い大容量タイプです。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%83%E3%83%88%E3%82%AF%E3%83%83%E3%82%AF%202.4L%20%E3%82%B7%E3%83%A3%E3%83%BC%E3%83%97&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">アイリスオーヤマ 電気圧力鍋 4.0L</div>
+        <p class="aff-item-desc">ホットクックの半額以下で手に入る高コスパ機。初期投資を抑えて最速で元を取りたいファミリー層におすすめです。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%82%A4%E3%83%AA%E3%82%B9%E3%82%AA%E3%83%BC%E3%83%A4%E3%83%9E%20%E9%9B%BB%E6%B0%97%E5%9C%A7%E5%8A%9B%E9%8D%8B%204L&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+      <div class="aff-item">
+        <div class="aff-item-title">iwaki(イワキ) 耐熱ガラス 保存容器 7点セット</div>
+        <p class="aff-item-desc">作った料理を小分け冷凍・冷蔵保存して平日の惣菜買いを完全ゼロ化。油汚れも落ちやすく時短効果が倍増します。</p>
+        <a class="aff-btn" href="https://www.amazon.co.jp/s?k=iwaki%20%E8%80%90%E7%86%B1%E3%82%AC%E3%83%A9%E3%82%B9%20%E4%BF%9D%E5%AD%98%E5%AE%B9%E5%99%A8%20%E3%83%91%E3%83%83%E3%82%AF%E3%82%B9%E3%83%AC%E3%83%B3%E3%82%B8&tag=your-tag-22" target="_blank" rel="nofollow sponsored noopener">
+          Amazonで人気の対象アイテム・価格を見る →
+        </a>
+      </div>
+    
+    </div>
+
+    <div class="card article-content">
+      <h2>自動調理鍋（ホットクック・電気圧力鍋）は本当に節約になるのか？</h2><p>5万円〜7万円台の高価格帯が多いシャープの「ヘルシオ ホットクック」や、2万円前後で買える電気圧力鍋。購入に踏み切れない最大の理由は「本当に元が取れるのか？」という疑問でしょう。結論から言うと、<strong>平日の惣菜買いやデリバリー・外食を週2〜3回置き換えるだけで、半年〜1年未満で元が取れる</strong>家庭が大半です。</p><h3>外食・惣菜と自炊のリアルなコスト差</h3><p>仕事終わりに疲れてデリバリーを頼むと2人で3,000円〜4,000円、スーパーの惣菜でも1,500円〜2,000円はかかります。一方、自動調理鍋なら肉と野菜を切って調味料を入れるだけで、2〜3人前のカレーや肉じゃがが700円〜1,000円程度の食材費で作れます。1回あたり1,500円〜2,000円の差額が発生するため、週3回活用すれば月2万円以上の食費圧縮が可能です。</p><h3>電気代の心配は不要？1回わずか10円〜20円</h3><p>「電気で何十分も煮込むと電気代が高くなるのでは」と不安になる方も多いですが、現代の自動調理鍋は高断熱設計のため非常に省エネです。カレーやシチューを1回作る電気代はおよそ15円〜20円程度。ガス火で弱火コトコト煮込むガス代とほぼ同等か、むしろ安く済むケースが一般的です。</p><h2>元を取るための3つの鉄則</h2><h3>1. 「疲れて料理できない日」のメニューを決めておく</h3><p>外食や出前に流れる原因は「疲労」です。朝に具材を入れて予約調理しておくか、帰宅直後に冷凍肉とカット野菜を放り込んでスタートを押すだけの定番レシピ（カレー、豚バラ大根、無水ポトフなど）をルーティン化しましょう。</p><h3>2. 家族人数よりワンサイズ上を選ぶ</h3><p>ホットクックなら2人暮らしでも2.4L（大容量タイプ）が推奨されます。一度に多めに作り、翌日のお弁当や夕食にスライドさせることで、調理の手間と食費の削減効率が劇的に上がります。</p><h3>3. 最初から高いモデルに拘りすぎない</h3><p>かき混ぜ機能やWi-Fi連携を重視するならホットクック一択ですが、「煮込みや角煮ができればOK」という場合は2万円前後の電気圧力鍋でも十分な節約効果が得られます。シミュレーターで本体価格を変えて、自分の許容回収期間に合うモデルを見つけてみてください。</p>
+      
+    </div>
+
+    <section>
+      <h2>他の損得・コスト逆算シミュレーター</h2>
+      <div class="tools-grid">
+        
+      <a class="tool-link-card" href="../tools/inner-sash-insulation-payback.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>二重窓・内窓リフォーム電気代削減シミュレーター！何年で元が取れる？補助金対応版</h3>
+        <p>内窓（二重窓）の設置費用と国の補助金を考慮し、年間の電気代削減額と投資回収年数を即座に試算！何年で元が取れるかをシミュレーションして、賢くお得に住まいの断熱化を進めましょう。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/food-waste-composter-payback.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>生ごみ処理機 損益分岐点計算機【自治体助成金＆ゴミ袋代で何年で元が取れる？】</h3>
+        <p>生ごみ処理機の購入費・自治体助成金・電気代・フィルター代と、削減できる有料ゴミ袋代から「何年で元が取れるか」を即座にシミュレーション。金銭的損得とQOL向上コストを可視化します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/drum-washer-dryer-payback.html">
+        <span class="category-badge">家電・エネルギー</span>
+        <h3>ドラム式洗濯乾燥機 vs 縦型＋干す手間 損益分岐点・時短価値シミュレーター</h3>
+        <p>ドラム式洗濯乾燥機の本体価格差を「時短効果の時給換算」で徹底シミュレーション！干す手間の削減時間や光熱費の差額から、何年で元が取れるか損益分岐点を一瞬で算出します。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/home-gym-membership-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>ホームジム vs 24時間ジム会費 損益分岐点シミュレーター【何ヶ月で元が取れる？】</h3>
+        <p>ホームジム器具（可変式ダンベルやインクラインベンチ）の初期投資が、24時間ジムの月会費・交通費に対して何ヶ月で回収できるかを瞬時に計算。年間の浮く移動時間や長期的な節約額もひと目でわかります。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/hair-removal-device-salon-breakeven.html">
+        <span class="category-badge">美容・ヘルスケア</span>
+        <h3>家庭用脱毛器vsサロン・医療脱毛 総額比較＆損益分岐シミュレーター</h3>
+        <p>家庭用脱毛器と脱毛サロン・医療脱毛、本当にお得なのはどっち？本体代・通院交通費・施術部位別の総額コストと「何回使えば元が取れるか」の損益分岐点を瞬時にシミュレーションします。</p>
+      </a>
+    
+      <a class="tool-link-card" href="../tools/soda-maker-petbottle-breakeven.html">
+        <span class="category-badge">暮らし・節約</span>
+        <h3>炭酸水メーカーvsペットボトル コスト比較＆元取れ計算機【年間節約額と損益分岐点】</h3>
+        <p>炭酸水を毎日飲むなら炭酸水メーカーと市販ペットボトルはどちらがお得？飲む量や購入価格を入力するだけで、500mlあたりの単価、年間節約額、本体代の元が取れるまでの損益分岐日数を即座にシミュレーションします。</p>
+      </a>
+    
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 損得・コスト逆算シミュレーター Lab | <a href="../index.html">トップページへ戻る</a></p>
+    </div>
+  </footer>
+  <script>
+    function calculateBreakeven() {
+  const price = parseFloat(document.getElementById('devicePrice').value) || 0;
+  const eatingOut = parseFloat(document.getElementById('eatingOutCost').value) || 0;
+  const homeCook = parseFloat(document.getElementById('homeCookCost').value) || 0;
+  const timesPerWeek = parseFloat(document.getElementById('timesPerWeek').value) || 0;
+  const electric = parseFloat(document.getElementById('electricCost').value) || 0;
+
+  const savePerMeal = eatingOut - (homeCook + electric);
+  const resultDiv = document.getElementById('calcResult');
+
+  if (savePerMeal <= 0) {
+    resultDiv.innerHTML = '<div class="result-headline">結論：<strong>外食費より自炊費が高いため、金銭的な元は取れません</strong></div><p style="color: #666; margin-top: 8px; font-size: 0.9rem;">1食あたりの自炊食材費を見直すか、浮いた時間（タイムパフォーマンス）を重視して導入を検討しましょう。</p>';
+    return;
+  }
+
+  const weeklySavings = savePerMeal * timesPerWeek;
+  const monthlySavings = Math.round(weeklySavings * 4.333);
+  const yearlySavings = monthlySavings * 12;
+  const monthsToBreakeven = (price / monthlySavings).toFixed(1);
+  const firstYearProfit = yearlySavings - price;
+
+  resultDiv.innerHTML = `
+    <div class="result-headline">結論：約 <strong>${monthsToBreakeven} ヶ月</strong> で本体代の元が取れます！</div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <span>月間の節約額</span>
+        <strong>約 ${monthlySavings.toLocaleString()} 円</strong>
+        <small>週 ${timesPerWeek} 回の自炊化ベース</small>
+      </div>
+      <div class="metric-card">
+        <span>年間浮く食費</span>
+        <strong>約 ${yearlySavings.toLocaleString()} 円</strong>
+        <small>12ヶ月換算の純節約額</small>
+      </div>
+      <div class="metric-card">
+        <span>1年目の実質収支</span>
+        <strong>${firstYearProfit >= 0 ? '+' : ''}${firstYearProfit.toLocaleString()} 円</strong>
+        <small>本体購入費を差し引いた差額</small>
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', calculateBreakeven);
+  </script>
+</body>
+</html>

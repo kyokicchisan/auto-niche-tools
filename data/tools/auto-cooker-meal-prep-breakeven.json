@@ -1,0 +1,33 @@
+{
+  "slug": "auto-cooker-meal-prep-breakeven",
+  "title": "自動調理鍋（ホットクック等）節約シミュレーター！外食・惣菜カットで何ヶ月で元が取れる？",
+  "category": "家電・エネルギー",
+  "summary": "ホットクックや電気圧力鍋の購入で迷っている方必見！外食や惣菜を自炊に置き換えた場合の月間節約額と、本体代の元が取れるまでの月数を簡単シミュレーションします。",
+  "targetKeywords": [
+    "自動調理鍋 元が取れる",
+    "ホットクック 節約 シミュレーション",
+    "電気圧力鍋 外食費 削減"
+  ],
+  "affiliateSearchQuery": "自動調理鍋 ホットクック 電気圧力鍋",
+  "affiliateRecommendations": [
+    {
+      "name": "シャープ ヘルシオ ホットクック 2.4L",
+      "description": "無水調理やかき混ぜ機能が優秀で、カレーや煮込み料理を完全放置で作れる大定番モデル。外食カット効果が最も高い大容量タイプです。",
+      "searchQuery": "ホットクック 2.4L シャープ"
+    },
+    {
+      "name": "アイリスオーヤマ 電気圧力鍋 4.0L",
+      "description": "ホットクックの半額以下で手に入る高コスパ機。初期投資を抑えて最速で元を取りたいファミリー層におすすめです。",
+      "searchQuery": "アイリスオーヤマ 電気圧力鍋 4L"
+    },
+    {
+      "name": "iwaki(イワキ) 耐熱ガラス 保存容器 7点セット",
+      "description": "作った料理を小分け冷凍・冷蔵保存して平日の惣菜買いを完全ゼロ化。油汚れも落ちやすく時短効果が倍増します。",
+      "searchQuery": "iwaki 耐熱ガラス 保存容器 パックスレンジ"
+    }
+  ],
+  "calculatorHtml": "<div class=\"calc-grid\">\n  <div class=\"form-group\">\n    <label for=\"devicePrice\">自動調理鍋の購入予定価格（円）</label>\n    <input type=\"number\" id=\"devicePrice\" value=\"55000\" step=\"1000\" min=\"5000\" oninput=\"calculateBreakeven()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"eatingOutCost\">置き換える外食・惣菜の1回費用（世帯合計・円）</label>\n    <input type=\"number\" id=\"eatingOutCost\" value=\"2800\" step=\"100\" min=\"500\" oninput=\"calculateBreakeven()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"homeCookCost\">自動調理鍋1回分の食材費（世帯合計・円）</label>\n    <input type=\"number\" id=\"homeCookCost\" value=\"900\" step=\"50\" min=\"200\" oninput=\"calculateBreakeven()\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"timesPerWeek\">自炊に置き換える頻度（週あたり回数）</label>\n    <select id=\"timesPerWeek\" onchange=\"calculateBreakeven()\">\n      <option value=\"1\">週1回（休日のみ）</option>\n      <option value=\"2\">週2回</option>\n      <option value=\"3\" selected>週3回（平日2回＋休日1回）</option>\n      <option value=\"4\">週4回</option>\n      <option value=\"5\">週5回（平日の外食・惣菜ゼロ化）</option>\n      <option value=\"7\">週7回（毎日活用）</option>\n    </select>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"electricCost\">1回あたりの電気代目安（円）</label>\n    <input type=\"number\" id=\"electricCost\" value=\"16\" step=\"1\" min=\"5\" oninput=\"calculateBreakeven()\">\n  </div>\n  <div id=\"calcResult\" class=\"result-box\"></div>\n</div>",
+  "calculatorJs": "function calculateBreakeven() {\n  const price = parseFloat(document.getElementById('devicePrice').value) || 0;\n  const eatingOut = parseFloat(document.getElementById('eatingOutCost').value) || 0;\n  const homeCook = parseFloat(document.getElementById('homeCookCost').value) || 0;\n  const timesPerWeek = parseFloat(document.getElementById('timesPerWeek').value) || 0;\n  const electric = parseFloat(document.getElementById('electricCost').value) || 0;\n\n  const savePerMeal = eatingOut - (homeCook + electric);\n  const resultDiv = document.getElementById('calcResult');\n\n  if (savePerMeal <= 0) {\n    resultDiv.innerHTML = '<div class=\"result-headline\">結論：<strong>外食費より自炊費が高いため、金銭的な元は取れません</strong></div><p style=\"color: #666; margin-top: 8px; font-size: 0.9rem;\">1食あたりの自炊食材費を見直すか、浮いた時間（タイムパフォーマンス）を重視して導入を検討しましょう。</p>';\n    return;\n  }\n\n  const weeklySavings = savePerMeal * timesPerWeek;\n  const monthlySavings = Math.round(weeklySavings * 4.333);\n  const yearlySavings = monthlySavings * 12;\n  const monthsToBreakeven = (price / monthlySavings).toFixed(1);\n  const firstYearProfit = yearlySavings - price;\n\n  resultDiv.innerHTML = `\n    <div class=\"result-headline\">結論：約 <strong>${monthsToBreakeven} ヶ月</strong> で本体代の元が取れます！</div>\n    <div class=\"metrics-row\">\n      <div class=\"metric-card\">\n        <span>月間の節約額</span>\n        <strong>約 ${monthlySavings.toLocaleString()} 円</strong>\n        <small>週 ${timesPerWeek} 回の自炊化ベース</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>年間浮く食費</span>\n        <strong>約 ${yearlySavings.toLocaleString()} 円</strong>\n        <small>12ヶ月換算の純節約額</small>\n      </div>\n      <div class=\"metric-card\">\n        <span>1年目の実質収支</span>\n        <strong>${firstYearProfit >= 0 ? '+' : ''}${firstYearProfit.toLocaleString()} 円</strong>\n        <small>本体購入費を差し引いた差額</small>\n      </div>\n    </div>\n  `;\n}\n\ndocument.addEventListener('DOMContentLoaded', calculateBreakeven);",
+  "articleHtml": "<h2>自動調理鍋（ホットクック・電気圧力鍋）は本当に節約になるのか？</h2><p>5万円〜7万円台の高価格帯が多いシャープの「ヘルシオ ホットクック」や、2万円前後で買える電気圧力鍋。購入に踏み切れない最大の理由は「本当に元が取れるのか？」という疑問でしょう。結論から言うと、<strong>平日の惣菜買いやデリバリー・外食を週2〜3回置き換えるだけで、半年〜1年未満で元が取れる</strong>家庭が大半です。</p><h3>外食・惣菜と自炊のリアルなコスト差</h3><p>仕事終わりに疲れてデリバリーを頼むと2人で3,000円〜4,000円、スーパーの惣菜でも1,500円〜2,000円はかかります。一方、自動調理鍋なら肉と野菜を切って調味料を入れるだけで、2〜3人前のカレーや肉じゃがが700円〜1,000円程度の食材費で作れます。1回あたり1,500円〜2,000円の差額が発生するため、週3回活用すれば月2万円以上の食費圧縮が可能です。</p><h3>電気代の心配は不要？1回わずか10円〜20円</h3><p>「電気で何十分も煮込むと電気代が高くなるのでは」と不安になる方も多いですが、現代の自動調理鍋は高断熱設計のため非常に省エネです。カレーやシチューを1回作る電気代はおよそ15円〜20円程度。ガス火で弱火コトコト煮込むガス代とほぼ同等か、むしろ安く済むケースが一般的です。</p><h2>元を取るための3つの鉄則</h2><h3>1. 「疲れて料理できない日」のメニューを決めておく</h3><p>外食や出前に流れる原因は「疲労」です。朝に具材を入れて予約調理しておくか、帰宅直後に冷凍肉とカット野菜を放り込んでスタートを押すだけの定番レシピ（カレー、豚バラ大根、無水ポトフなど）をルーティン化しましょう。</p><h3>2. 家族人数よりワンサイズ上を選ぶ</h3><p>ホットクックなら2人暮らしでも2.4L（大容量タイプ）が推奨されます。一度に多めに作り、翌日のお弁当や夕食にスライドさせることで、調理の手間と食費の削減効率が劇的に上がります。</p><h3>3. 最初から高いモデルに拘りすぎない</h3><p>かき混ぜ機能やWi-Fi連携を重視するならホットクック一択ですが、「煮込みや角煮ができればOK」という場合は2万円前後の電気圧力鍋でも十分な節約効果が得られます。シミュレーターで本体価格を変えて、自分の許容回収期間に合うモデルを見つけてみてください。</p>",
+  "createdAt": "2026-11-27"
+}
